@@ -68,7 +68,4 @@ defineProps(['isCollapse'])
 </template>
 
 <style lang='scss' scoped>
-.menu-bar {
-    // width: auto;
-}
 </style>
