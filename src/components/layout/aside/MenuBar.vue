@@ -11,7 +11,7 @@ let menuItems = reactive([
         alwayShow: false,
         name: "http://1.1.1.1:8080/test/a",
         meta: {
-            title: "接口文档",
+            title: "路由",
             icon: "el-icon-document",
             roles: ["sys:document"],
             parentId: 33
@@ -23,7 +23,7 @@ let menuItems = reactive([
         alwayShow: true,
         name: "http://1.1.1.1:8080/test/a2",
         meta: {
-            title: "接口文档2",
+            title: "路由2",
             icon: "el-icon-document",
             roles: ["sys:document"],
             parentId: 34
@@ -35,7 +35,7 @@ let menuItems = reactive([
                 alwayShow: false,
                 name: "http://1.1.1.1:8080/test/asub1",
                 meta: {
-                    title: "接口文档SUB1",
+                    title: "路由SUB1",
                     icon: "el-icon-document",
                     roles: ["sys:document"],
                     parentId: 35
@@ -47,7 +47,7 @@ let menuItems = reactive([
                 alwayShow: false,
                 name: "http://1.1.1.1:8080/test/asub2",
                 meta: {
-                    title: "接口文档SUB2",
+                    title: "路由SUB2",
                     icon: "el-icon-document",
                     roles: ["sys:document"],
                     parentId: 38

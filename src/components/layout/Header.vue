@@ -28,9 +28,9 @@ function buttonClick() {
                 <el-menu-item index="1">系统</el-menu-item>
                 <el-menu-item index="2">动画</el-menu-item>
                 <el-menu-item index="3">漫画</el-menu-item>
-                <el-menu-item index="3">游戏</el-menu-item>
-                <el-menu-item index="4">音乐</el-menu-item>
-                <el-menu-item index="5">小说</el-menu-item>
+                <el-menu-item index="4">游戏</el-menu-item>
+                <el-menu-item index="5">音乐</el-menu-item>
+                <el-menu-item index="6">小说</el-menu-item>
             </el-menu>
         </el-col>
         <el-col :span="4">
