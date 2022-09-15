@@ -2,19 +2,25 @@
 import { ref } from 'vue';
 import MenuBar from './aside/MenuBar.vue';
 import Header from './Header.vue';
+import { ElNotification as notify } from 'element-plus'
 
 const isCollapse = ref(false)
 const receiveIsCollapseFromHeader = (e: boolean) => {
     isCollapse.value = e
 }
 
+
+const onBack = () => {
+    notify('Back')
+}
+
 </script>
 
 <template>
     <el-container class="admin-layout">
-        <el-aside class="aside" :width="isCollapse ? '64px' : '280px'" >
+        <el-aside class="aside" :width="isCollapse ? '64px' : '280px'">
             <dev class="logo">
-                Ikaros 
+                Ikaros
                 <span v-if="!isCollapse">
                     Admin
                 </span>
@@ -26,15 +32,43 @@ const receiveIsCollapseFromHeader = (e: boolean) => {
                 <Header @isCollapse="receiveIsCollapseFromHeader"></Header>
             </el-header>
             <el-main class="main">
-                <dev>
-                    <el-breadcrumb separator="/">
-                        <el-breadcrumb-item :to="{ path: '/' }">homepage</el-breadcrumb-item>
-                    </el-breadcrumb>
-                </dev>
-                <dev class="content">
+
+                <div class="up">
+                    <el-page-header @back="onBack" title="返回">
+                        <template #breadcrumb>
+                            <el-breadcrumb separator="/">
+                                <el-breadcrumb-item :to="{ path: './page-header.html' }">
+                                    首页
+                                </el-breadcrumb-item>
+                                <el-breadcrumb-item><a href="./page-header.html">路由1</a></el-breadcrumb-item>
+                                <el-breadcrumb-item>路由2</el-breadcrumb-item>
+                            </el-breadcrumb>
+                        </template>
+                        <template #content>
+                            <div class="flex items-center">
+                                <span class="text-large font-600 mr-3"> 标题 </span>
+                                <span class="text-sm mr-2" style="color: var(--el-text-color-regular)">
+                                    副标题
+                                </span>
+                            </div>
+                        </template>
+                        <template #extra>
+                            <div class="flex items-center">
+                                <el-button>操作1</el-button>
+                                <el-button type="primary" class="ml-2">操作2</el-button>
+                            </div>
+                        </template>
+
+                    </el-page-header>
+                </div>
+
+                <div class="middle">
                     <RouterView />
-                </dev>
+                </div>
             </el-main>
+            <el-footer style="background-color: #f0f2f5;" align="center" height="30px" class="down">
+                Proudly power by <a href="https://github.com/li-guohao/ikaros" target="_blank">Ikaros</a>
+            </el-footer>
         </el-container>
     </el-container>
 </template>
@@ -57,7 +91,7 @@ const receiveIsCollapseFromHeader = (e: boolean) => {
         }
 
         // width: auto;
-        
+
         background-color: #d1e9ff;
 
     }
@@ -73,8 +107,37 @@ const receiveIsCollapseFromHeader = (e: boolean) => {
 
     .main {
         background-color: #fff;
+        margin: 0;
+        padding: 10px 0 0 0;
 
 
+        .up {
+            padding: 6px 20px;
+            text-align: center;
+
+            .title {
+                margin-top: 15px;
+            }
+        }
+
+        .middle {
+            margin: 0;
+            height: 100%;
+            min-height: 80%;
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        .down {
+            // height: auto;
+            // position: fixed;
+            // left: 0;
+            // bottom: 0;
+            // width: 80%;
+            background-color: #f0f2f5;
+            // color: rgb(24, 6, 6);
+            text-align: center;
+        }
     }
 }
 </style>
