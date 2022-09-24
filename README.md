@@ -37,6 +37,6 @@ yarn run build
 
 
 ## Lints and fixes files
-`` shell
+``` shell
 yarn run lint
 ```
