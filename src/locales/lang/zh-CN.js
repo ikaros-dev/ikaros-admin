@@ -21,7 +21,7 @@ export default {
 
   'layouts.usermenu.dialog.title': '信息',
   'layouts.usermenu.dialog.content': '您确定要注销吗？',
-  'layouts.userLayout.title': 'Ant Design 是西湖区最具影响力的 Web 设计规范',
+  'layouts.userLayout.title': 'Ikaros 是一个开源的专注于 ACGMN 的内容管理系统(CMS)',
   ...components,
   ...global,
   ...menu,
