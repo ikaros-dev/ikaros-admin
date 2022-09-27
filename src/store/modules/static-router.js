@@ -42,6 +42,7 @@ function hasRole(roles, route) {
   }
 }
 
+// eslint-disable-next-line
 function filterAsyncRouter (routerMap, role) {
   const accessedRouters = routerMap.filter(route => {
     if (hasPermission(role.permissionList, route)) {
@@ -69,10 +70,10 @@ const permission = {
   actions: {
     GenerateRoutes ({ commit }, data) {
       return new Promise(resolve => {
-        const { role } = data
+        // const { role } = data
         const routerMap = cloneDeep(asyncRouterMap)
-        const accessedRouters = filterAsyncRouter(routerMap, role)
-        commit('SET_ROUTERS', accessedRouters)
+        // const accessedRouters = filterAsyncRouter(routerMap, role)
+        commit('SET_ROUTERS', routerMap)
         resolve()
       })
     }
