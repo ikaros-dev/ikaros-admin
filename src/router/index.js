@@ -13,7 +13,7 @@ Vue.use(Router)
 
 const createRouter = () =>
   new Router({
-    mode: 'history',
+    // mode: 'history',
     routes: constantRouterMap
   })
 
