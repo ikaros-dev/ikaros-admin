@@ -11,7 +11,7 @@ const request = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
   timeout: 6000 // 请求超时时间
 })
-console.log(process.env.VUE_APP_API_BASE_URL)
+console.log('current backend open api address: ' + process.env.VUE_APP_API_BASE_URL)
 // 异常拦截处理器
 const errorHandler = (error) => {
   // console.log(error)

@@ -2,10 +2,10 @@ import request from '@/utils/request'
 
 const userApi = {
   Login: '/user/login',
-  Logout: '/auth/logout',
-  ForgePassword: '/auth/forge-password',
-  Register: '/auth/register',
-  twoStepCode: '/auth/2step-code',
+  Logout: '/user/logout',
+  ForgePassword: '/user/forge-password',
+  Register: '/user/register',
+  twoStepCode: '/user/2step-code',
   SendSms: '/account/sms',
   SendSmsErr: '/account/sms_err',
   // get my info
@@ -60,7 +60,7 @@ export function getCurrentUserNav () {
 export function logout () {
   return request({
     url: userApi.Logout,
-    method: 'post',
+    method: 'get',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
