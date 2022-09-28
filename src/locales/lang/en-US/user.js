@@ -1,8 +1,8 @@
 export default {
   'user.login.userName': 'userName',
   'user.login.password': 'password',
-  'user.login.username.placeholder': 'Account: admin',
-  'user.login.password.placeholder': 'password: admin or ant.design',
+  'user.login.username.placeholder': 'please enter username',
+  'user.login.password.placeholder': 'please enter password',
   'user.login.message-invalid-credentials':
     'Invalid username or password（admin/ant.design）',
   'user.login.message-invalid-verification-code': 'Invalid verification code',
@@ -15,6 +15,10 @@ export default {
   'user.login.sign-in-with': 'Sign in with',
   'user.login.signup': 'Sign up',
   'user.login.login': 'Login',
+  'user.login.success.message': 'welcome',
+  'user.login.success.description': ', welcome back',
+  'user.login.reqfail.message': 'login fail',
+  'user.login.reqfail.description': 'there was an error in the request, please try again later',
   'user.register.register': 'Register',
   'user.register.email.placeholder': 'Email',
   'user.register.password.placeholder': 'Password ',
@@ -41,5 +45,9 @@ export default {
   'user.confirm-password.required': 'Please confirm your password!',
   'user.phone-number.required': 'Please enter your phone number!',
   'user.phone-number.wrong-format': 'Please enter a valid phone number',
-  'user.verification-code.required': 'Please enter the verification code!'
+  'user.verification-code.required': 'Please enter the verification code! mssage',
+  'user.auth.unauthorized.title': 'Unauthorized',
+  'user.auth.unauthorized.desc': 'Authorization verification failed!',
+  'user.auth.forbidden.title': 'Forbidden',
+  'user.auth.forbidden.desc': 'Access is forbidden!'
 }

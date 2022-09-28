@@ -1,7 +1,9 @@
+import i18n from '@/locales/index'
+
 export function timeFix () {
   const time = new Date()
   const hour = time.getHours()
-  return hour < 9 ? '早上好' : hour <= 11 ? '上午好' : hour <= 13 ? '中午好' : hour < 20 ? '下午好' : '晚上好'
+  return hour < 9 ? i18n.tc('util.timefix.greetings.morning') : hour <= 11 ? i18n.tc('util.timefix.greetings.forenoon') : hour <= 13 ? i18n.tc('util.timefix.greetings.midday') : hour < 20 ? i18n.tc('util.timefix.greetings.afternoon') : i18n.tc('util.timefix.greetings.evening')
 }
 
 export function welcome () {

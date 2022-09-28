@@ -55,7 +55,7 @@ const user = {
       return new Promise((resolve, reject) => {
         // 请求后端获取用户信息 /api/user/info
         getInfo().then(response => {
-          console.log(response)
+          // console.log(response)
           const { result } = response
           if (result.roles) {
             const role = { ...result.roles }
@@ -89,14 +89,15 @@ const user = {
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
         logout(state.token).then(() => {
-          commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
-          storage.remove(ACCESS_TOKEN)
-          resolve()
+
         }).catch((err) => {
           console.log('logout fail:', err)
           // resolve()
         }).finally(() => {
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          storage.remove(ACCESS_TOKEN)
+          resolve()
         })
       })
     }

@@ -4,6 +4,7 @@ import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import i18n from '@/locales/index'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -14,21 +15,22 @@ const request = axios.create({
 console.log('current backend open api address: ' + process.env.VUE_APP_API_BASE_URL)
 // 异常拦截处理器
 const errorHandler = (error) => {
-  // console.log(error)
+  console.log(error)
   if (error.response) {
     const data = error.response.data
     // 从 localstorage 获取 token
     const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
       notification.error({
-        message: 'Forbidden',
-        description: data.message
+        message: i18n.tc('user.auth.forbidden.title'),
+        description: i18n.tc('user.auth.forbidden.title') + ' : ' + data.message
       })
     }
+
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
+        message: i18n.tc('user.auth.unauthorized.title'),
+        description: i18n.tc('user.auth.unauthorized.desc')
       })
       if (token) {
         store.dispatch('Logout').then(() => {
