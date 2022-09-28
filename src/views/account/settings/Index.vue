@@ -1,5 +1,5 @@
 <template>
-  <div class="page-header-index-wide">
+  <page-header-wrapper :title="false" class="page-header-index-wide">
     <a-card :bordered="false" :bodyStyle="{ padding: '16px 0', height: '100%' }" :style="{ height: '100%' }">
       <div class="account-settings-info-main" :class="{ 'mobile': isMobile }">
         <div class="account-settings-info-left">
@@ -45,7 +45,7 @@
         </div>
       </div>
     </a-card>
-  </div>
+  </page-header-wrapper>
 </template>
 
 <script>

@@ -7,19 +7,19 @@
           <a-form-item
             :label="$t('account.settings.basic.nickname')"
           >
-            <a-input :placeholder="$t('account.settings.basic.nickname-message')" />
+            <a-input :placeholder="$t('account.settings.basic.nickname-message')" :value="currentUserInfo.nickname" />
           </a-form-item>
           <a-form-item
             :label="$t('account.settings.basic.profile')"
           >
-            <a-textarea rows="4" :placeholder="$t('account.settings.basic.profile-message')"/>
+            <a-textarea rows="4" :placeholder="$t('account.settings.basic.profile-message')" :value="currentUserInfo.introduce" />
           </a-form-item>
 
           <a-form-item
             :label="$t('account.settings.basic.email')"
             :required="false"
           >
-            <a-input placeholder="example@ant.design"/>
+            <a-input placeholder="example@ikaros.run" :value="currentUserInfo.email" />
           </a-form-item>
 
           <a-form-item>
@@ -48,6 +48,7 @@
 <script>
 import AvatarModal from './AvatarModal'
 import { baseMixin } from '@/store/app-mixin'
+import store from '@/store'
 
 export default {
   mixins: [baseMixin],
@@ -58,8 +59,9 @@ export default {
     return {
       // cropper
       preview: {},
+      currentUserInfo: store.getters.userInfo,
       option: {
-        img: '/avatar2.jpg',
+        img: store.getters.userInfo.avatar,
         info: true,
         size: 1,
         outputType: 'jpeg',
