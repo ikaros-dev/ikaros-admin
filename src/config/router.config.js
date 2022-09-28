@@ -191,20 +191,20 @@ export const asyncRouterMap = [
           {
             path: '/file/add',
             name: 'FileAdd',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Success'),
+            component: () => import(/* webpackChunkName: "result" */ '@/views/file/Add'),
             meta: { title: 'menu.file.add', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
           },
           {
             path: '/file/list',
             name: 'FileList',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
+            component: () => import(/* webpackChunkName: "result" */ '@/views/file/List'),
             meta: { title: 'menu.file.list', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
           },
           {
             path: '/file/edit',
             name: 'FileEdit',
-            hidden: true,
-            component: () => import(/* webpackChunkName: "result" */ '@/views/result/Error'),
+            // hidden: true,
+            component: () => import(/* webpackChunkName: "result" */ '@/views/file/Edit'),
             meta: { title: 'menu.file.edit', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
           }
         ]
