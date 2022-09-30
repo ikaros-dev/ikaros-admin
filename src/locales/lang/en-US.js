@@ -8,9 +8,9 @@ import user from './en-US/user'
 
 import dashboard from './en-US/dashboard'
 import form from './en-US/form'
-import result from './en-US/result'
 import account from './en-US/account'
 import util from './en-US/util'
+import exception from './en-US/exception'
 
 const components = {
   antLocale: antdEnUS,
@@ -31,7 +31,7 @@ export default {
   ...user,
   ...dashboard,
   ...form,
-  ...result,
   ...account,
-  ...util
+  ...util,
+  ...exception
 }
