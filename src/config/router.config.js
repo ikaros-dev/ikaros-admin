@@ -53,7 +53,7 @@ export const asyncRouterMap = [
       // file
       {
         path: '/file',
-        name: 'file',
+        name: 'File',
         component: RouteView,
         redirect: '/file/list',
         meta: { title: 'menu.file', icon: 'file', permission: ['result'] },
@@ -131,6 +131,14 @@ export const asyncRouterMap = [
             meta: { title: 'menu.system.about', hiddenHeaderContent: false }
           }
         ]
+      },
+
+      // test
+      {
+        path: '/test',
+        name: 'Test',
+        component: () => import('@/views/test/Index'),
+        meta: { title: 'menu.test', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
       }
     ]
   },

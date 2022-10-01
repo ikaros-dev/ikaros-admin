@@ -31,7 +31,7 @@ export default {
     'menu.exception.not-find': '404',
     'menu.exception.server-error': '500',
     'menu.exception.trigger': 'Trigger',
-    'menu.file': 'file',
+    'menu.file': 'File',
     'menu.file.add': 'add',
     'menu.file.list': 'list',
     'menu.file.edit': 'edit',
