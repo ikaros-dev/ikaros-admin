@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
+import TwoStepCaptcha from '@/components/Tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha } from '@/api/login'
