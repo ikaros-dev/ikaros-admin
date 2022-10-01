@@ -5,10 +5,10 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
-              <img :src="avatar" />
+              <img :src="userInfo.avatar" />
             </div>
-            <div class="username">{{ currentUser.nickname }}</div>
-            <div class="bio">{{ currentUser.introduce }}</div>
+            <div class="username">{{ userInfo.nickname }}</div>
+            <div class="bio">{{ userInfo.introduce }}</div>
           </div>
           <!-- <a-divider :dashed="true"/> -->
         </a-card>
@@ -53,12 +53,11 @@ export default {
           tab: '项目(8)'
         }
       ],
-      noTitleKey: 'app',
-      currentUser: {}
+      noTitleKey: 'app'
     }
   },
   computed: {
-    ...mapGetters(['nickname', 'avatar'])
+    ...mapGetters(['userInfo'])
   },
   mounted () {
     this.currentUser = store.getters.userInfo
