@@ -137,7 +137,7 @@ export const asyncRouterMap = [
       {
         path: '/test',
         name: 'Test',
-        component: () => import('@/views/test/Index'),
+        component: () => import('@/views/Test'),
         meta: { title: 'menu.test', keepAlive: true, icon: 'dashboard', permission: ['dashboard'] }
       }
     ]

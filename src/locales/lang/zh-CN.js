@@ -12,6 +12,7 @@ import account from './zh-CN/account'
 import util from './zh-CN/util'
 import exception from './zh-CN/exception'
 import test from './zh-CN/test'
+import request from './zh-CN/request'
 
 const components = {
   antLocale: antd,
@@ -35,5 +36,6 @@ export default {
   ...account,
   ...util,
   ...exception,
-  ...test
+  ...test,
+  ...request
 }

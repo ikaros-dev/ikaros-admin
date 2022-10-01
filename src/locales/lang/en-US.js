@@ -12,6 +12,7 @@ import account from './en-US/account'
 import util from './en-US/util'
 import exception from './en-US/exception'
 import test from './en-US/test'
+import request from './en-US/request'
 
 const components = {
   antLocale: antdEnUS,
@@ -35,5 +36,6 @@ export default {
   ...account,
   ...util,
   ...exception,
-  ...test
+  ...test,
+  ...request
 }

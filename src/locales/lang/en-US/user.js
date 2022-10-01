@@ -3,8 +3,7 @@ export default {
   'user.login.password': 'password',
   'user.login.username.placeholder': 'please enter username',
   'user.login.password.placeholder': 'please enter password',
-  'user.login.message-invalid-credentials':
-    'Invalid username or password（admin/ant.design）',
+  'user.login.message-invalid-credentials': 'Invalid username or password',
   'user.login.message-invalid-verification-code': 'Invalid verification code',
   'user.login.tab-login-credentials': 'Credentials',
   'user.login.tab-login-mobile': 'Mobile number',
@@ -18,7 +17,6 @@ export default {
   'user.login.success.message': 'welcome',
   'user.login.success.description': ', welcome back',
   'user.login.reqfail.message': 'login fail',
-  'user.login.reqfail.description': 'there was an error in the request, please try again later',
   'user.register.register': 'Register',
   'user.register.email.placeholder': 'Email',
   'user.register.password.placeholder': 'Password ',

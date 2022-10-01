@@ -58,6 +58,12 @@ request.interceptors.request.use(config => {
 // response interceptor
 request.interceptors.response.use((response) => {
   // console.log(response.data)
+  console.log(response)
+  const body = response.data
+  if (body && body.code !== 200) {
+    const msg = i18n.tc('request.data.code.fail.msg.prefix') + body.message
+    return Promise.reject(msg)
+  }
   return response.data
 }, errorHandler)
 
