@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <a-form id="formLogin" class="user-layout-login" ref="formLogin" :form="form" @submit="handleSubmit">
+    <a-form id="formLogin" class="user-layout-login" ref="formLogin" :form="form" @submit="handleSubmit" >
       <a-form-item>
         <a-input
           size="large"
@@ -29,15 +29,6 @@
         </a-input-password>
       </a-form-item>
 
-      <a-form-item>
-        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">{{ $t('user.login.remember-me') }}</a-checkbox>
-        <router-link
-          :to="{ name: 'recover', params: { user: 'aaa'} }"
-          class="forge-password"
-          style="float: right;"
-        >{{ $t('user.login.forgot-password') }}</router-link>
-      </a-form-item>
-
       <a-form-item style="margin-top:24px">
         <a-button
           size="large"
@@ -48,6 +39,13 @@
           :disabled="state.loginBtn"
         >{{ $t('user.login.login') }}</a-button>
       </a-form-item>
+
+      <router-link
+        v-if="showForgetRoutLink"
+        :to="{ name: 'ResetPassword' }"
+        class="forge-password"
+        style="float: right;"
+      >{{ $t('user.login.forgot-password') }}</router-link>
 
     </a-form>
 
@@ -76,15 +74,22 @@ export default {
       state: {
         time: 60,
         loginBtn: false,
-        // login type: 0 email, 1 username, 2 telephone
+        // login type: 0 email, 1 username
         loginType: 0,
         smsSendBtn: false
       },
+      showForgetRoutLink: false,
       // i18n msg
       userLoginSuccessMessage: this.$t('user.login.success.message'),
       userLoginSuccessDescription: this.$t('user.login.success.description'),
       userLoginReqfailMessage: this.$t('user.login.reqfail.message')
     }
+  },
+  beforeMount () {
+    document.addEventListener('keydown', this.onRegisterResetPasswordKeydown)
+  },
+  beforeDestroy () {
+    document.removeEventListener('keydown', this.onRegisterResetPasswordKeydown)
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
@@ -208,6 +213,14 @@ export default {
         description: '' + err,
         duration: 4
       })
+    },
+    onRegisterResetPasswordKeydown (e) {
+      // Windows / Linux: Shift + Alt + h
+      // maxOS: Shift + Command + h
+      if (e.keyCode === 72 && (e.altKey || e.metaKey) && e.shiftKey) {
+        e.preventDefault()
+        this.showForgetRoutLink = !this.showForgetRoutLink
+      }
     }
   }
 }

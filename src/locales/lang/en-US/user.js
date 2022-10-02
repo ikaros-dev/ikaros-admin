@@ -1,7 +1,7 @@
 export default {
   'user.login.userName': 'userName',
   'user.login.password': 'password',
-  'user.login.username.placeholder': 'please enter username',
+  'user.login.username.placeholder': 'please enter username or email',
   'user.login.password.placeholder': 'please enter password',
   'user.login.message-invalid-credentials': 'Invalid username or password',
   'user.login.message-invalid-verification-code': 'Invalid verification code',
@@ -31,7 +31,7 @@ export default {
   'user.register-result.view-mailbox': 'View mailbox',
   'user.email.required': 'Please enter your email!',
   'user.email.wrong-format': 'The email address is in the wrong format!',
-  'user.userName.required': 'Please enter account name or email address',
+  'user.userName.required': 'Please enter username or email address',
   'user.password.required': 'Please enter your password!',
   'user.password.twice.msg': 'The passwords entered twice do not match!',
   'user.password.strength.msg':

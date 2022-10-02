@@ -1,7 +1,7 @@
 export default {
   'user.login.userName': '用户名',
   'user.login.password': '密码',
-  'user.login.username.placeholder': '请输入用户名',
+  'user.login.username.placeholder': '请输入用户名或者邮箱',
   'user.login.password.placeholder': '请输入密码',
   'user.login.message-invalid-credentials': '账户或密码错误',
   'user.login.message-invalid-verification-code': '验证码错误',
@@ -31,7 +31,7 @@ export default {
   'user.register-result.view-mailbox': '查看邮箱',
   'user.email.required': '请输入邮箱地址！',
   'user.email.wrong-format': '邮箱地址格式错误！',
-  'user.userName.required': '请输入帐户名或邮箱地址',
+  'user.userName.required': '请输入用户名或邮箱地址',
   'user.password.required': '请输入密码！',
   'user.password.twice.msg': '两次输入的密码不匹配!',
   'user.password.strength.msg': '密码强度不够 ',
