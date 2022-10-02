@@ -10,8 +10,6 @@ import 'ant-design-vue/dist/antd.less'
 import VueClipboard from 'vue-clipboard2'
 import PageLoading from '@/components/PageLoading'
 import PermissionHelper from '@/core/permission/permission'
-// import '@/components/use'
-import './directives/action'
 
 VueClipboard.config.autoSetContainer = true
 

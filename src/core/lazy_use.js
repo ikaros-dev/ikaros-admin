@@ -52,8 +52,6 @@ import Viser from 'viser-vue'
 // ext library
 import VueCropper from 'vue-cropper'
 import PageLoading from '@/components/PageLoading'
-import PermissionHelper from '@/core/permission/permission'
-import './directives/action'
 
 Vue.use(ConfigProvider)
 Vue.use(Layout)
@@ -108,7 +106,6 @@ Vue.prototype.$warning = Modal.warning
 
 Vue.use(Viser)
 Vue.use(PageLoading)
-Vue.use(PermissionHelper)
 Vue.use(VueCropper)
 
 process.env.NODE_ENV !== 'production' && console.warn('[development][antd-pro] NOTICE: Antd use lazy-load.')
