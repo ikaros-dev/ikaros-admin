@@ -3569,11 +3569,6 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@*, commander@^9.3.0:
-  version "9.4.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-9.4.0.tgz#bc4a40918fefe52e22450c111ecd6b7acce6f11c"
-  integrity sha512-sRPT+umqkz90UA8M1yqYfnHlZA7fF6nSphDtxeywPZ49ysjxDQybzk13CL+mXekDRG92skbcqCLVovuCusNmFw==
-
 commander@2, commander@^2.19.0, commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
@@ -3588,6 +3583,11 @@ commander@^8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-8.3.0.tgz#4837ea1b2da67b9c616a67afbb0fafee567bca66"
   integrity sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==
+
+commander@^9.3.0:
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-9.4.0.tgz#bc4a40918fefe52e22450c111ecd6b7acce6f11c"
+  integrity sha512-sRPT+umqkz90UA8M1yqYfnHlZA7fF6nSphDtxeywPZ49ysjxDQybzk13CL+mXekDRG92skbcqCLVovuCusNmFw==
 
 commitizen@^4.0.3, commitizen@^4.2.4:
   version "4.2.5"
@@ -7531,13 +7531,6 @@ mkdirp@^0.5.6:
   integrity sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==
   dependencies:
     minimist "^1.2.6"
-
-mockjs2@1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/mockjs2/-/mockjs2-1.0.8.tgz#37ca061d6c3319d888292aef656434380971c94c"
-  integrity sha512-IXY9wzq3Pr2tybkJnT+dzrTz0GBRTtgXc7Cke/UUQyyWtbjDrck8uZ3NmMF4LaWgAD8vm8EMGcBk4Itc6nzpRg==
-  dependencies:
-    commander "*"
 
 module-alias@^2.2.2:
   version "2.2.2"
