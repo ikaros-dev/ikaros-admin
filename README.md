@@ -11,9 +11,6 @@
 - eslint
 - @vue/cli
 - ant-design-vue@1.x - Ant Design Of Vue 实现
-- vue-cropper - 头像裁剪组件
-- @antv/g2 - Alipay AntV 数据可视化图表
-- Viser-vue - antv/g2 封装实现
 
 # 项目下载和运行
 
