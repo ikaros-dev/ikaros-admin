@@ -61,6 +61,7 @@ export const asyncRouterMap = [
           {
             path: '/file/add',
             name: 'FileAdd',
+            hidden: true,
             component: () => import(/* webpackChunkName: "result" */ '@/views/file/Add'),
             meta: { title: 'menu.file.add', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
           },
@@ -72,6 +73,7 @@ export const asyncRouterMap = [
           },
           {
             path: '/file/edit',
+            hidden: true,
             name: 'FileEdit',
             // hidden: true,
             component: () => import(/* webpackChunkName: "result" */ '@/views/file/Edit'),
