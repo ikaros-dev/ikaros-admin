@@ -54,32 +54,8 @@ export const asyncRouterMap = [
       {
         path: '/file',
         name: 'File',
-        component: RouteView,
-        redirect: '/file/list',
-        meta: { title: 'menu.file', icon: 'file', permission: ['result'] },
-        children: [
-          {
-            path: '/file/add',
-            name: 'FileAdd',
-            hidden: true,
-            component: () => import(/* webpackChunkName: "result" */ '@/views/file/Add'),
-            meta: { title: 'menu.file.add', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
-          },
-          {
-            path: '/file/list',
-            name: 'FileList',
-            component: () => import(/* webpackChunkName: "result" */ '@/views/file/List'),
-            meta: { title: 'menu.file.list', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
-          },
-          {
-            path: '/file/edit',
-            hidden: true,
-            name: 'FileEdit',
-            // hidden: true,
-            component: () => import(/* webpackChunkName: "result" */ '@/views/file/Edit'),
-            meta: { title: 'menu.file.edit', keepAlive: false, hiddenHeaderContent: true, permission: ['result'] }
-          }
-        ]
+        component: () => import('@/views/File'),
+        meta: { title: 'menu.file', icon: 'picture', permission: ['result'] }
       },
 
       // account
