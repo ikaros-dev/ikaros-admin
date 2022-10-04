@@ -1,4 +1,4 @@
-# ikaros-admin
+# ikaros-web
 [ikaros](https://github.com/li-guohao/ikaros) 项目的前端后台界面，已经编译进 [ikaros](https://github.com/li-guohao/ikaros) 对应的目录中。
 
 基于[ant-design-vue-pro](https://github.com/vueComponent/ant-design-vue-pro)
@@ -10,7 +10,7 @@
 - webpack
 - eslint
 - @vue/cli
-- ant-design-vue@1.x - Ant Design Of Vue 实现
+- ant-design-vue@1.x
 
 # 项目下载和运行
 
