@@ -81,9 +81,6 @@ export default {
     return {
       server: {
         process: (fieldName, file, metadata, load, error, progress, abort) => {
-          // todo get token
-          const CancelToken = null
-          const source = CancelToken.source()
           this.uploadHandler(
             file,
             {
@@ -91,18 +88,22 @@ export default {
                 if (progressEvent.total > 0) {
                   progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total)
                 }
-              },
-              cancelToken: source.token
+              }
             },
             this.field
           )
             .then(response => {
               load(response)
-              this.$notification.success('Uploaded successfully', response)
+              // this.$notification.success({
+              //   message: 'Uploaded successfully, info: ' + response
+              // })
               this.$emit('success', response, file)
             })
             .catch(failure => {
-              this.$notification.failure('Failed to upload file', failure)
+              console.log('failure', failure)
+              this.$notification.error({
+                message: 'Failed to upload file, info: ' + failure
+              })
               this.$emit('failure', failure, file)
               error()
             })
@@ -110,7 +111,7 @@ export default {
             abort: () => {
               abort()
               this.$notification.success('Upload operation aborted by the user')
-              source.cancel('Upload operation canceled by the user.')
+              // source.cancel('Upload operation canceled by the user.')
             }
           }
         }
@@ -120,7 +121,7 @@ export default {
   },
   methods: {
     handleFilePondInit () {
-      console.log('FilePond has initialized')
+      // console.log('FilePond has initialized')
     },
     handleClearFileList () {
       this.$refs.pond.removeFiles()

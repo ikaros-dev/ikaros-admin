@@ -1,11 +1,11 @@
 <template>
   <a-modal v-model="modalVisible" :afterClose="onClose" :footer="null" destroyOnClose title="上传文件">
-    <FilePondUpload ref="upload" :uploadHandler="uploadHandler"></FilePondUpload>
+    <FilePondUpload ref="filePondUploadRef" :uploadHandler="uploadHandler"></FilePondUpload>
   </a-modal>
 </template>
 <script>
 import FilePondUpload from '@/components/Upload/FilePondUpload.vue'
-// todo import api
+import { upload } from '@/api/file'
 
 export default {
   name: 'FileUploadModal',
@@ -18,9 +18,7 @@ export default {
   },
   data () {
     return {
-      uploadHandler: (file, options) => {
-        // todo call api to upload file
-      }
+      uploadHandler: (file, options) => upload(file, options)
     }
   },
   computed: {
@@ -35,7 +33,7 @@ export default {
   },
   methods: {
     onClose () {
-      this.$refs.upload.handleClearFileList()
+      this.$refs.filePondUploadRef.handleClearFileList()
       this.$emit('close')
     }
   }

@@ -18,8 +18,6 @@ const errorHandler = (error) => {
   console.log(error)
   if (error.response) {
     const data = error.response.data
-    // 从 localstorage 获取 token
-    const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
       notification.error({
         message: i18n.tc('user.auth.forbidden.title'),
@@ -32,6 +30,8 @@ const errorHandler = (error) => {
         message: i18n.tc('user.auth.unauthorized.title'),
         description: i18n.tc('user.auth.unauthorized.desc')
       })
+      // 从 localstorage 获取 token
+      const token = storage.get(ACCESS_TOKEN)
       if (token) {
         store.dispatch('Logout').then(() => {
           setTimeout(() => {
