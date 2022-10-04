@@ -40,6 +40,7 @@ const assetsCDN = {
 
 // vue.config.js
 const vueConfig = {
+  publicPath: process.env.VUE_APP_BASE_URL,
   configureWebpack: {
     // webpack plugins
     plugins: [
