@@ -20,7 +20,7 @@
                       @change="handleQuery()"
                     >
                       <a-select-option v-for="item in places.data" :key="item" :value="item">
-                        {{ item | typeText }}
+                        {{ item }}
                       </a-select-option>
                     </a-select>
                   </a-form-item>
@@ -28,7 +28,7 @@
                 <a-col :md="6" :sm="24">
                   <a-form-item label="文件类型：">
                     <a-select
-                      v-model="list.params.mediaType"
+                      v-model="list.params.type"
                       :loading="types.loading"
                       allowClear
                       @change="handleQuery()"
@@ -67,63 +67,50 @@
       </a-col>
       <a-col :span="24">
         <a-spin :spinning="list.loading">
-          <div
-            class="grid grid-cols-2 gap-x-2 gap-y-3 sm:grid-cols-3 md:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-10"
-            role="list"
-          >
-            <div
-              v-for="(file, index) in list.data"
-              :key="index"
-              :class="`${isItemSelect(file) ? 'border-blue-600' : 'border-white'}`"
-              class="relative cursor-pointer overflow-hidden rounded-sm border-solid bg-white transition-all hover:shadow-sm"
-              @click="handleItemClick(file)"
-              @mouseenter="$set(file, 'hover', true)"
-              @mouseleave="$set(file, 'hover', false)"
-              @contextmenu.prevent="handleContextMenu($event, file)"
-            >
-              <div class="group aspect-w-10 aspect-h-7 block w-full overflow-hidden bg-white">
-                <img
-                  v-if="isImage(file)"
-                  :alt="file.name"
-                  :src="file.thumbPath"
-                  class="pointer-events-none overflow-hidden object-cover transition-opacity group-hover:opacity-70"
-                  loading="lazy"
-                />
-                <span v-else class="flex items-center justify-center text-2xl text-gray-600">
-                  {{ file.suffix }}
-                </span>
+          <div class="div-filelist-item">
+            <a-row :gutter="16" class="row-filelist" >
+              <div
+                v-for="(file, index) in list.data"
+                :key="index"
+                @click="handleItemClick(file)"
+                @mouseenter="$set(file, 'hover', true)"
+                @mouseleave="$set(file, 'hover', false)"
+                @contextmenu.prevent="handleContextMenu($event, file)"
+              >
+                <a-col
+                  :xs="24"
+                  :sm="12"
+                  :md="8"
+                  :lg="8"
+                  :xl="6"
+                  class="col-file-item">
+                  <a-card :title="file.name" :bordered="false" :class="`${isItemSelect(file) ? 'card-body-select-true' : 'card-body-select-false'}`">
+                    <template #extra>
+                      <a-icon
+                        v-show="!isItemSelect(file) && file.hover"
+                        :style="{ fontSize: '20px', color: 'rgb(37 99 235)' }"
+                        theme="twoTone"
+                        type="plus-circle"
+                        @click.stop="handleSelect(file)"
+                      />
+                    </template>
+                    <img
+                      v-if="isImage(file)"
+                      :alt="file.name"
+                      :src="file.location"
+                      class="img-filelist-item"
+                      loading="lazy"
+                    />
+                    <div v-else >
+                      <p>当前文件类型为： {{ file.type }}</p>
+                      <p>暂时只支持图片预览，预览请点击详情</p>
+                    </div>
+                  </a-card>
+                </a-col>
               </div>
-              <a-tooltip :title="file.name">
-                <span class="block truncate p-1.5 text-xs font-medium text-gray-500">
-                  {{ file.name }}
-                </span>
-              </a-tooltip>
-
-              <a-icon
-                v-show="!isItemSelect(file) && file.hover"
-                :style="{ fontSize: '20px', color: 'rgb(37 99 235)' }"
-                class="absolute top-1 right-1 cursor-pointer font-bold transition-all"
-                theme="twoTone"
-                type="plus-circle"
-                @click.stop="handleSelect(file)"
-              />
-              <a-icon
-                v-show="isItemSelect(file)"
-                :style="{ fontSize: '20px', color: 'rgb(37 99 235)' }"
-                class="absolute top-1 right-1 cursor-pointer font-bold transition-all"
-                theme="twoTone"
-                type="check-circle"
-              />
-              <a-icon
-                v-show="file.hover && list.selected.length > 0"
-                :style="{ fontSize: '20px' }"
-                class="absolute top-1 left-1 cursor-pointer font-bold transition-all"
-                theme="twoTone"
-                type="profile"
-                @click.stop="handleOpenDetail(file)"
-              />
-            </div>
+            </a-row>
           </div>
+
         </a-spin>
       </a-col>
     </a-row>
@@ -132,7 +119,7 @@
       <a-pagination
         :current="pagination.page"
         :defaultPageSize="pagination.size"
-        :pageSizeOptions="['50', '100', '150', '200']"
+        :pageSizeOptions="['8', '16', '32', '64']"
         :total="pagination.total"
         class="pagination"
         showLessItems
@@ -149,7 +136,7 @@
 
 <script>
 import FileUploadModal from '@/components/File/FileUploadModal.vue'
-import fileApi from '@/api/file'
+import { listByPaging, listTypes, listPlaces, deleteById, deleteInBatch } from '@/api/file'
 
 export default {
   components: { FileUploadModal },
@@ -162,10 +149,10 @@ export default {
         hasNext: false,
         hasPrevious: false,
         params: {
-          page: 0,
-          size: 50,
+          page: 1,
+          size: 8,
           keyword: undefined,
-          mediaType: undefined,
+          type: undefined,
           place: undefined
         },
         selected: [],
@@ -192,10 +179,10 @@ export default {
   computed: {
     isImage () {
       return function (file) {
-        if (!file || !file.mediaType) {
+        if (!file || !file.type) {
           return false
         }
-        return file.mediaType.startsWith('image')
+        return file.type.startsWith('IMAGE')
       }
     },
     isItemSelect () {
@@ -205,7 +192,7 @@ export default {
     },
     pagination () {
       return {
-        page: this.list.params.page + 1,
+        page: this.list.params.page,
         size: this.list.params.size,
         total: this.list.total
       }
@@ -219,6 +206,9 @@ export default {
       return index === this.list.data.length - 1 && !this.list.hasNext
     }
   },
+  created () {
+    this.handleResetParam()
+  },
   methods: {
     /**
      * List files
@@ -227,17 +217,18 @@ export default {
       try {
         this.list.loading = true
 
-        const response = await fileApi.list(this.list.params)
+        const response = await listByPaging(this.list.params)
+        // this.$log.debug('[handleListFiles] response: ', response)
 
-        if (response.data.content.length === 0 && this.list.params.page > 0) {
+        if (response.result.content.length === 0 && this.list.params.page > 0) {
           this.list.params.page--
           await this.handleListFiles()
           return
         }
-        this.list.data = response.data.content
-        this.list.total = response.data.total
-        this.list.hasNext = response.data.hasNext
-        this.list.hasPrevious = response.data.hasPrevious
+        this.list.data = response.result.content
+        this.list.total = response.result.total
+        this.list.hasNext = response.result.hasNext
+        this.list.hasPrevious = response.result.hasPrevious
       } catch (error) {
         this.$log.error(error)
       } finally {
@@ -252,9 +243,10 @@ export default {
       try {
         this.types.loading = true
 
-        const response = await fileApi.listTypes()
+        const response = await listTypes()
+        // this.$log.debug('[handleListTypes] response: ', response)
 
-        this.types.data = response.data
+        this.types.data = response.result
       } catch (error) {
         this.$log.error(error)
       } finally {
@@ -269,13 +261,14 @@ export default {
       try {
         this.places.loading = true
 
-        const response = await fileApi.listPlaces()
+        const response = await listPlaces()
+        // this.$log.debug('[handleListPlaces] response: ', response)
 
-        this.types.data = response.data
+        this.places.data = response.result
       } catch (error) {
         this.$log.error(error)
       } finally {
-        this.types.loading = false
+        this.places.loading = false
       }
     },
 
@@ -355,7 +348,7 @@ export default {
                 okText: '确定',
                 cancelText: '取消',
                 onOk: async () => {
-                  await fileApi.deleteById(item.id)
+                  await deleteById(item.id)
                   await this.handleListFiles()
                   this.handleUnselect(item)
                 }
@@ -373,7 +366,8 @@ export default {
      * Handle page change
      */
     handlePageChange (page = 1) {
-      this.list.params.page = page - 1
+      this.$log.debug('[handlePageChange] page: ', page)
+      this.list.params.page = page
       this.handleListFiles()
     },
 
@@ -382,7 +376,7 @@ export default {
      */
     handlePageSizeChange (current, size) {
       this.$log.debug(`Current: ${current}, PageSize: ${size}`)
-      this.list.params.page = 0
+      this.list.params.page = 1
       this.list.params.size = size
       this.handleListFiles()
     },
@@ -392,7 +386,7 @@ export default {
      */
     handleResetParam () {
       this.list.params.keyword = undefined
-      this.list.params.mediaType = undefined
+      this.list.params.type = undefined
       this.list.params.place = undefined
       this.handlePageChange()
       this.handleListTypes()
@@ -403,6 +397,7 @@ export default {
      * Search files
      */
     handleQuery () {
+      this.$log.debug('params', this.list.params)
       this.handlePageChange()
     },
 
@@ -427,11 +422,11 @@ export default {
         async onOk () {
           try {
             const fileIds = _this.list.selected.map(file => file.id)
-            await fileApi.deleteInBatch(fileIds)
+            await deleteInBatch(fileIds)
             _this.list.selected = []
             _this.$message.success('删除成功')
           } catch (e) {
-            _this.$log.error('Failed to delete selected files', e)
+            console.error('Failed to delete selected files', e)
           } finally {
             await _this.handleListFiles()
           }
@@ -475,3 +470,39 @@ export default {
   }
 }
 </script>
+<style lang="less" scoped>
+.div-filelist-item{
+  background-color: #ececec;
+  padding: 20px;
+
+  .row-filelist {
+
+    .col-file-item {
+      margin: 3px 0;
+      // min-width: 100%;
+      // min-height: 100%;
+      height: 300px;
+      overflow: hidden;
+
+      .card-body-select-true{
+        border: 1px blue solid;
+        border-radius: 3px;
+        height: inherit;
+      }
+      .card-body-select-false{
+        border: 1px #ececec solid;
+        border-radius: 3px;
+        height: inherit;
+      }
+
+      .img-filelist-item{
+        margin: 0;
+        height: 100%;
+        width: 100%;
+        // overflow: hidden;
+      }
+    }
+  }
+}
+
+</style>

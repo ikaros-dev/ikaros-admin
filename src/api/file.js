@@ -8,8 +8,6 @@ const api = {
   places: '/file/places'
 }
 
-export default api
-
 export function upload (file, options) {
   const formData = new FormData()
   formData.append('file', file)
@@ -28,10 +26,10 @@ export function upload (file, options) {
  *   page: 0
  *   size: 50
  *   keyword: undefined
- *   mediaType: undefined
+ *   type: undefined
  *   place: undefined
  */
-export function list (params) {
+export function listByPaging (params) {
   return request({
     url: api.list,
     method: 'get',

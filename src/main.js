@@ -17,6 +17,8 @@ import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less' // global style
 
+import './logger'
+
 Vue.config.productionTip = false
 
 // mount axios to `Vue.$http` and `this.$http`

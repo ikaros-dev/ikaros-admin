@@ -4,6 +4,10 @@
 基于[ant-design-vue-pro](https://github.com/vueComponent/ant-design-vue-pro)
 
 
+# VSCode 插件
+- Vetur: Vue2支持插件
+- ESLint: 代码规范插件
+
 # 环境和依赖
 - node
 - yarn
