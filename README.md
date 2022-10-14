@@ -1,7 +1,7 @@
 # ikaros-web
 [ikaros](https://github.com/li-guohao/ikaros) 项目的前端后台界面，已经编译进 [ikaros](https://github.com/li-guohao/ikaros) 对应的目录中。
 
-基于[ant-design-vue-pro](https://github.com/vueComponent/ant-design-vue-pro) 和 halo-admin
+基于[ant-design-vue-pro](https://github.com/vueComponent/ant-design-vue-pro) 和 [halo-admin](https://github.com/halo-dev/console)
 
 
 # VSCode 插件
