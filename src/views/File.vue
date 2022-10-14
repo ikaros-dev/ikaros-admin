@@ -516,4 +516,7 @@ export default {
   }
 }
 
+.page-wrapper {
+  margin-top: 5px;
+}
 </style>
