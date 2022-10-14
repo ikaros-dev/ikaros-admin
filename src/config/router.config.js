@@ -64,7 +64,7 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/anime/list',
         name: 'anime',
-        meta: { title: '番剧', keepAlive: true, icon: 'picture' },
+        meta: { title: '番剧', keepAlive: true, icon: 'appstore' },
         children: [
           {
             path: '/anime/userFollow',
@@ -141,6 +141,14 @@ export const asyncRouterMap = [
             meta: { title: 'menu.system.about', hiddenHeaderContent: false }
           }
         ]
+      },
+
+      // test
+      {
+        path: '/test',
+        name: 'Test',
+        component: () => import('@/views/Test'),
+        meta: { title: 'menu.test', keepAlive: true, icon: 'bars', permission: ['dashboard'] }
       }
 
     ]
