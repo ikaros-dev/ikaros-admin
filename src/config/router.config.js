@@ -55,7 +55,39 @@ export const asyncRouterMap = [
         path: '/file',
         name: 'File',
         component: () => import('@/views/File'),
-        meta: { title: 'menu.file', icon: 'picture', permission: ['result'] }
+        meta: { title: 'menu.file', icon: 'picture' }
+      },
+
+      // anime
+      {
+        path: '/anime',
+        component: RouteView,
+        redirect: '/anime/list',
+        name: 'anime',
+        meta: { title: '番剧', keepAlive: true, icon: 'picture' },
+        children: [
+          {
+            path: '/anime/userFollow',
+            name: 'userFollow',
+            hidden: true,
+            component: () => import('@/views/anime/UserFollow'),
+            meta: { title: '我的追番', keepAlive: true }
+          },
+          {
+            path: '/anime/add',
+            name: 'add',
+            component: () => import('@/views/anime/Add'),
+            meta: { title: '新增番剧', hideHeader: true },
+            hideChildrenInMenu: true
+          },
+          {
+            path: '/anime/list',
+            name: 'list',
+            component: () => import('@/views/anime/List'),
+            meta: { title: '番剧列表', hideHeader: true },
+            hideChildrenInMenu: true
+          }
+        ]
       },
 
       // account

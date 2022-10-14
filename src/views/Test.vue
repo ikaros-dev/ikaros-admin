@@ -3,7 +3,7 @@
     <H2>Test</H2>
     <br>
 
-    <div>
+    <!-- <div>
       <h2>FileUpload.vue</h2>
       <button @click="upload.visible = true">展示</button>
       <FileUploadModal :visible.sync="upload.visible" />
@@ -13,7 +13,7 @@
     <div>
       <h2>FilePondUpload.vue</h2>
       <FilePondUpload :ref="upload" :uploadHandler="uploadHandler"></FilePondUpload>
-    </div>
+    </div> -->
   </page-header-wrapper>
 </template>
 
