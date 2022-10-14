@@ -31,7 +31,7 @@
           <a-list-item >
             <a-list-item-meta>
               <template v-if="editable" slot="description">
-                <a-input ref="nameInput" v-model="file.name" @blur="handleUpdateName" />
+                <a-input ref="nameInput" v-model="file.name" @blur="handleUpdateName" @pressEnter="handleUpdateName"/>
               </template>
               <template v-else slot="description">{{ file.name }}</template>
               <span slot="title">
