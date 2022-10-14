@@ -20,7 +20,7 @@
                       @change="handleQuery()"
                     >
                       <a-select-option v-for="item in places.data" :key="item" :value="item">
-                        {{ item }}
+                        {{ item | fileTypePlace }}
                       </a-select-option>
                     </a-select>
                   </a-form-item>
@@ -37,7 +37,7 @@
                         v-for="(item, index) in types.data"
                         :key="index"
                         :value="item"
-                      >{{ item }}
+                      >{{ item | fileTypeText }}
                       </a-select-option>
                     </a-select>
                   </a-form-item>
@@ -97,7 +97,7 @@
                     <img
                       v-if="isImage(file)"
                       :alt="file.name"
-                      :src="file.location"
+                      :src="file.url"
                       class="img-filelist-item"
                       loading="lazy"
                     />
@@ -131,15 +131,27 @@
 
     <FileUploadModal :visible.sync="upload.visible" @close="onUploadClose" />
 
+    <FileDetailModal
+      :addToPhoto="true"
+      :file="list.current"
+      :visible.sync="detailVisible"
+      @delete="handleListFiles()"
+    >
+      <template #extraFooter>
+        <a-button :disabled="selectPreviousButtonDisabled" @click="handleSelectPrevious">上一项</a-button>
+        <a-button :disabled="selectNextButtonDisabled" @click="handleSelectNext">下一项</a-button>
+      </template>
+    </FileDetailModal>
   </page-header-wrapper>
 </template>
 
 <script>
 import FileUploadModal from '@/components/File/FileUploadModal.vue'
+import FileDetailModal from '@/components/File/FileDetailModal.vue'
 import { listByPaging, listTypes, listPlaces, deleteById, deleteInBatch } from '@/api/file'
 
 export default {
-  components: { FileUploadModal },
+  components: { FileUploadModal, FileDetailModal },
   data () {
     return {
       list: {
@@ -366,7 +378,7 @@ export default {
      * Handle page change
      */
     handlePageChange (page = 1) {
-      this.$log.debug('[handlePageChange] page: ', page)
+      this.$log.debug('page: ', page)
       this.list.params.page = page
       this.handleListFiles()
     },
@@ -486,12 +498,12 @@ export default {
 
       .card-body-select-true{
         border: 1px blue solid;
-        border-radius: 3px;
+        border-radius: 5px;
         height: inherit;
       }
       .card-body-select-false{
         border: 1px #ececec solid;
-        border-radius: 3px;
+        border-radius: 5px;
         height: inherit;
       }
 

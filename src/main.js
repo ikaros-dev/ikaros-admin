@@ -18,6 +18,7 @@ import './utils/filter' // global filter
 import './global.less' // global style
 
 import './logger'
+import '@/filter'
 
 Vue.config.productionTip = false
 

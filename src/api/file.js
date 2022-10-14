@@ -1,11 +1,12 @@
 import request from '@/utils/request'
 
 const api = {
-  basic: '/file/',
+  basic: '/file',
   upload: '/file/data',
   list: '/file/list',
   types: '/file/types',
-  places: '/file/places'
+  places: '/file/places',
+  updateName: '/file/name'
 }
 
 export function upload (file, options) {
@@ -66,5 +67,16 @@ export function deleteInBatch (ids) {
     url: api.basic,
     method: 'delete',
     params: ids
+  })
+}
+
+export function updateNameById (id, name) {
+  return request({
+    url: api.updateName,
+    method: 'put',
+    params: {
+      'id': id,
+      'name': name
+    }
   })
 }
