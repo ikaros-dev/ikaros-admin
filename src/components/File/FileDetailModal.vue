@@ -1,7 +1,7 @@
 <template>
-  <a-modal v-model="modalVisible" width="85%" title="文件详情">
+  <a-modal v-model="modalVisible" width="70%" title="文件详情">
     <a-row :gutter="24" type="flex">
-      <a-col :lg="9" :md="24" :sm="24" :xl="9" :xs="24">
+      <a-col :lg="15" :md="24" :sm="24" :xl="15" :xs="24">
         <div class="attach-detail-img pb-3">
           <a v-if="isImage" :href="file.url" target="_blank">
             <img :src="file.url" class="file-detail-preview-img" loading="lazy" />
@@ -21,9 +21,14 @@
           <div v-else>此文件不支持预览</div>
         </div>
       </a-col>
-      <a-col :lg="15" :md="24" :sm="24" :xl="15" :xs="24">
+      <a-col :lg="9" :md="24" :sm="24" :xl="9" :xs="24">
         <a-list itemLayout="horizontal">
           <a-list-item style="padding-top: 0">
+            <a-list-item-meta :description="file.id">
+              <span slot="title">文件ID：</span>
+            </a-list-item-meta>
+          </a-list-item>
+          <a-list-item >
             <a-list-item-meta>
               <template v-if="editable" slot="description">
                 <a-input ref="nameInput" v-model="file.name" @blur="handleUpdateName" />
@@ -203,5 +208,6 @@ export default {
 .file-detail-preview-img {
   width: 100%;
   height: 100%;
+  border-radius: 5px;
 }
 </style>
