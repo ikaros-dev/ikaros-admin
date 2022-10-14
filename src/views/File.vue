@@ -117,7 +117,7 @@
       <a-pagination
         :current="pagination.page"
         :defaultPageSize="pagination.size"
-        :pageSizeOptions="['8', '16', '32', '64']"
+        :pageSizeOptions="['8', '16', '32', '64', '128']"
         :total="pagination.total"
         class="pagination"
         showLessItems
@@ -317,10 +317,10 @@ export default {
       this.$contextmenu({
         items: [
           {
-            label: `复制${this.isImage(item) ? '图片' : '文件'}链接`,
+            label: `复制${this.isImage(item) ? '图片' : '文件'}名称`,
             onClick: () => {
               // this.$log.debug('item', item)
-              const text = `${encodeURI(item.url)}`
+              const text = item.name
               this.$copyText(text)
                 .then(message => {
                   this.$log.debug('copy', message)
@@ -334,10 +334,10 @@ export default {
             divided: true
           },
           {
-            disabled: !this.isImage(item),
-            label: '复制 Markdown 格式链接',
+            label: `复制${this.isImage(item) ? '图片' : '文件'}链接`,
             onClick: () => {
-              const text = `![${item.name}](${encodeURI(item.url)})`
+              // this.$log.debug('item', item)
+              const text = `${encodeURI(item.url)}`
               this.$copyText(text)
                 .then(message => {
                   this.$log.debug('copy', message)
