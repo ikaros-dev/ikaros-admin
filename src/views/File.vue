@@ -73,8 +73,6 @@
                 v-for="(file, index) in list.data"
                 :key="index"
                 @click="handleItemClick(file)"
-                @mouseenter="$set(file, 'hover', true)"
-                @mouseleave="$set(file, 'hover', false)"
                 @contextmenu.prevent="handleContextMenu($event, file)"
               >
                 <a-col
@@ -102,8 +100,8 @@
                       loading="lazy"
                     />
                     <div v-else >
-                      <p>当前文件类型为： {{ file.type }}</p>
-                      <p>暂时只支持图片预览，预览请点击详情</p>
+                      <p>当前文件类型为： {{ file.type | fileTypeText }}</p>
+                      <p>非图片格式的预览，请点击当前卡片查询详情</p>
                     </div>
                   </a-card>
                 </a-col>
@@ -321,7 +319,8 @@ export default {
           {
             label: `复制${this.isImage(item) ? '图片' : '文件'}链接`,
             onClick: () => {
-              const text = `${encodeURI(item.path)}`
+              // this.$log.debug('item', item)
+              const text = `${encodeURI(item.url)}`
               this.$copyText(text)
                 .then(message => {
                   this.$log.debug('copy', message)
@@ -338,7 +337,7 @@ export default {
             disabled: !this.isImage(item),
             label: '复制 Markdown 格式链接',
             onClick: () => {
-              const text = `![${item.name}](${encodeURI(item.path)})`
+              const text = `![${item.name}](${encodeURI(item.url)})`
               this.$copyText(text)
                 .then(message => {
                   this.$log.debug('copy', message)

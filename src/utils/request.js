@@ -10,7 +10,7 @@ import i18n from '@/locales/index'
 const request = axios.create({
   // API 请求的默认前缀
   baseURL: process.env.VUE_APP_API_BASE_URL,
-  timeout: 6000 // 请求超时时间
+  timeout: 60000 // 请求超时时间设置为1分钟，todo 这里大文件上传可能有点问题
 })
 console.log('current backend open api address: ' + process.env.VUE_APP_API_BASE_URL)
 // 异常拦截处理器
