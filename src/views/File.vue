@@ -85,7 +85,7 @@
                   <a-card :title="file.name" :bordered="false" :class="`${isItemSelect(file) ? 'card-body-select-true' : 'card-body-select-false'}`">
                     <template #extra>
                       <a-icon
-                        v-show="!isItemSelect(file) && file.hover"
+                        v-show="!isItemSelect(file)"
                         :style="{ fontSize: '20px', color: 'rgb(37 99 235)' }"
                         theme="twoTone"
                         type="plus-circle"
