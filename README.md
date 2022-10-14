@@ -3,6 +3,8 @@
 
 基于[ant-design-vue-pro](https://github.com/vueComponent/ant-design-vue-pro) 和 [halo-admin](https://github.com/halo-dev/console)
 
+# 问题追踪
+请到 [ikaros](https://github.com/li-guohao/ikaros) 下进行提问: https://github.com/li-guohao/ikaros/issues 
 
 # VSCode 插件
 - Vetur: Vue2支持插件
