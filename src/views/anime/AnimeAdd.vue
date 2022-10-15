@@ -51,12 +51,19 @@
         </a-button>
       </a-form-item>
     </a-form>
+
+    <FileSelectModal
+      :visible.sync="fileSelectModalVisible"
+      @sendSelectedFileFieldValue="handSelectedFileFieldValue"
+      :disableCopySelectedFileIdButton="true" />
   </page-header-wrapper>
 
 </template>
 
 <script>
+import FileSelectModal from '@/components/File/FileSelectModal.vue'
 export default {
+  components: { FileSelectModal },
   data () {
     return {
       labelCol: {
@@ -72,16 +79,27 @@ export default {
         sm: { span: 12, offset: 5 }
       },
       formLayout: 'horizontal',
-      form: this.$form.createForm(this, { name: 'coordinated' })
+      form: this.$form.createForm(this, { name: 'coordinated' }),
+      fileSelectModalVisible: false
     }
   },
+
   methods: {
     onChange () {
     },
+
     handleSubmit () {},
-    // 打开文件快速选择
+
     openFileSelectModal () {
-      alert('hello')
+      this.fileSelectModalVisible = true
+    },
+
+    handSelectedFileFieldValue (value) {
+      this.$log.debug('value', value)
+      // this.$log.debug('form', this.form)
+      this.form.setFieldsValue({
+        coverUrl: value
+      })
     }
   }
 }

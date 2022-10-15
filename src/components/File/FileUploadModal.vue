@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="modalVisible" :afterClose="onClose" :footer="null" destroyOnClose title="上传文件">
+  <a-modal v-model="modalVisible" :afterClose="onModalClose" :footer="null" destroyOnClose title="上传文件">
     <FilePondUpload ref="filePondUploadRef" :uploadHandler="uploadHandler"></FilePondUpload>
   </a-modal>
 </template>
@@ -32,9 +32,9 @@ export default {
     }
   },
   methods: {
-    onClose () {
+    onModalClose () {
       this.$refs.filePondUploadRef.handleClearFileList()
-      this.$emit('close')
+      this.$emit('fileUploadModalClose')
     }
   }
 }

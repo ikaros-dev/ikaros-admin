@@ -127,7 +127,7 @@
       />
     </div>
 
-    <FileUploadModal :visible.sync="upload.visible" @close="onUploadClose" />
+    <FileUploadModal :visible.sync="upload.visible" @fileUploadModalClose="onUploadClose" />
 
     <FileDetailModal
       :addToPhoto="true"
@@ -224,6 +224,7 @@ export default {
      * List files
      */
     async handleListFiles () {
+      // this.$log.debug('handleListFiles run once')
       try {
         this.list.loading = true
 
@@ -413,6 +414,7 @@ export default {
     },
 
     onUploadClose () {
+      // this.$log.debug('onUploadClose run once')
       this.handlePageChange()
       this.handleListTypes()
       this.handleListPlaces()
@@ -424,11 +426,11 @@ export default {
     handleDeleteFileInBatch () {
       const _this = this
       if (this.list.selected.length <= 0) {
-        this.$message.warn('你还未选择任何附件，请至少选择一个！')
+        this.$message.warn('你还未选择任何文件，请至少选择一个！')
         return
       }
       this.$confirm({
-        title: '确定要批量删除选中的附件吗？',
+        title: '确定要批量删除选中的文件吗？',
         content: '一旦删除不可恢复，请谨慎操作',
         async onOk () {
           try {
