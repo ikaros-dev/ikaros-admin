@@ -70,20 +70,20 @@ export const asyncRouterMap = [
             path: '/anime/userFollow',
             name: 'userFollow',
             hidden: true,
-            component: () => import('@/views/anime/UserFollow'),
+            component: () => import('@/views/anime/AnimeUserFollow'),
             meta: { title: '我的追番', keepAlive: true }
           },
           {
             path: '/anime/add',
             name: 'add',
-            component: () => import('@/views/anime/Add'),
+            component: () => import('@/views/anime/AnimeAdd'),
             meta: { title: '新增番剧', hideHeader: true },
             hideChildrenInMenu: true
           },
           {
             path: '/anime/list',
             name: 'list',
-            component: () => import('@/views/anime/List'),
+            component: () => import('@/views/anime/AnimeList'),
             meta: { title: '番剧列表', hideHeader: true },
             hideChildrenInMenu: true
           }
@@ -141,15 +141,15 @@ export const asyncRouterMap = [
             meta: { title: 'menu.system.about', hiddenHeaderContent: false }
           }
         ]
-      },
-
-      // test
-      {
-        path: '/test',
-        name: 'Test',
-        component: () => import('@/views/Test'),
-        meta: { title: 'menu.test', keepAlive: true, icon: 'bars', permission: ['dashboard'] }
       }
+
+      // // test
+      // {
+      //   path: '/test',
+      //   name: 'Test',
+      //   component: () => import('@/views/Test'),
+      //   meta: { title: 'menu.test', keepAlive: true, icon: 'bars', permission: ['dashboard'] }
+      // }
 
     ]
   },
