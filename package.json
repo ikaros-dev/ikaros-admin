@@ -19,6 +19,7 @@
     "axios": "^0.26.1",
     "core-js": "^3.21.1",
     "dayjs": "^1.11.5",
+    "dplayer": "^1.27.0",
     "enquire.js": "^2.1.6",
     "filepond": "^4.30.4",
     "filepond-plugin-file-validate-type": "^1.2.8",

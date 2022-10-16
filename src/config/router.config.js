@@ -141,15 +141,15 @@ export const asyncRouterMap = [
             meta: { title: 'menu.system.about', hiddenHeaderContent: false }
           }
         ]
-      }
+      },
 
-      // // test
-      // {
-      //   path: '/test',
-      //   name: 'Test',
-      //   component: () => import('@/views/Test'),
-      //   meta: { title: 'menu.test', keepAlive: true, icon: 'bars', permission: ['dashboard'] }
-      // }
+      // test
+      {
+        path: '/test',
+        name: 'Test',
+        component: () => import('@/views/Test'),
+        meta: { title: 'menu.test', keepAlive: true, icon: 'bars', permission: ['dashboard'] }
+      }
 
     ]
   },

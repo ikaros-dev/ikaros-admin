@@ -3,39 +3,43 @@
     <H2>Test</H2>
     <br>
 
-    <!-- <div>
-      <h2>FileUpload.vue</h2>
-      <button @click="upload.visible = true">展示</button>
-      <FileUploadModal :visible.sync="upload.visible" />
-    </div>
-    <br>
+    <button @click="doPlay">play</button>
+    <d-player ref="myPlayer" :options="options" />
 
-    <div>
-      <h2>FilePondUpload.vue</h2>
-      <FilePondUpload :ref="upload" :uploadHandler="uploadHandler"></FilePondUpload>
-    </div> -->
   </page-header-wrapper>
 </template>
 
 <script>
-import FileUploadModal from '@/components/File/FileUploadModal.vue'
-import FilePondUpload from '@/components/Upload/FilePondUpload.vue'
 
 export default {
   name: 'Test',
-  components: { FileUploadModal, FilePondUpload },
   data () {
     return {
-      upload: {
-        visible: false
-      },
-      uploadHandler: (file, options) => {
-        // todo call api to upload file
+      defaultPic: 'http://192.168.2.143:9090/upload/2022/10/16/9/223e5664bcb9435d9fe63f1e6d16c9ee.jpg',
+      defaultUrl: 'http://192.168.2.143:9090/upload/2022/10/16/9/6c52452457234c1d992b0f10d1ec696c.mkv',
+      options: {
+        container: {},
+        screenshot: true,
+        preload: 'metadata',
+        volume: 0.7,
+        video: {
+            pic: '',
+            url: ''
+        }
       }
     }
   },
-  method: {
-
+  beforeMount () {
+    this.options.video.pic = this.defaultPic
+    this.options.video.url = this.defaultUrl
+  },
+  methods: {
+    doPlay () {
+      this.$refs.myPlayer.dp.play()
+    },
+    afterClickPlay () {
+      alert('afterClickPlay')
+    }
   }
 }
 </script>

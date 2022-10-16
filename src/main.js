@@ -12,6 +12,7 @@ import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
 import Contextmenu from 'vue-contextmenujs'
 import VueClipboard from 'vue-clipboard2'
+import VideoDPlayer from './video/dplayer'
 
 import bootstrap from './core/bootstrap'
 import './core/lazy_use' // use lazy load components
@@ -27,6 +28,7 @@ Vue.config.productionTip = false
 Vue.use(VueAxios)
 Vue.use(Contextmenu)
 Vue.use(VueClipboard)
+Vue.use(VideoDPlayer)
 // use pro-layout components
 Vue.component('pro-layout', ProLayout)
 Vue.component('page-container', PageHeaderWrapper)
