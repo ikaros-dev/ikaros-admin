@@ -75,6 +75,18 @@ export default {
     uploadHandler: {
       type: Function,
       required: true
+    },
+    // 是否开启分片上传
+    enableChunkUploads: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    // 分片上传单片字节大小，默认 50MB
+    chunkSize: {
+      type: Number,
+      required: false,
+      default: 50000000
     }
   },
   data: function () {
@@ -89,8 +101,7 @@ export default {
                   progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total)
                 }
               }
-            },
-            this.field
+            }
           )
             .then(response => {
               load(response)

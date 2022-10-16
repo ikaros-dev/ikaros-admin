@@ -9,12 +9,13 @@ const api = {
   updateName: '/file/name'
 }
 
-export function upload (file, options) {
+export function upload (file, onUploadProgress) {
   const formData = new FormData()
   formData.append('file', file)
   return request({
     url: api.upload,
     method: 'put',
+    onUploadProgress: onUploadProgress,
     data: formData,
     headers: {
       'Content-Type': 'multipart/form-data'

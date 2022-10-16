@@ -18,7 +18,7 @@ export default {
   },
   data () {
     return {
-      uploadHandler: (file, options) => upload(file, options)
+      uploadHandler: (file, onUploadProgress) => upload(file, onUploadProgress)
     }
   },
   computed: {
