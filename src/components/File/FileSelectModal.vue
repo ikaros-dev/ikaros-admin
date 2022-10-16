@@ -81,7 +81,7 @@
                     />
                     <div v-else >
                       <p>当前文件类型为： {{ file.type | fileTypeText }}</p>
-                      <p>非图片格式的预览，请点击当前卡片查询详情</p>
+                      <p>非图片格式在选择页不支持预览，预览请去文件页</p>
                     </div>
                   </a-card>
                 </a-col>
