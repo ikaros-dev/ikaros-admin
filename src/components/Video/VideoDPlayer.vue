@@ -15,6 +15,11 @@ export default {
       default: ''
     }
   },
+  computed: {
+    variablyUrl () {
+      return `${this.url}`
+    }
+  },
   data () {
     return {
       options: {
@@ -35,6 +40,24 @@ export default {
   },
   mounted () {
     this.$emit('player', this.$refs.myVideoDPlayer.dp)
+  },
+  watch: {
+    variablyUrl (newUrl, oldUrl) {
+      // console.log(oldUrl)
+      // console.log(newUrl)
+      this.reRanderVideo(newUrl)
+    }
+  },
+  methods: {
+    reRanderVideo (newVideoUrl) {
+      this.$log.debug('newVideoUrl', newVideoUrl)
+      // this.$log.debug('player', this.$refs.myVideoDPlayer.dp)
+      this.$refs.myVideoDPlayer.dp.pause()
+      this.$refs.myVideoDPlayer.dp.switchVideo({
+          url: newVideoUrl
+      })
+      // this.$refs.myVideoDPlayer.dp.play()
+    }
   }
 }
 </script>

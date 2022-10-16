@@ -6,7 +6,8 @@
           <a v-if="isImage" :href="file.url" target="_blank">
             <img :src="file.url" class="file-detail-preview-img" loading="lazy" />
           </a>
-          <video
+          <VideoDPlayer v-else-if="isVideo" :url="file.url" />
+          <!-- <video
             v-else-if="isVideo"
             width="100%"
             height="100%"
@@ -14,7 +15,7 @@
             controls
             preload="metadata">
             您的浏览器不支持这个格式的视频
-          </video>
+          </video> -->
           <audio v-else-if="isVoice" controls :src="file.url">
             您的浏览器不支持这个格式的音频
           </audio>
@@ -83,9 +84,11 @@
 
 <script>
 import { deleteById, updateNameById } from '@/api/file'
+import VideoDPlayer from '@/components/Video/VideoDPlayer.vue'
 
 export default {
   name: 'FileDetailModal',
+  components: { VideoDPlayer },
   props: {
     visible: {
       type: Boolean,

@@ -4,15 +4,18 @@
     <br>
 
     <button @click="doPlay">play</button>
-    <d-player ref="myPlayer" :options="options" />
+    <!-- <d-player ref="myPlayer" :options="options" /> -->
 
+    <VideoDPlayer :pic="defaultPic" :url="defaultUrl" @player="handerVideoPlayer"/>
   </page-header-wrapper>
 </template>
 
 <script>
+import VideoDPlayer from '@/components/Video/VideoDPlayer.vue'
 
 export default {
   name: 'Test',
+  components: { VideoDPlayer },
   data () {
     return {
       defaultPic: 'http://192.168.2.143:9090/upload/2022/10/16/9/223e5664bcb9435d9fe63f1e6d16c9ee.jpg',
@@ -26,7 +29,8 @@ export default {
             pic: '',
             url: ''
         }
-      }
+      },
+      player: {}
     }
   },
   beforeMount () {
@@ -35,10 +39,12 @@ export default {
   },
   methods: {
     doPlay () {
-      this.$refs.myPlayer.dp.play()
+      // this.$refs.myPlayer.dp.play()
+      this.player.play()
     },
-    afterClickPlay () {
-      alert('afterClickPlay')
+    handerVideoPlayer (player) {
+      this.$log.debug('player', player)
+      this.player = player
     }
   }
 }
