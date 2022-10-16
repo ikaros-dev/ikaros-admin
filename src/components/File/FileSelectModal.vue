@@ -80,7 +80,7 @@
                       loading="lazy"
                     />
                     <div v-else >
-                      <p>当前文件类型为： {{ file.type | fileTypeText }}</p>
+                      <p>当前文件 类型/后缀 为： {{ file.type | fileTypeText }}/{{ file.postfix }}</p>
                       <p>非图片格式在选择页不支持预览，预览请去文件页</p>
                     </div>
                   </a-card>

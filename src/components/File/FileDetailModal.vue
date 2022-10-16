@@ -44,8 +44,9 @@
             </a-list-item-meta>
           </a-list-item>
           <a-list-item>
-            <a-list-item-meta :description="file.type | fileTypeText">
-              <span slot="title">文件类型：</span>
+            <a-list-item-meta >
+              <span slot="title">文件 类型/后缀：</span>
+              <span slot="description"> {{ file.type | fileTypeText }}/{{ file.postfix }}</span>
             </a-list-item-meta>
           </a-list-item>
           <a-list-item>
