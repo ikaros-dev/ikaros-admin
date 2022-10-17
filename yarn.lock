@@ -3872,6 +3872,11 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+crypto-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.1.1.tgz#9e485bcf03521041bd85844786b83fb7619736cf"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+
 css-declaration-sorter@^6.3.0:
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/css-declaration-sorter/-/css-declaration-sorter-6.3.1.tgz#be5e1d71b7a992433fb1c542c7a1b835e45682ec"
@@ -5245,6 +5250,11 @@ file-loader@^6.2.0:
   dependencies:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
+
+filepond-plugin-file-rename@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/filepond-plugin-file-rename/-/filepond-plugin-file-rename-1.1.8.tgz#5aadef7c887c3928d54c9b8f93ab21615c0d7d27"
+  integrity sha512-qqZe1JFvl9S/lmIjQiRIzXxRkxobE7hqqjDOFgJkBzcZAjWn/rGpUEWWc5JUDL71JqyACG8gwMFSzGr1a04IQA==
 
 filepond-plugin-file-validate-type@^1.2.8:
   version "1.2.8"

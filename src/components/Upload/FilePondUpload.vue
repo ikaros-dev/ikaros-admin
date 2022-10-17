@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import vueFilePond from 'vue-filepond'
+import vueFilePond, { setOptions } from 'vue-filepond'
 import 'filepond/dist/filepond.min.css'
 
 // Plugins
@@ -36,15 +36,28 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
+import FilePondPluginFileRename from 'filepond-plugin-file-rename'
 
 import storage from 'store'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+
+import Utf8 from 'crypto-js/enc-utf8'
+import Base64 from 'crypto-js/enc-base64'
 
 // Create component and register plugins
 const FilePond = vueFilePond(
   FilePondPluginImageExifOrientation,
   FilePondPluginImagePreview,
-  FilePondPluginFileValidateType)
+  FilePondPluginFileValidateType,
+  FilePondPluginFileRename)
+
+setOptions({
+    fileRenameFunction: (file) => {
+      const word = Utf8.parse(file.name)
+      return Base64.stringify(word)
+    }
+})
+
 export default {
   name: 'FilePondUpload',
   components: {
