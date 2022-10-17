@@ -1,6 +1,6 @@
 <template>
   <a-modal v-model="modalVisible" :afterClose="onModalClose" :footer="null" destroyOnClose title="上传文件">
-    <FilePondUpload ref="filePondUploadRef" :uploadHandler="uploadHandler"></FilePondUpload>
+    <FilePondUpload ref="filePondUploadRef" :uploadHandler="uploadHandler" :enableChunkForce="true" :enableChunkUploads="true" />
   </a-modal>
 </template>
 <script>

@@ -12,6 +12,9 @@
       :maxParallelUploads="5"
       :name="name"
       :server="server"
+      :chunkUploads="enableChunkUploads"
+      :chunkSize="chunkSize"
+      :chunkForce="enableChunkForce"
       fileValidateTypeLabelExpectedTypes="请选择 {lastType} 格式的文件"
       labelFileProcessing="上传中"
       labelFileProcessingAborted="取消上传"
@@ -33,6 +36,9 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
+
+import storage from 'store'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
 
 // Create component and register plugins
 const FilePond = vueFilePond(
@@ -82,50 +88,69 @@ export default {
       required: false,
       default: false
     },
-    // 分片上传单片字节大小，默认 50MB
+    // 是否强制分片上传
+    enableChunkForce: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    // 分片上传单片字节大小，默认 300MB
     chunkSize: {
       type: Number,
       required: false,
-      default: 50000000
+      default: 300000000
     }
   },
   data: function () {
     return {
       server: {
-        process: (fieldName, file, metadata, load, error, progress, abort) => {
-          this.uploadHandler(
-            file,
-            {
-              onUploadProgress: progressEvent => {
-                if (progressEvent.total > 0) {
-                  progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total)
-                }
-              }
+        url: process.env.VUE_APP_API_BASE_URL + '/',
+        process: {
+            url: './file/filepond/unique',
+            headers: {
+              Authorization: storage.get(ACCESS_TOKEN)
             }
-          )
-            .then(response => {
-              load(response)
-              // this.$notification.success({
-              //   message: 'Uploaded successfully, info: ' + response
-              // })
-              this.$emit('success', response, file)
-            })
-            .catch(failure => {
-              console.log('failure', failure)
-              this.$notification.error({
-                message: 'Failed to upload file, info: ' + failure
-              })
-              this.$emit('failure', failure, file)
-              error()
-            })
-          return {
-            abort: () => {
-              abort()
-              this.$notification.success('Upload operation aborted by the user')
-              // source.cancel('Upload operation canceled by the user.')
+        },
+        patch: {
+            url: './file/filepond/patch/',
+            headers: {
+              Authorization: storage.get(ACCESS_TOKEN)
             }
-          }
         }
+        // process: (fieldName, file, metadata, load, error, progress, abort) => {
+        //   this.uploadHandler(
+        //     file,
+        //     {
+        //       onUploadProgress: progressEvent => {
+        //         if (progressEvent.total > 0) {
+        //           progress(progressEvent.lengthComputable, progressEvent.loaded, progressEvent.total)
+        //         }
+        //       }
+        //     }
+        //   )
+        //     .then(response => {
+        //       load(response)
+        //       // this.$notification.success({
+        //       //   message: 'Uploaded successfully, info: ' + response
+        //       // })
+        //       this.$emit('success', response, file)
+        //     })
+        //     .catch(failure => {
+        //       console.log('failure', failure)
+        //       this.$notification.error({
+        //         message: 'Failed to upload file, info: ' + failure
+        //       })
+        //       this.$emit('failure', failure, file)
+        //       error()
+        //     })
+        //   return {
+        //     abort: () => {
+        //       abort()
+        //       this.$notification.success('Upload operation aborted by the user')
+        //       // source.cancel('Upload operation canceled by the user.')
+        //     }
+        //   }
+        // }
       },
       fileList: []
     }
