@@ -7,12 +7,12 @@
             <a-form layout="inline">
               <a-row :gutter="48">
                 <a-col :md="6" :sm="24">
-                  <a-form-item label="关键词：">
+                  <a-form-item label="关键词：" >
                     <a-input v-model="list.params.keyword" @keyup.enter="handleQuery()" />
                   </a-form-item>
                 </a-col>
                 <a-col :md="6" :sm="24">
-                  <a-form-item label="存储位置：">
+                  <a-form-item label="存储位置：" >
                     <a-select
                       v-model="list.params.place"
                       :loading="places.loading"
