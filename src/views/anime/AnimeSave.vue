@@ -56,26 +56,79 @@
       <hr>
 
       <!-- 季度区域 -->
+      <!-- 静态的季度&剧集表单
       <a-form-model-item :wrapper-col="noLabelItemWrapperCol">
-        <a-button type="dashed" style="width: 100%" @click="addSeasonFormModelItem">
+        <a-collapse :bordered="false">
+          <template #expandIcon="props">
+            <a-icon type="caret-right" :rotate="props.isActive ? 90 : 0" />
+          </template>
+          <a-collapse-panel header="季度类型" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
+            <AnimeSeason />
+            <a-collapse :bordered="false">
+              <template #expandIcon="props">
+                <a-icon type="caret-right" :rotate="props.isActive ? 90 : 0" />
+              </template>
+              <a-collapse-panel header="剧集信息" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
+                <a-tabs
+                  :default-active-key="1"
+                  tab-position="top"
+                  @change="handleTabChange"
+                >
+                  <a-tab-pane v-for="i in 24" :key="i" :tab="`第${i}集`">
+                    <AnimeEpisode />
+                  </a-tab-pane>
+                </a-tabs>
+              </a-collapse-panel>
+            </a-collapse>
+
+          </a-collapse-panel>
+        </a-collapse>
+      </a-form-model-item> -->
+
+      <a-form-model-item
+        :wrapper-col="noLabelItemWrapperCol"
+        v-for="(season) in dynamicSeasonForm.seasons"
+        :key="season.id"
+      >
+        <a-collapse :bordered="false">
+          <template #expandIcon="props">
+            <a-icon type="caret-right" :rotate="props.isActive ? 90 : 0" />
+          </template>
+          <a-collapse-panel header="季度类型" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
+            <!-- 季度信息 -->
+            <AnimeSeason />
+            <!-- 季度所属剧集信息 -->
+            <a-collapse :bordered="false">
+              <template #expandIcon="props">
+                <a-icon type="caret-right" :rotate="props.isActive ? 90 : 0" />
+              </template>
+              <a-collapse-panel header="剧集信息" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
+                <a-tabs
+                  :default-active-key="1"
+                  tab-position="top"
+                  @change="handleTabChange">
+                  <a-tab-pane v-for="i in 24" :key="i" :tab="`第${i}集`">
+                    <AnimeEpisode />
+                  </a-tab-pane>
+                </a-tabs>
+
+              </a-collapse-panel>
+            </a-collapse>
+            <a-icon
+              slot="extra"
+              v-if="dynamicSeasonForm.seasons.length > 1"
+              class="dynamic-delete-button"
+              type="minus-circle-o"
+              :disabled="dynamicSeasonForm.seasons.length === 1"
+              @click="removeSeason(season)" />
+          </a-collapse-panel>
+        </a-collapse>
+      </a-form-model-item>
+      <!-- 动态添加季度 -->
+      <a-form-model-item :wrapper-col="noLabelItemWrapperCol">
+        <a-button type="dashed" style="width: 100%" @click="addSeason">
           <a-icon type="plus" /> 添加季度
         </a-button>
-      </a-form-model-item>
-      <a-form-model-item :wrapper-col="noLabelItemWrapperCol">
-        <a-card title="季度类型">
-          <!-- 季度信息 -->
-          <AnimeSeason />
-          <!-- 季度所属剧集信息 -->
-          <a-tabs
-            :default-active-key="1"
-            tab-position="top"
-            @change="handleTabChange"
-          >
-            <a-tab-pane v-for="i in 24" :key="i" :tab="`第${i}集`">
-              <AnimeEpisode />
-            </a-tab-pane>
-          </a-tabs>
-        </a-card>
       </a-form-model-item>
 
     </a-form-model>
@@ -131,6 +184,11 @@ export default {
         coverUrl: '',
         staffs: '',
         airTime: ''
+      },
+      dynamicSeasonForm: {
+        seasons: [
+          {}
+        ]
       }
     }
   },
@@ -163,6 +221,26 @@ export default {
     },
     handleTabChange (activeKey) {
       this.$log.debug('activeKey', activeKey)
+    },
+    removeSeason (season) {
+      const _seasons = this.dynamicSeasonForm.seasons
+      this.$confirm({
+        title: '您确认要移除这个季度信息吗？',
+        content: '当你点击确认按钮，这个季度的信息会被移除！！！',
+        onOk () {
+          const index = _seasons.indexOf(season)
+          if (index !== -1) {
+            _seasons.splice(index, 1)
+          }
+        },
+        onCancel () {}
+      })
+    },
+    addSeason () {
+      this.dynamicSeasonForm.seasons.push({
+        value: '',
+        key: Date.now()
+      })
     }
   }
 }

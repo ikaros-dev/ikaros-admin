@@ -76,8 +76,8 @@ export const asyncRouterMap = [
           {
             path: '/anime/add',
             name: 'add',
-            component: () => import('@/views/anime/AnimeAdd'),
-            meta: { title: '新增番剧', hideHeader: true },
+            component: () => import('@/views/anime/AnimeSave'),
+            meta: { title: '保存番剧', hideHeader: true },
             hideChildrenInMenu: true
           },
           {

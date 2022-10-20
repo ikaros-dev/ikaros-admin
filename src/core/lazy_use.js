@@ -48,7 +48,8 @@ import {
   notification,
   Pagination,
   FormModel,
-  Carousel
+  Carousel,
+  Collapse
 } from 'ant-design-vue'
 import Viser from 'viser-vue'
 
@@ -101,6 +102,7 @@ Vue.use(Space)
 Vue.use(Pagination)
 Vue.use(FormModel)
 Vue.use(Carousel)
+Vue.use(Collapse)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
