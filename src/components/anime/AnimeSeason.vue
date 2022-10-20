@@ -1,13 +1,24 @@
 <template>
-  <a-form-model labelAlign="left" :label-col="labelCol" :wrapper-col="wrapperCol">
+  <a-form-model :model="season" labelAlign="left" :label-col="labelCol" :wrapper-col="wrapperCol">
     <a-form-model-item label="季度ID">
-      <a-input disabled />
+      <a-input v-model="season.id" disabled />
     </a-form-model-item>
     <a-form-model-item label="季度标题" >
-      <a-input placeholder="请输入标题"/>
+      <a-input v-model="season.title" placeholder="请输入标题"/>
     </a-form-model-item>
     <a-form-model-item label="季度原始标题" >
-      <a-input placeholder="请输入原始标题，建议罗马音或者英文，Ikaros可能根据这个标题去互联网查询元数据"/>
+      <a-input v-model="season.originalTitle" placeholder="请输入原始标题，建议罗马音或者英文，Ikaros可能根据这个标题去互联网查询元数据"/>
+    </a-form-model-item>
+    <a-form-model-item label="简述">
+      <a-textarea
+        v-model="season.overview"
+        placeholder="请输入季度介绍"
+        :auto-size="{ minRows: 3, maxRows: 10 }"/>
+    </a-form-model-item>
+    <a-form-model-item :wrapper-col="noLabelItemWrapperCol">
+      <a-button type="primary">
+        保存季度信息
+      </a-button>
     </a-form-model-item>
   </a-form-model>
 </template>
@@ -39,7 +50,8 @@ data () {
         sm: { span: 24, offset: 0 },
         md: { span: 24, offset: 0 },
         lg: { span: 24, offset: 0 }
-      }
+      },
+      season: {}
     }
   }
 }

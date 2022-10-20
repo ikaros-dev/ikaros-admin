@@ -49,7 +49,7 @@
       </a-form-model-item>
       <a-form-model-item :wrapper-col="labelItemWrapperCol">
         <a-button type="primary">
-          提交
+          保存番剧信息
         </a-button>
       </a-form-model-item>
 
@@ -62,14 +62,17 @@
         </a-button>
       </a-form-model-item>
       <a-form-model-item :wrapper-col="noLabelItemWrapperCol">
-        <a-card title="第一季度">
+        <a-card title="季度类型">
+          <!-- 季度信息 -->
+          <AnimeSeason />
+          <!-- 季度所属剧集信息 -->
           <a-tabs
             :default-active-key="1"
             tab-position="top"
             @change="handleTabChange"
           >
             <a-tab-pane v-for="i in 24" :key="i" :tab="`第${i}集`">
-              <AnimeSeason />
+              <AnimeEpisode />
             </a-tab-pane>
           </a-tabs>
         </a-card>
@@ -88,8 +91,9 @@
 <script>
 import FileSelectModal from '@/components/File/FileSelectModal.vue'
 import AnimeSeason from '@/components/anime/AnimeSeason.vue'
+import AnimeEpisode from '@/components/anime/AnimeEpisode.vue'
 export default {
-  components: { FileSelectModal, AnimeSeason },
+  components: { FileSelectModal, AnimeSeason, AnimeEpisode },
   data () {
     return {
       labelCol: {
