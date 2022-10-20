@@ -7,7 +7,7 @@
       <a-input disabled v-model="episode.duration" />
     </a-form-model-item>
     <a-form-model-item label="剧集关联文件ID" >
-      <a-input v-model="episode.fileId" placeholder="点击右边按钮，可快速获取已存在文件ID或者上传新的文件">
+      <a-input disabled v-model="episode.fileId" placeholder="点击右边按钮，可快速获取已存在文件ID或者上传新的文件">
         <a-icon slot="addonAfter" type="search" @click="openFileSelectModal"/>
       </a-input>
     </a-form-model-item>

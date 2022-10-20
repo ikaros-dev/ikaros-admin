@@ -58,6 +58,22 @@
             </a-form-model-item>
           </a-form-model>
         </a-tab-pane>
+        <a-tab-pane class="tab-content-pane" key="network" tab="第三方设置">
+          <a-form-model :model="thirdParty" >
+            <!-- todo 需要改成 是否开启按钮 -->
+            <a-form-model-item label="bgmTvAPI前缀">
+              <a-input v-model="thirdParty.bangumiApiBase" />
+            </a-form-model-item>
+            <a-form-model-item label="bgmTvAPI条目">
+              <a-input v-model="thirdParty.bangumiApiSubjects" />
+            </a-form-model-item>
+            <a-form-model-item >
+              <a-button type="primary" @click="saveThirdPartyOption">
+                保存第三方设置
+              </a-button>
+            </a-form-model-item>
+          </a-form-model>
+        </a-tab-pane>
         <a-tab-pane class="tab-content-pane" key="other" tab="其它设置">
           <a-form-model :model="other" >
             <!-- todo 需要改成 是否开启按钮 -->
@@ -80,7 +96,9 @@
 </template>
 
 <script>
-import { findOptionModelList, saveCommonOptionModel, saveFileOptionModel, saveSeoOptionModel, saveOtherOptionModel } from '@/api/options'
+import { findOptionModelList, saveCommonOptionModel,
+  saveFileOptionModel, saveSeoOptionModel,
+  saveOtherOptionModel, saveThirdPartyOption } from '@/api/options'
 
 export default {
   data () {
@@ -89,6 +107,7 @@ export default {
       common: {},
       seo: {},
       file: {},
+      thirdParty: {},
       other: {}
     }
   },
@@ -119,31 +138,45 @@ export default {
           this.file = entity
         }
 
-        if (category === 'other') {
-          this.other = entity
+        if (category === 'file') {
+          this.file = entity
+        }
+
+        if (category === 'thirdparty') {
+          this.thirdParty = entity
         }
       })
 
       // this.$log.debug('common', this.common)
       // this.$log.debug('seo', this.seo)
       // this.$log.debug('file', this.file)
+      this.$log.debug('network', this.network)
       // this.$log.debug('other', this.other)
     },
     async saveCommonOtpion () {
       // this.$log.debug('common', this.common)
       await saveCommonOptionModel(this.common)
+      this.$message.info('更新成功')
     },
     async saveFileOption () {
       // this.$log.debug('file', this.file)
       await saveFileOptionModel(this.file)
+      this.$message.info('更新成功')
     },
     async saveSeoOption () {
       // this.$log.debug('seo', this.seo)
       await saveSeoOptionModel(this.seo)
+      this.$message.info('更新成功')
     },
     async saveOtherOption () {
       // this.$log.debug('other', this.other)
       await saveOtherOptionModel(this.other)
+      this.$message.info('更新成功')
+    },
+    async saveThirdPartyOption () {
+      // this.$log.debug('thirdParty', this.thirdParty)
+      await saveThirdPartyOption(this.thirdParty)
+      this.$message.info('更新成功')
     }
   }
 }
