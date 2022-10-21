@@ -48,7 +48,7 @@
         </a-input>
       </a-form-model-item>
       <a-form-model-item :wrapper-col="labelItemWrapperCol">
-        <a-button type="primary">
+        <a-button type="primary" @click="handleSaveAnimeClick">
           保存番剧信息
         </a-button>
       </a-form-model-item>
@@ -87,7 +87,7 @@
 
       <a-form-model-item
         :wrapper-col="noLabelItemWrapperCol"
-        v-for="(season) in dynamicSeasonForm.seasons"
+        v-for="(season) in seasons"
         :key="season.id"
       >
         <a-collapse :bordered="false">
@@ -96,7 +96,7 @@
           </template>
           <a-collapse-panel header="季度类型" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
             <!-- 季度信息 -->
-            <AnimeSeason />
+            <AnimeSeason :season="season" :animeId="anime.id" @updateSeason="(newSeason) => {season = newSeason}"/>
             <!-- 季度所属剧集信息 -->
             <a-collapse :bordered="false">
               <template #expandIcon="props">
@@ -116,10 +116,10 @@
             </a-collapse>
             <a-icon
               slot="extra"
-              v-if="dynamicSeasonForm.seasons.length > 1"
+              v-if="seasons.length > 1"
               class="dynamic-delete-button"
               type="minus-circle-o"
-              :disabled="dynamicSeasonForm.seasons.length === 1"
+              :disabled="seasons.length === 1"
               @click="removeSeason(season)" />
           </a-collapse-panel>
         </a-collapse>
@@ -145,6 +145,9 @@
 import FileSelectModal from '@/components/File/FileSelectModal.vue'
 import AnimeSeason from '@/components/anime/AnimeSeason.vue'
 import AnimeEpisode from '@/components/anime/AnimeEpisode.vue'
+import { saveAnime } from '@/api/anime'
+import moment from 'moment'
+
 export default {
   components: { FileSelectModal, AnimeSeason, AnimeEpisode },
   data () {
@@ -185,11 +188,9 @@ export default {
         staffs: '',
         airTime: ''
       },
-      dynamicSeasonForm: {
-        seasons: [
-          {}
-        ]
-      }
+      seasons: [
+        {}
+      ]
     }
   },
 
@@ -223,7 +224,7 @@ export default {
       this.$log.debug('activeKey', activeKey)
     },
     removeSeason (season) {
-      const _seasons = this.dynamicSeasonForm.seasons
+      const _seasons = this.seasons
       this.$confirm({
         title: '您确认要移除这个季度信息吗？',
         content: '当你点击确认按钮，这个季度的信息会被移除！！！',
@@ -237,10 +238,24 @@ export default {
       })
     },
     addSeason () {
-      this.dynamicSeasonForm.seasons.push({
+      this.seasons.push({
         value: '',
         key: Date.now()
       })
+    },
+    handleSaveAnimeClick () {
+      const idMsg = this.anime.id ? ', ID=' + this.anime.id : ''
+      saveAnime(this.anime)
+        .then((res) => {
+          this.$message.success('保存番剧成功' + idMsg)
+          // this.$log.debug('res', res)
+          this.anime = res.result
+          this.anime.airTime = moment(this.anime.airTime)
+        })
+        .catch((err) => {
+          this.$log.error('save anime fail, err: ', err)
+          this.$message.error('保存番剧失败' + idMsg)
+        })
     }
   }
 }

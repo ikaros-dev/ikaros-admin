@@ -5,10 +5,10 @@
     </a-form-model-item>
     <a-form-model-item label="季度类型">
       <a-select v-model="season.type" placeholder="请选择季度类型">
-        <a-select-option value="shanghai">
+        <a-select-option value="1">
           第一季
         </a-select-option>
-        <a-select-option value="beijing">
+        <a-select-option value="2">
           第二季
         </a-select-option>
       </a-select>
@@ -26,7 +26,7 @@
         :auto-size="{ minRows: 3, maxRows: 10 }"/>
     </a-form-model-item>
     <a-form-model-item :wrapper-col="noLabelItemWrapperCol">
-      <a-button type="primary">
+      <a-button type="primary" @click="handleSaveClick">
         保存季度信息
       </a-button>
     </a-form-model-item>
@@ -34,36 +34,64 @@
 </template>
 
 <script>
+import { saveSeasonWithAnimeId } from '@/api/anime'
+
 export default {
-data () {
-    return {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 }
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 24 },
-        md: { span: 24 },
-        lg: { span: 24 }
-      },
-      labelItemWrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 24, offset: 0 },
-        md: { span: 16, offset: 4 },
-        lg: { span: 20, offset: 2 }
-      },
-      noLabelItemWrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 24, offset: 0 },
-        md: { span: 24, offset: 0 },
-        lg: { span: 24, offset: 0 }
-      },
-      season: {}
+  props: {
+    animeId: {
+      type: String,
+      default: -1
+    },
+    season: {
+      type: Object,
+      default: () => ({})
     }
-  }
+  },
+  data () {
+      return {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 24 },
+          md: { span: 24 },
+          lg: { span: 24 }
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 24 },
+          md: { span: 24 },
+          lg: { span: 24 }
+        },
+        labelItemWrapperCol: {
+          xs: { span: 24, offset: 0 },
+          sm: { span: 24, offset: 0 },
+          md: { span: 16, offset: 4 },
+          lg: { span: 20, offset: 2 }
+        },
+        noLabelItemWrapperCol: {
+          xs: { span: 24, offset: 0 },
+          sm: { span: 24, offset: 0 },
+          md: { span: 24, offset: 0 },
+          lg: { span: 24, offset: 0 }
+        }
+      }
+    },
+    methods: {
+      publishSeasonUpdatedEvent (data) {
+        this.$emit('updateSeason', data)
+      },
+      handleSaveClick () {
+        // todo save season
+        saveSeasonWithAnimeId(this.season, this.animeId)
+          .then(res => {
+            this.$message.success('保存季度成功')
+            this.publishSeasonUpdatedEvent(res.result)
+          })
+          .catch(err => {
+            this.$log.error('save season fail, err: ', err)
+            this.$message.error('保存季度失败')
+          })
+      }
+    }
 }
 </script>
 
