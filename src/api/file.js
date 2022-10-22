@@ -23,14 +23,6 @@ export function upload (file, onUploadProgress) {
   })
 }
 
-/**
- * params:
- *   page: 0
- *   size: 50
- *   keyword: undefined
- *   type: undefined
- *   place: undefined
- */
 export function listByPaging (params) {
   return request({
     url: api.list,

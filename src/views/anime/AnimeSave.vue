@@ -1,13 +1,15 @@
 <template>
   <page-header-wrapper :title="false">
     <a-form-model :model="anime" labelAlign="right" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-form-model-item :wrapper-col="labelItemWrapperCol">
+      <!-- <a-form-model-item :wrapper-col="labelItemWrapperCol">
         <a-button type="primary" @click="handlerQuickFill">
           快速填充
         </a-button>
-      </a-form-model-item>
+      </a-form-model-item> -->
       <a-form-model-item label="番剧ID">
-        <a-input v-model="anime.id" disabled />
+        <a-input v-model="anime.id" disabled >
+          <a-icon slot="addonAfter" type="search" @click="openFileSelectModal"/>
+        </a-input>
       </a-form-model-item>
       <a-form-model-item label="标题" >
         <a-input v-model="anime.title" placeholder="请输入标题"/>
@@ -15,9 +17,9 @@
       <a-form-model-item label="原始标题" >
         <a-input v-model="anime.originalTitle" placeholder="请输入原始标题，建议输入bgmtv能检索到的原始标题，Ikaros可能根据这个标题去互联网查询元数据"/>
       </a-form-model-item>
-      <a-form-model-item label="bgmtvId" >
+      <!-- <a-form-model-item label="bgmtvId" >
         <a-input v-model="anime.bgmtvId" placeholder="请输入bgm.tv对应的番剧ID"/>
-      </a-form-model-item>
+      </a-form-model-item> -->
       <a-form-model-item label="简述">
         <a-textarea
           v-model="anime.overview"
@@ -94,9 +96,9 @@
           <template #expandIcon="props">
             <a-icon type="caret-right" :rotate="props.isActive ? 90 : 0" />
           </template>
-          <a-collapse-panel header="季度类型" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
+          <a-collapse-panel :header="season.title" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
             <!-- 季度信息 -->
-            <AnimeSeason :season="season" :animeId="anime.id" @updateSeason="(newSeason) => {season = newSeason}"/>
+            <AnimeSeason :season="season" :animeId="new String(anime.id)" @updateSeason="(newSeason) => {season = newSeason}"/>
             <!-- 季度所属剧集信息 -->
             <a-collapse :bordered="false">
               <template #expandIcon="props">
@@ -116,17 +118,15 @@
             </a-collapse>
             <a-icon
               slot="extra"
-              v-if="seasons.length > 1"
               class="dynamic-delete-button"
               type="minus-circle-o"
-              :disabled="seasons.length === 1"
               @click="removeSeason(season)" />
           </a-collapse-panel>
         </a-collapse>
       </a-form-model-item>
       <!-- 动态添加季度 -->
       <a-form-model-item :wrapper-col="noLabelItemWrapperCol">
-        <a-button type="dashed" style="width: 100%" @click="addSeason">
+        <a-button type="dashed" style="width: 100%" @click="addSeasonItem">
           <a-icon type="plus" /> 添加季度
         </a-button>
       </a-form-model-item>
@@ -145,10 +145,11 @@
 import FileSelectModal from '@/components/File/FileSelectModal.vue'
 import AnimeSeason from '@/components/anime/AnimeSeason.vue'
 import AnimeEpisode from '@/components/anime/AnimeEpisode.vue'
-import { saveAnime } from '@/api/anime'
+import { saveAnime, removeAnimeSeason } from '@/api/anime'
 import moment from 'moment'
 
 export default {
+  name: 'AnimeSave',
   components: { FileSelectModal, AnimeSeason, AnimeEpisode },
   data () {
     return {
@@ -188,12 +189,18 @@ export default {
         staffs: '',
         airTime: ''
       },
-      seasons: [
-        {}
-      ]
+      seasons: []
     }
   },
-
+  mounted () {
+    if (this.$router.currentRoute.params.anime) {
+      const anime = this.$router.currentRoute.params.anime
+      this.$log.debug('anime', anime)
+      anime.airTime = moment(anime.airTime)
+      this.$set(this, 'anime', anime)
+      this.$set(this, 'seasons', anime.seasons)
+    }
+  },
   methods: {
     openFileSelectModal () {
       this.fileSelectModalVisible = true
@@ -217,14 +224,14 @@ export default {
         }
       }
     },
-    addSeasonFormModelItem () {
-      this.$log.debug('run once')
-    },
     handleTabChange (activeKey) {
       this.$log.debug('activeKey', activeKey)
     },
     removeSeason (season) {
       const _seasons = this.seasons
+      const _animeId = this.anime.id
+      const _log = this.$log
+      const _message = this.$message
       this.$confirm({
         title: '您确认要移除这个季度信息吗？',
         content: '当你点击确认按钮，这个季度的信息会被移除！！！',
@@ -233,15 +240,27 @@ export default {
           if (index !== -1) {
             _seasons.splice(index, 1)
           }
+          if (_animeId && season.id) {
+            // 请求server 移除 季度
+            _log.debug('will remove season', season)
+            removeAnimeSeason(_animeId, season.id)
+              .catch((err) => {
+                _log.error('save anime fail, err: ', err)
+                _message.error('移除季度失败')
+              })
+          }
         },
         onCancel () {}
       })
     },
-    addSeason () {
+    addSeasonItem () {
+      this.$log.debug('id', this.anime.id)
+      this.$log.debug('seasons', this.seasons)
       this.seasons.push({
         value: '',
-        key: Date.now()
+        key: new Date().getTime()
       })
+      this.$forceUpdate()
     },
     handleSaveAnimeClick () {
       const idMsg = this.anime.id ? ', ID=' + this.anime.id : ''
