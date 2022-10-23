@@ -146,7 +146,9 @@ export default {
         saveSeasonWithAnimeId(this.season, this.animeId)
           .then(res => {
             this.$message.success('保存季度成功')
-            this.publishSeasonUpdatedEvent(res.result)
+            const newSeason = res.result
+            this.$set(this, 'season', newSeason)
+            this.publishSeasonUpdatedEvent(newSeason)
           })
           .catch(err => {
             this.$log.error('save season fail, err: ', err)
