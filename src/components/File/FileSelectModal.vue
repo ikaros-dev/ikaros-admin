@@ -261,7 +261,7 @@ export default {
      * Handle page change
      */
     handlePageChange (page = 1) {
-      this.$log.debug('page: ', page)
+      // this.$log.debug('page: ', page)
       this.list.params.page = page
       this.handleListFiles()
     },

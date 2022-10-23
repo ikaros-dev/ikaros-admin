@@ -40,6 +40,13 @@ const errorHandler = (error) => {
         })
       }
     }
+
+    if (error.response.status === 404) {
+      notification.error({
+        message: '404 not found',
+        description: '404 not found' + ' : ' + data.message
+      })
+    }
   }
   return Promise.reject(error)
 }

@@ -5,6 +5,7 @@ const api = {
   saveCommonOptionModel: '/option/model/common',
   saveSeoOptionModel: '/option/model/seo',
   saveFileOptionModel: '/option/model/file',
+  saveThirdPartyOption: '/option/model/thirdparty',
   saveOtherOptionModel: '/option/model/other'
 }
 
@@ -42,6 +43,14 @@ export function saveFileOptionModel (data) {
 export function saveOtherOptionModel (data) {
   return request({
     url: api.saveOtherOptionModel,
+    method: 'post',
+    data: data
+  })
+}
+
+export function saveThirdPartyOption (data) {
+  return request({
+    url: api.saveThirdPartyOption,
     method: 'post',
     data: data
   })

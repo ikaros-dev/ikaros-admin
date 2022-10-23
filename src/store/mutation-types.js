@@ -23,3 +23,31 @@ export const NAV_THEME = {
   LIGHT: 'light',
   DARK: 'dark'
 }
+
+/**
+ * 对应服务端 季度的所有类型
+ */
+export const ANIME_SEASON_TYPE_MAP = new Map([
+  ['FIRST', '正篇第一季'],
+  ['SECOND', '正篇第二季'],
+  ['THIRD', '正篇第三季'],
+  ['FOUR', '正篇第四季'],
+  ['FIFTH', '正篇第五季'],
+  ['SIXTH', '正篇第六季'],
+
+  ['SPECIAL_FIRST', '特别篇 其一'],
+  ['SPECIAL_SECOND', '特别篇 其二'],
+  ['SPECIAL_THIRD', '特别篇 其三'],
+
+  ['PROMOTION_VIDEO', '宣传短片 (PV)'],
+
+  ['OPENING_SONG', '片头曲 (OP)'],
+  ['ENDING_SONG', '片尾曲 (ED)'],
+
+  ['SPECIAL_PROMOTION', 'SP'],
+  ['SMALL_THEATER', '小剧场'],
+  ['LIVE', 'LIVE'],
+  ['CM', 'CM'],
+
+  ['OTHER', '其它']
+])
