@@ -145,7 +145,7 @@ export default {
         // todo save season
         saveSeasonWithAnimeId(this.season, this.animeId)
           .then(res => {
-            // this.$message.success('保存季度成功')
+            this.$message.success('保存季度成功')
             this.publishSeasonUpdatedEvent(res.result)
           })
           .catch(err => {

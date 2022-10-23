@@ -4,7 +4,7 @@
       <a-input disabled v-model="episode.id" />
     </a-form-model-item>
     <a-form-model-item label="序列">
-      <a-input v-model="episode.seq" placeholder="请输入第几集，要求数组"/>
+      <a-input v-model="episode.seq" placeholder="请输入第几集，要求数字"/>
     </a-form-model-item>
     <a-form-model-item label="时长" >
       <a-input disabled v-model="episode.duration" />
