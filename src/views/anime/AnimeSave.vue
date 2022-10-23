@@ -89,8 +89,8 @@
 
       <a-form-model-item
         :wrapper-col="noLabelItemWrapperCol"
-        v-for="(season) in seasons"
-        :key="season.id"
+        v-for="(season, index) in seasons"
+        :key="index"
       >
         <a-collapse :bordered="false">
           <template #expandIcon="props">
@@ -98,24 +98,7 @@
           </template>
           <a-collapse-panel :header="season.title" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
             <!-- 季度信息 -->
-            <AnimeSeason :season="season" :animeId="new String(anime.id)" @updateSeason="(newSeason) => {season = newSeason}"/>
-            <!-- 季度所属剧集信息 -->
-            <a-collapse :bordered="false">
-              <template #expandIcon="props">
-                <a-icon type="caret-right" :rotate="props.isActive ? 90 : 0" />
-              </template>
-              <a-collapse-panel header="剧集信息" style="background: #f7f7f7;border-radius: 4px;border: 0;overflow: hidden">
-                <a-tabs
-                  :default-active-key="1"
-                  tab-position="top"
-                  @change="handleTabChange">
-                  <a-tab-pane v-for="i in 24" :key="i" :tab="`第${i}集`">
-                    <AnimeEpisode />
-                  </a-tab-pane>
-                </a-tabs>
-
-              </a-collapse-panel>
-            </a-collapse>
+            <AnimeSeason :receiveSeason="season" :animeId="new String(anime.id)" @updateSeason="(newSeason) => {season = newSeason}"/>
             <a-icon
               slot="extra"
               class="dynamic-delete-button"
@@ -144,13 +127,12 @@
 <script>
 import FileSelectModal from '@/components/File/FileSelectModal.vue'
 import AnimeSeason from '@/components/anime/AnimeSeason.vue'
-import AnimeEpisode from '@/components/anime/AnimeEpisode.vue'
 import { saveAnime, removeAnimeSeason } from '@/api/anime'
 import moment from 'moment'
 
 export default {
   name: 'AnimeSave',
-  components: { FileSelectModal, AnimeSeason, AnimeEpisode },
+  components: { FileSelectModal, AnimeSeason },
   data () {
     return {
       labelCol: {
@@ -192,7 +174,7 @@ export default {
       seasons: []
     }
   },
-  mounted () {
+  beforeMount () {
     if (this.$router.currentRoute.params.anime) {
       const anime = this.$router.currentRoute.params.anime
       this.$log.debug('anime', anime)
@@ -223,9 +205,6 @@ export default {
           this.$log.debug('request server to quick fill by originalTitle', this.anime.originalTitle)
         }
       }
-    },
-    handleTabChange (activeKey) {
-      this.$log.debug('activeKey', activeKey)
     },
     removeSeason (season) {
       const _seasons = this.seasons

@@ -7,7 +7,9 @@ const api = {
   findDTOById: '/anime/dto/id',
   removeAnimeSeason: '/anime/season/animeId',
   reqBgmtvBangumiMetadata2AddAnimeFleetly: '/anime/metadata/network/bgmTvId',
-  findSeasonTypes: '/anime/season/types'
+  findSeasonTypes: '/anime/season/types',
+  saveEpisodeWithSeasonId: '/anime/episode/seasonId',
+  removeSeasonEpisode: '/anime/season/episode/seasonId'
 }
 
 export function saveAnime (anime) {
@@ -69,5 +71,23 @@ export function findSeasonTypes () {
   return request({
     url: api.findSeasonTypes,
     method: 'get'
+  })
+}
+
+export function saveEpisodeWithSeasonId (seasonId, episode) {
+  return request({
+    url: api.saveEpisodeWithSeasonId + '/' + seasonId,
+    method: 'put',
+    data: episode
+  })
+}
+
+export function removeSeasonEpisode (seasonId, episodeId) {
+  return request({
+    url: api.removeSeasonEpisode + '/' + seasonId,
+    method: 'delete',
+    params: {
+      'episodeId': episodeId
+    }
   })
 }
