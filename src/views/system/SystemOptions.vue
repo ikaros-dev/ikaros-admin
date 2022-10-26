@@ -30,7 +30,7 @@
           <a-form-model :model="seo" >
             <!-- todo 需要改成 是否开启按钮 -->
             <a-form-model-item label="屏蔽搜索引擎">
-              <a-input v-model="seo.hideForSearchEngine" />
+              <a-switch :checked="seo.hideForSearchEngine | str2boolean" @change="chageHideForSearchEngineSwitch" />
             </a-form-model-item>
             <a-form-model-item label="关键词">
               <a-input v-model="seo.keywords" />
@@ -49,7 +49,15 @@
           <!-- todo 需要改成下拉框 -->
           <a-form-model :model="file" >
             <a-form-model-item label="存储位置">
-              <a-input v-model="file.placeSelect" />
+              <!-- <a-input v-model="file.placeSelect" /> -->
+              <a-select
+                v-model="file.placeSelect"
+                :loading="places.loading"
+              >
+                <a-select-option v-for="item in places.data" :key="item" :value="item">
+                  {{ item | fileTypePlace }}
+                </a-select-option>
+              </a-select>
             </a-form-model-item>
             <a-form-model-item >
               <a-button type="primary" @click="saveFileOption">
@@ -96,9 +104,10 @@
 </template>
 
 <script>
-import { findOptionModelList, saveCommonOptionModel,
-  saveFileOptionModel, saveSeoOptionModel,
-  saveOtherOptionModel, saveThirdPartyOption } from '@/api/options'
+import { listPlaces } from '@/api/file'
+import { findPresetOptionList, saveCommonPresetOption,
+  saveFilePresetOption, saveSeoPresetOption,
+  saveOtherPresetOption, saveThirdPartyOption } from '@/api/options'
 
 export default {
   data () {
@@ -108,75 +117,102 @@ export default {
       seo: {},
       file: {},
       thirdParty: {},
-      other: {}
+      other: {},
+      places: {
+        data: [],
+        loading: false
+      }
     }
   },
   created () {
-    this.findOptionModels()
+    this.findPresetOptions()
+    this.handleListPlaces()
   },
   methods: {
     selectTabChange (key) {
       // this.$log.debug('select tab key', key)
     },
-    async findOptionModels () {
-      const { result } = await findOptionModelList()
+    async handleListPlaces () {
+      try {
+        this.places.loading = true
+
+        const response = await listPlaces()
+        // this.$log.debug('[handleListPlaces] response: ', response)
+
+        this.places.data = response.result
+      } catch (error) {
+        this.$log.error(error)
+      } finally {
+        this.places.loading = false
+      }
+    },
+    async findPresetOptions () {
+      const { result } = await findPresetOptionList()
       this.options = result
-      // this.$log.debug('options', this.options)
+      this.$log.debug('options', this.options)
 
       this.options.forEach(entity => {
         const category = entity.category
 
-        if (category === 'common') {
+        if (category === 'COMMON') {
           this.common = entity
         }
 
-        if (category === 'seo') {
+        if (category === 'SEO') {
           this.seo = entity
         }
 
-        if (category === 'file') {
+        if (category === 'FILE') {
           this.file = entity
         }
 
-        if (category === 'file') {
-          this.file = entity
-        }
-
-        if (category === 'thirdparty') {
+        if (category === 'THIRD_PARTY') {
           this.thirdParty = entity
+        }
+
+        if (category === 'OTHER') {
+          this.other = entity
         }
       })
 
       // this.$log.debug('common', this.common)
       // this.$log.debug('seo', this.seo)
       // this.$log.debug('file', this.file)
-      this.$log.debug('network', this.network)
+      // this.$log.debug('network', this.network)
       // this.$log.debug('other', this.other)
     },
     async saveCommonOtpion () {
       // this.$log.debug('common', this.common)
-      await saveCommonOptionModel(this.common)
+      await saveCommonPresetOption(this.common)
       this.$message.info('更新成功')
     },
     async saveFileOption () {
       // this.$log.debug('file', this.file)
-      await saveFileOptionModel(this.file)
+      await saveFilePresetOption(this.file)
       this.$message.info('更新成功')
     },
     async saveSeoOption () {
       // this.$log.debug('seo', this.seo)
-      await saveSeoOptionModel(this.seo)
+      await saveSeoPresetOption(this.seo)
       this.$message.info('更新成功')
     },
     async saveOtherOption () {
       // this.$log.debug('other', this.other)
-      await saveOtherOptionModel(this.other)
+      await saveOtherPresetOption(this.other)
       this.$message.info('更新成功')
     },
     async saveThirdPartyOption () {
       // this.$log.debug('thirdParty', this.thirdParty)
       await saveThirdPartyOption(this.thirdParty)
       this.$message.info('更新成功')
+    },
+    chageHideForSearchEngineSwitch (checked) {
+      // this.$log.debug('checked', checked)
+      if (checked) {
+        this.seo.hideForSearchEngine = 'true'
+      } else {
+        this.seo.hideForSearchEngine = 'false'
+      }
     }
   }
 }

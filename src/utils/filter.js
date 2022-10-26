@@ -51,3 +51,8 @@ Vue.filter('fileTypeText', function (type) {
 Vue.filter('fileTypePlace', function (place) {
   return place ? FilePlaces[place].text : ''
 })
+
+// 文件位置 => 对应文本
+Vue.filter('str2boolean', function (str) {
+  return str === 'true'
+})

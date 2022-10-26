@@ -1,49 +1,49 @@
 import request from '@/utils/request'
 
 const api = {
-  findOptionModelList: '/option/model/list',
-  saveCommonOptionModel: '/option/model/common',
-  saveSeoOptionModel: '/option/model/seo',
-  saveFileOptionModel: '/option/model/file',
-  saveThirdPartyOption: '/option/model/thirdparty',
-  saveOtherOptionModel: '/option/model/other'
+  findPresetOptionList: '/option/preset/list',
+  saveCommonPresetOption: '/option/preset/common',
+  saveSeoPresetOption: '/option/preset/seo',
+  saveFilePresetOption: '/option/preset/file',
+  saveThirdPartyOption: '/option/preset/thirdparty',
+  saveOtherPresetOption: '/option/preset/other'
 }
 
-export function findOptionModelList () {
+export function findPresetOptionList () {
   return request({
-    url: api.findOptionModelList,
+    url: api.findPresetOptionList,
     method: 'get'
   })
 }
 
-export function saveCommonOptionModel (data) {
+export function saveCommonPresetOption (data) {
   return request({
-    url: api.saveCommonOptionModel,
-    method: 'post',
+    url: api.saveCommonPresetOption,
+    method: 'put',
     data: data
   })
 }
 
-export function saveSeoOptionModel (data) {
+export function saveSeoPresetOption (data) {
   return request({
-    url: api.saveSeoOptionModel,
-    method: 'post',
+    url: api.saveSeoPresetOption,
+    method: 'put',
     data: data
   })
 }
 
-export function saveFileOptionModel (data) {
+export function saveFilePresetOption (data) {
   return request({
-    url: api.saveFileOptionModel,
-    method: 'post',
+    url: api.saveFilePresetOption,
+    method: 'put',
     data: data
   })
 }
 
-export function saveOtherOptionModel (data) {
+export function saveOtherPresetOption (data) {
   return request({
-    url: api.saveOtherOptionModel,
-    method: 'post',
+    url: api.saveOtherPresetOption,
+    method: 'put',
     data: data
   })
 }
@@ -51,7 +51,7 @@ export function saveOtherOptionModel (data) {
 export function saveThirdPartyOption (data) {
   return request({
     url: api.saveThirdPartyOption,
-    method: 'post',
+    method: 'put',
     data: data
   })
 }
