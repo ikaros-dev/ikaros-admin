@@ -122,7 +122,8 @@
 </template>
 
 <script>
-import { listAnimeDTOS, findAnimeDTOById, reqBgmtvBangumiMetadata2AddAnimeFleetly } from '@/api/anime'
+import { listAnimeDTOS, findAnimeDTOById } from '@/api/anime'
+import { reqBgmtvBangumiMetadata } from '@/api/network'
 
 export default {
   name: 'AnimeList',
@@ -247,7 +248,7 @@ export default {
         this.animeAddfleetlyModal.confirmLoading = true
         const bgmTvId = parseInt(value)
         // this.$log.debug('bgmTvId', bgmTvId)
-        reqBgmtvBangumiMetadata2AddAnimeFleetly(bgmTvId)
+        reqBgmtvBangumiMetadata(bgmTvId)
           .then((res) => {
             this.animeAddfleetlyModal.confirmLoading = false
             this.animeAddfleetlyModal.visible = false

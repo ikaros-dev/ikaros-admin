@@ -127,8 +127,9 @@
 <script>
 import FileSelectModal from '@/components/File/FileSelectModal.vue'
 import AnimeSeason from '@/components/anime/AnimeSeason.vue'
-import { saveAnime, removeAnimeSeason } from '@/api/anime'
+import { saveAnime } from '@/api/anime'
 import moment from 'moment'
+import { removeSeason } from '@/api/season'
 
 export default {
   name: 'AnimeSave',
@@ -222,9 +223,9 @@ export default {
           if (_animeId && season.id) {
             // 请求server 移除 季度
             _log.debug('will remove season', season)
-            removeAnimeSeason(_animeId, season.id)
+            removeSeason(season.id)
               .catch((err) => {
-                _log.error('save anime fail, err: ', err)
+                _log.error('remove season fail, err: ', err)
                 _message.error('移除季度失败')
               })
           }

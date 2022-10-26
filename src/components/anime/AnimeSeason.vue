@@ -67,9 +67,10 @@
 </template>
 
 <script>
-import { saveSeasonWithAnimeId, findSeasonTypes, removeSeasonEpisode } from '@/api/anime'
 import { ANIME_SEASON_TYPE_MAP } from '@/store/mutation-types'
 import AnimeEpisode from '@/components/anime/AnimeEpisode.vue'
+import { findSeasonTypes, saveSeason } from '@/api/season'
+import { removeEpisode } from '@/api/episode'
 
 export default {
   name: 'AnimeSeason',
@@ -143,7 +144,8 @@ export default {
       },
       handleSaveClick () {
         // todo save season
-        saveSeasonWithAnimeId(this.season, this.animeId)
+        this.season.animeId = this.animeId
+        saveSeason(this.season)
           .then(res => {
             this.$message.success('保存季度成功')
             const newSeason = res.result
@@ -194,7 +196,6 @@ export default {
         //   return
         // }
         const _episodes = this.episodes
-        const seasonId = this.season.id
         // _log.debug('episodes', this.episodes)
         // _log.debug('episodeTabsActiveKey', this.episodeTabsActiveKey)
         const currentEpisode = this.episodes[_episodeTabsActiveKey]
@@ -204,7 +205,7 @@ export default {
           title: '您确认要移除这个剧集吗？',
           content: '当你点击确认按钮，这个剧集的信息会被移除！！！当前剧集序列为：' + currentEpisode.seq,
           onOk () {
-            removeSeasonEpisode(seasonId, episodeId)
+            removeEpisode(episodeId)
               .then((res) => {
                 _episodes.splice(_episodeTabsActiveKey, 1)
               })
