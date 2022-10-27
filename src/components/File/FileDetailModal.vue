@@ -45,7 +45,7 @@
           </a-list-item>
           <a-list-item>
             <a-list-item-meta >
-              <span slot="title">文件 类型：</span>
+              <span slot="title">文件类型：</span>
               <span slot="description"> {{ file.type | fileTypeText }}</span>
             </a-list-item-meta>
           </a-list-item>

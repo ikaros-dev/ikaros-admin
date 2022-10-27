@@ -6,13 +6,13 @@
           <a-form layout="inline">
             <a-row :gutter="48">
               <a-col :md="8" :sm="24">
-                <a-form-item label="标题：">
-                  <a-input v-model="list.params.title" @keyup.enter="handleQuery()" />
+                <a-form-item label="中文标题：">
+                  <a-input v-model="list.params.titleCn" @keyup.enter="handleQuery()" />
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
-                <a-form-item label="原始标题：">
-                  <a-input v-model="list.params.originalTitle" @keyup.enter="handleQuery()" />
+                <a-form-item label="标题：">
+                  <a-input v-model="list.params.title" @keyup.enter="handleQuery()" />
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
@@ -37,7 +37,6 @@
               <div
                 v-for="(anime, index) in list.data"
                 :key="index"
-                @click="handleAnimeItemClick(anime)"
               >
                 <a-col
                   :xs="24"
@@ -46,19 +45,14 @@
                   :lg="8"
                   :xl="6"
                   class="col-anime-item">
-                  <a-card :bordered="false" >
-                    <!-- <img :src="anime.coverUrl" :alt="anime.originalTitle"/>
-                    <h1>{{ anime }}</h1> -->
+                  <a-card :bordered="false" :title="anime.titleCn === '' ? anime.title : anime.titleCn">
+                    <a slot="extra" href="#" @click="handleAnimeItemClick(anime)">编辑</a>
                     <img
                       slot="cover"
                       :alt="anime.originalTitle"
                       :src="anime.coverUrl"
+                      @click="openAnimeDetailModal"
                     />
-                    <a-card-meta :title="anime.title">
-                      <template slot="description">
-                        {{ anime.originalTitle }}
-                      </template>
-                    </a-card-meta>
                   </a-card>
                 </a-col>
               </div>
@@ -261,7 +255,9 @@ export default {
           })
       }
     },
-    handleAnimeAddfleetlyModalCancel () {}
+    openAnimeDetailModal () {
+      this.$log.debug('run')
+    }
   }
 }
 </script>
