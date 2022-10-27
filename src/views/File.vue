@@ -100,7 +100,7 @@
                       loading="lazy"
                     />
                     <div v-else >
-                      <p>当前文件 类型/后缀 为： {{ file.type | fileTypeText }}/{{ file.postfix }}</p>
+                      <p>当前文件 类型 为： {{ file.type | fileTypeText }}</p>
                       <p>非图片格式的预览，请点击当前卡片查询详情</p>
                     </div>
                   </a-card>

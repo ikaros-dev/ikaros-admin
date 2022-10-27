@@ -49,9 +49,9 @@
 </template>
 
 <script>
+import { saveEpisode } from '@/api/episode'
 import FileSelectModal from '@/components/File/FileSelectModal.vue'
 import moment from 'moment'
-import { saveEpisodeWithSeasonId } from '@/api/anime'
 
 export default {
   components: { FileSelectModal },
@@ -120,13 +120,14 @@ export default {
       this.fileSelectModalVisible = true
     },
     handSelectedFileFieldValue (value) {
-      this.episode.fileId = value
+      this.episode.url = value
     },
     publishEpisodeUpdatedEvent (data) {
       this.$emit('updateEpisode', data)
     },
     handleSaveEpClick () {
-      saveEpisodeWithSeasonId(this.seasonId, this.episode)
+      this.episode.seasonId = this.seasonId
+      saveEpisode(this.episode)
         .then(res => {
             const episode = this.fileterEpisode(res.result)
             this.$set(this, 'episode', episode)

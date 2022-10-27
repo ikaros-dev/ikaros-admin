@@ -1,6 +1,6 @@
 import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
-import { login, getInfo, logout } from '@/api/login'
+import { login, getInfo } from '@/api/user'
 import { ACCESS_TOKEN, TOKEN_PREFIX } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
@@ -88,17 +88,10 @@ const user = {
     // 登出
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
-        logout(state.token).then(() => {
-
-        }).catch((err) => {
-          console.log('logout fail:', err)
-          // resolve()
-        }).finally(() => {
-          commit('SET_TOKEN', '')
+        commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           storage.remove(ACCESS_TOKEN)
           resolve()
-        })
       })
     }
 
