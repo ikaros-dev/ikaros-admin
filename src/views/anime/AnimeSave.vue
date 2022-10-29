@@ -126,7 +126,7 @@
 
 <script>
 import FileSelectModal from '@/components/File/FileSelectModal.vue'
-import AnimeSeason from '@/components/anime/AnimeSeason.vue'
+import AnimeSeason from '@/components/Anime/AnimeSeason.vue'
 import { saveAnime } from '@/api/anime'
 import moment from 'moment'
 import { removeSeason } from '@/api/season'

@@ -11,11 +11,11 @@
         </a-select-option>
       </a-select>
     </a-form-model-item>
-    <a-form-model-item label="季度标题" >
-      <a-input v-model="season.title" placeholder="请输入标题"/>
+    <a-form-model-item label="季度中文标题" >
+      <a-input v-model="season.titleCn" placeholder="请输入中文标题"/>
     </a-form-model-item>
-    <a-form-model-item label="季度原始标题" >
-      <a-input v-model="season.originalTitle" placeholder="请输入原始标题，建议罗马音或者英文，Ikaros可能根据这个标题去互联网查询元数据"/>
+    <a-form-model-item label="季度标题" >
+      <a-input v-model="season.title" placeholder="请输入原始标题，建议罗马音或者英文，Ikaros可能根据这个标题去互联网查询元数据"/>
     </a-form-model-item>
     <a-form-model-item label="简述">
       <a-textarea
@@ -26,6 +26,9 @@
     <a-form-model-item :wrapper-col="noLabelItemWrapperCol">
       <a-button type="primary" @click="handleSaveClick">
         保存季度信息
+      </a-button>
+      <a-button style="margin-left: 4px;" type="primary" @click="handleResourceMatchingClick">
+        匹配资源
       </a-button>
     </a-form-model-item>
     <!-- 剧集信息 -->
@@ -63,18 +66,21 @@
         </a-tabs>
       </a-collapse-panel>
     </a-collapse>
+
+    <FileMatchingModal :receiveSeasonId="new String(season.id)" :visible.sync="fileMatchingModalVisible" />
   </a-form-model>
 </template>
 
 <script>
 import { ANIME_SEASON_TYPE_MAP } from '@/store/mutation-types'
-import AnimeEpisode from '@/components/anime/AnimeEpisode.vue'
+import AnimeEpisode from '@/components/Anime/AnimeEpisode.vue'
 import { findSeasonTypes, saveSeason } from '@/api/season'
 import { removeEpisode } from '@/api/episode'
+import FileMatchingModal from '@/components/File/FileMatchingModal.vue'
 
 export default {
   name: 'AnimeSeason',
-  components: { AnimeEpisode },
+  components: { AnimeEpisode, FileMatchingModal },
   props: {
     animeId: {
       type: String,
@@ -135,7 +141,8 @@ export default {
         season: {},
         episodes: [],
         episodeTabsActiveKey: 0,
-        tabClosable: true
+        tabClosable: true,
+        fileMatchingModalVisible: false
       }
     },
     methods: {
@@ -216,6 +223,9 @@ export default {
           },
           onCancel () {}
         })
+      },
+      handleResourceMatchingClick () {
+        this.fileMatchingModalVisible = true
       }
     }
 }
