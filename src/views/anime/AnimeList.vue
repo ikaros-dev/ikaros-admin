@@ -80,6 +80,7 @@
     <a-modal
       title="快速新增动漫"
       :visible="animeAddfleetlyModal.visible"
+      @cancel="animeAddfleetlyModal.visible = false"
       :footer="null"
     >
       <a-form-model layout="inline" :model="animeAddFleetlyForm" @submit.native.prevent>
