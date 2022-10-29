@@ -81,7 +81,7 @@
     </div>
 
     <template slot="footer">
-      <a-button type="primary">请求匹配</a-button>
+      <a-button type="primary" @click="handleRequestMatchingClick" :loading="requestMatchingButtonLoading">请求匹配</a-button>
     </template>
 
     <FileUploadModal :visible.sync="upload.visible" @fileUploadModalClose="onFileUploadModalClose" />
@@ -92,6 +92,7 @@
 <script>
 import FileUploadModal from '@/components/File/FileUploadModal.vue'
 import { listTypes, listPlaces, listByPaging } from '@/api/file'
+import { matchingEpisodeUrlByFileIds } from '@/api/season'
 
 export default {
   name: 'FileMatchingModal',
@@ -100,6 +101,15 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    receiveSeasonId: {
+      type: String,
+      default: -1
+    }
+  },
+  beforeMount () {
+    if (this.receiveSeasonId) {
+      this.seasonId = this.receiveSeasonId
     }
   },
   computed: {
@@ -139,6 +149,7 @@ export default {
           dataIndex: 'url'
         }
       ],
+      seasonId: '',
       fileTableSelectedRowKeys: [],
       list: {
         data: [],
@@ -167,7 +178,9 @@ export default {
 
       upload: {
         visible: false
-      }
+      },
+
+      requestMatchingButtonLoading: false
     }
   },
   created () {
@@ -303,8 +316,23 @@ export default {
     fileTableOnSelectChange (selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.fileTableSelectedRowKeys = selectedRowKeys
-    }
+    },
 
+    handleRequestMatchingClick () {
+      this.requestMatchingButtonLoading = true
+      matchingEpisodeUrlByFileIds(this.seasonId, this.fileTableSelectedRowKeys)
+      .then(res => {
+        this.$message.success('匹配成功')
+        this.modalVisible = false
+      })
+      .catch(error => {
+        this.$message.error('匹配失败')
+        this.$log.debug('matching episode url by file ids fail, error:', error)
+      })
+      .finally(() => {
+        this.requestMatchingButtonLoading = false
+      })
+    }
   }
 }
 </script>

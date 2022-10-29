@@ -67,7 +67,7 @@
       </a-collapse-panel>
     </a-collapse>
 
-    <FileMatchingModal :visible.sync="fileMatchingModalVisible" />
+    <FileMatchingModal :receiveSeasonId="new String(season.id)" :visible.sync="fileMatchingModalVisible" />
   </a-form-model>
 </template>
 
