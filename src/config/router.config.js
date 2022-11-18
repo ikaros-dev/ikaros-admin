@@ -152,11 +152,6 @@ export const asyncRouterMap = [
       // }
 
     ]
-  },
-  {
-    path: '*',
-    redirect: '/404',
-    hidden: true
   }
 ]
 
@@ -186,7 +181,20 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/option/app/init',
+    name: 'OptionAppInit',
+    component: () => import('@/views/option/OptionAppInit'),
+    hidden: true
+  },
+
+  {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
+  },
+
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }
 ]

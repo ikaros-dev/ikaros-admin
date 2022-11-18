@@ -1,6 +1,8 @@
 export const ACCESS_TOKEN = 'Authorization'
 export const TOKEN_PREFIX = 'Bearer '
 
+// export const SERVER_IS_INIT = 'server_is_init'
+
 export const SIDEBAR_TYPE = 'sidebar_type'
 export const TOGGLE_MOBILE_TYPE = 'is_mobile'
 export const TOGGLE_NAV_THEME = 'nav_theme'

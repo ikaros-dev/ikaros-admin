@@ -1,12 +1,20 @@
 import request from '@/utils/request'
 
 const api = {
+  serverIsInit: '/option/app/is-init',
   findPresetOptionList: '/option/preset/list',
   saveCommonPresetOption: '/option/preset/common',
   saveSeoPresetOption: '/option/preset/seo',
   saveFilePresetOption: '/option/preset/file',
   saveThirdPartyOption: '/option/preset/thirdparty',
   saveOtherPresetOption: '/option/preset/other'
+}
+
+export function getServerIsInit () {
+  return request({
+    url: api.serverIsInit,
+    method: 'get'
+  })
 }
 
 export function findPresetOptionList () {
