@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 const api = {
   serverIsInit: '/option/app/is-init',
+  serverInit: '/option/app/init',
   findPresetOptionList: '/option/preset/list',
   saveCommonPresetOption: '/option/preset/common',
   saveSeoPresetOption: '/option/preset/seo',
@@ -14,6 +15,14 @@ export function getServerIsInit () {
   return request({
     url: api.serverIsInit,
     method: 'get'
+  })
+}
+
+export function serverInit (data) {
+  return request({
+    url: api.serverInit,
+    method: 'post',
+    data: data
   })
 }
 

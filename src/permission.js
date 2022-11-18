@@ -23,7 +23,7 @@ router.beforeEach((to, from, next) => {
   // not init
   getServerIsInit()
     .then(rsp => {
-      console.log('rsp result', rsp.result)
+      // console.log('server has init: ', rsp.result)
       const isInit = rsp.result
       if (!isInit) {
         next({ path: serverInitPath })
