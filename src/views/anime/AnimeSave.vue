@@ -18,7 +18,7 @@
         <a-input v-model="anime.title" placeholder="请输入标题，建议输入bgmtv能检索到的原始标题，Ikaros可能根据这个标题去互联网查询元数据"/>
       </a-form-model-item>
       <!-- <a-form-model-item label="bgmtvId" >
-        <a-input v-model="anime.bgmtvId" placeholder="请输入bgm.tv对应的番剧ID"/>
+        <a-input v-model="Anime.bgmtvId" placeholder="请输入bgm.tv对应的番剧ID"/>
       </a-form-model-item> -->
       <a-form-model-item label="简述">
         <a-textarea
@@ -252,7 +252,7 @@ export default {
           this.anime.airTime = moment(this.anime.airTime)
         })
         .catch((err) => {
-          this.$log.error('save anime fail, err: ', err)
+          this.$log.error('save Anime fail, err: ', err)
           this.$message.error('保存番剧失败' + idMsg)
         })
     }
