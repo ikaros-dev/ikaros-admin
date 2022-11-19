@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { serverInit } from '@/api/options'
+import { postOptionAppInit } from '@/api/options'
 import store from '@/store'
 
 export default {
@@ -86,7 +86,7 @@ export default {
 
       // 提交给后台
       const _appInit = this.appInit
-      serverInit(_appInit)
+      postOptionAppInit(_appInit)
         .then(rsp => {
           const result = rsp.result
           if (result) {

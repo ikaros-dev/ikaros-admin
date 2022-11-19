@@ -7,7 +7,7 @@ import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { i18nRender } from '@/locales'
-import { getServerIsInit } from '@/api/options'
+import { getOptionAppIsInit } from '@/api/options'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
   to.meta && typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`)
 
   // not init
-  getServerIsInit()
+  getOptionAppIsInit()
     .then(rsp => {
       // console.log('server has init: ', rsp.result)
       const isInit = rsp.result
