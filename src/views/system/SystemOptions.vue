@@ -103,10 +103,13 @@
             <a-form-model-item label="url">
               <a-input v-model="qbittorrent.URL" placeholder="http://192.168.2.1:9091"/>
             </a-form-model-item>
-            <a-form-model-item label="HTTP Port">
+            <a-form-model-item label="是否开启验证">
+              <a-switch :checked="qbittorrent.ENABLE_AUTH | str2boolean" @change="changeEnableAuthSwitch" />
+            </a-form-model-item>
+            <a-form-model-item label="用户名" v-if="qbittorrent.ENABLE_AUTH === 'true'">
               <a-input v-model="qbittorrent.USERNAME" placeholder="admin"/>
             </a-form-model-item>
-            <a-form-model-item label="HTTP Port">
+            <a-form-model-item label="密码" v-if="qbittorrent.ENABLE_AUTH === 'true'">
               <a-input-password v-model="qbittorrent.PASSWORD" placeholder="adminadmin"/>
             </a-form-model-item>
             <a-form-model-item>
@@ -286,6 +289,9 @@ export default {
     changeMikanEnableProxySwitch (checked) {
       // this.$log.debug('checked', checked)
       this.mikan.ENABLE_PROXY = checked ? 'true' : 'false'
+    },
+    changeEnableAuthSwitch (checked) {
+      this.qbittorrent.ENABLE_AUTH = checked ? 'true' : 'false'
     },
     testQbittorrentConfig () {
       this.testConnectQbittorrentButtonLoading = this
