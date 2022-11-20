@@ -127,6 +127,24 @@
           </a-form-model>
         </a-tab-pane>
 
+        <a-tab-pane class="tab-content-pane" key="BGMTV" tab="番组计划">
+          <a-form-model :model="bgmtv">
+            <a-form-model-item label="开启HTTP代理">
+              <a-alert
+                message="需要在 网络设置 里配置好HTTP代理"
+                banner
+                closable
+              />
+              <a-switch :checked="bgmtv.ENABLE_PROXY | str2boolean" @change="changeBgmTvEnableProxySwitch" />
+            </a-form-model-item>
+            <a-form-model-item>
+              <a-button type="primary" @click="saveOption('BGMTV')">
+                保存番组计划设置
+              </a-button>
+            </a-form-model-item>
+          </a-form-model>
+        </a-tab-pane>
+
         <a-tab-pane class="tab-content-pane" key="MIKAN" tab="密柑计划">
           <a-form-model :model="mikan">
             <a-form-model-item label="开启HTTP代理">
@@ -292,6 +310,9 @@ export default {
     },
     changeEnableAuthSwitch (checked) {
       this.qbittorrent.ENABLE_AUTH = checked ? 'true' : 'false'
+    },
+    changeBgmTvEnableProxySwitch (checked) {
+      this.bgmtv.ENABLE_PROXY = checked ? 'true' : 'false'
     },
     testQbittorrentConfig () {
       this.testConnectQbittorrentButtonLoading = this
