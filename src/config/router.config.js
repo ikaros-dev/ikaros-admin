@@ -58,30 +58,30 @@ export const asyncRouterMap = [
         meta: { title: 'menu.file', icon: 'picture' }
       },
 
-      // anime
+      // Anime
       {
-        path: '/anime',
+        path: '/Anime',
         component: RouteView,
-        redirect: '/anime/list',
+        redirect: '/Anime/list',
         name: 'anime',
         meta: { title: '番剧', keepAlive: true, icon: 'appstore' },
         children: [
           {
-            path: '/anime/userFollow',
+            path: '/Anime/userFollow',
             name: 'AnimeUserFollow',
             hidden: true,
             component: () => import('@/views/anime/AnimeUserFollow'),
             meta: { title: '我的追番', keepAlive: true }
           },
           {
-            path: '/anime/save',
+            path: '/Anime/save',
             name: 'AnimeSave',
             component: () => import('@/views/anime/AnimeSave'),
             meta: { title: '保存番剧', hideHeader: true },
             hideChildrenInMenu: true
           },
           {
-            path: '/anime/list',
+            path: '/Anime/list',
             name: 'AnimeList',
             component: () => import('@/views/anime/AnimeList'),
             meta: { title: '番剧列表', hideHeader: true },
@@ -153,6 +153,7 @@ export const asyncRouterMap = [
 
     ]
   },
+
   {
     path: '*',
     redirect: '/404',
@@ -183,6 +184,13 @@ export const constantRouterMap = [
         component: () => import('@/views/user/ResetPassword')
       }
     ]
+  },
+
+  {
+    path: '/option/app/init',
+    name: 'OptionAppInit',
+    component: () => import('@/views/option/OptionAppInit'),
+    hidden: true
   },
 
   {

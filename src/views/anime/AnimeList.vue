@@ -203,7 +203,7 @@ export default {
       }
     },
     handleAnimeItemClick (anime) {
-      // this.$log.debug('anime', anime)
+      // this.$log.debug('Anime', Anime)
       // 这里根据animeId, 查询到完整的 animeDTO，把 dto作为参数传给保存页面
       const animeId = anime.id
       findAnimeDTOById(animeId)
@@ -222,7 +222,7 @@ export default {
         })
     },
     toAnimeSavePage () {
-      this.$router.push('/anime/save')
+      this.$router.push('/Anime/save')
     },
     handleAnimeAddFleetlyFormSubmit () {
       const type = this.animeAddFleetlyForm.type
@@ -250,7 +250,7 @@ export default {
             this.handlePageChange()
           })
           .catch((err) => {
-            this.$log.error('request bgmtv subject metadata to add anime fleetly fail, err: ', err)
+            this.$log.error('request bgmtv subject metadata to add Anime fleetly fail, err: ', err)
             this.$message.error('请求番组计划快速新增番剧失败, ID=' + bgmTvId)
             this.animeAddfleetlyModal.confirmLoading = false
           })

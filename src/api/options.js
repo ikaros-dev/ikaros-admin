@@ -1,57 +1,38 @@
 import request from '@/utils/request'
 
 const api = {
-  findPresetOptionList: '/option/preset/list',
-  saveCommonPresetOption: '/option/preset/common',
-  saveSeoPresetOption: '/option/preset/seo',
-  saveFilePresetOption: '/option/preset/file',
-  saveThirdPartyOption: '/option/preset/thirdparty',
-  saveOtherPresetOption: '/option/preset/other'
+  getOptionAppIsInit: '/option/app/is-init',
+  postOptionAppInit: '/option/app/init',
+  getOptionList: '/option/list',
+  saveOptionWithRequest: '/option'
 }
 
-export function findPresetOptionList () {
+export function getOptionAppIsInit () {
   return request({
-    url: api.findPresetOptionList,
+    url: api.getOptionAppIsInit,
     method: 'get'
   })
 }
 
-export function saveCommonPresetOption (data) {
+export function postOptionAppInit (data) {
   return request({
-    url: api.saveCommonPresetOption,
-    method: 'put',
+    url: api.postOptionAppInit,
+    method: 'post',
     data: data
   })
 }
 
-export function saveSeoPresetOption (data) {
+export function getOptionList () {
   return request({
-    url: api.saveSeoPresetOption,
-    method: 'put',
-    data: data
+    url: api.getOptionList,
+    method: 'get'
   })
 }
 
-export function saveFilePresetOption (data) {
+export function saveOptionWithRequest (req) {
   return request({
-    url: api.saveFilePresetOption,
-    method: 'put',
-    data: data
-  })
-}
-
-export function saveOtherPresetOption (data) {
-  return request({
-    url: api.saveOtherPresetOption,
-    method: 'put',
-    data: data
-  })
-}
-
-export function saveThirdPartyOption (data) {
-  return request({
-    url: api.saveThirdPartyOption,
-    method: 'put',
-    data: data
+    url: api.saveOptionWithRequest,
+    method: 'post',
+    data: req
   })
 }

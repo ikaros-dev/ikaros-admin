@@ -7,16 +7,30 @@ import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { i18nRender } from '@/locales'
+import { getOptionAppIsInit } from '@/api/options'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const allowList = ['login', 'ResetPassword'] // no redirect allowList
+const allowList = ['login', 'ResetPassword', 'OptionAppInit'] // no redirect allowList
 const loginRoutePath = '/user/login'
 const defaultRoutePath = '/dashboard/workplace'
+const serverInitPath = '/option/app/init'
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`)
+
+  // not init
+  getOptionAppIsInit()
+    .then(rsp => {
+      // console.log('server has init: ', rsp.result)
+      const isInit = rsp.result
+      if (!isInit) {
+        next({ path: serverInitPath })
+        NProgress.done()
+      }
+    })
+
   /* has token */
   const token = storage.get(ACCESS_TOKEN)
   if (token) {
