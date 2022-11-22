@@ -165,6 +165,24 @@
             </a-form-model-item>
           </a-form-model>
         </a-tab-pane>
+
+        <a-tab-pane class="tab-content-pane" key="APP" tab="应用设置">
+          <a-form-model :model="app">
+            <a-form-model-item label="开启自动追番">
+              <a-alert
+                message="需要配置好 蜜柑的订阅 和 Qbittorrent 连接, 否则无法正常工作"
+                banner
+                closable
+              />
+              <a-switch :checked="app.ENABLE_AUTO_ANIME_SUB_TASK | str2boolean" @change="changeAppEnableAutoAnimeSubSwitch" />
+            </a-form-model-item>
+            <a-form-model-item>
+              <a-button type="primary" @click="saveOption('APP')">
+                保存应用设置
+              </a-button>
+            </a-form-model-item>
+          </a-form-model>
+        </a-tab-pane>
       </a-tabs>
     </div>
   </page-header-wrapper>
@@ -182,6 +200,7 @@ export default {
   data () {
     return {
       options: [],
+      app: {},
       common: {},
       seo: {},
       file: {},
@@ -229,6 +248,10 @@ export default {
       this.options.forEach(entity => {
         const category = entity.category
 
+        if (category === 'APP') {
+          this.app = entity.kvMap
+        }
+
         if (category === 'COMMON') {
           this.common = entity.kvMap
         }
@@ -266,10 +289,13 @@ export default {
         }
       })
     },
-    async saveOption (category) {
+    saveOption (category) {
       this.$log.debug('category', category)
       const request = {}
       request.category = category
+      if (category === 'APP') {
+        request.kvMap = this.app
+      }
       if (category === 'COMMON') {
         request.kvMap = this.common
       }
@@ -297,8 +323,23 @@ export default {
       if (category === 'OTHER') {
         request.kvMap = this.other
       }
-      await saveOptionWithRequest(request)
-      this.$message.info('更新成功')
+      saveOptionWithRequest(request)
+        .then(rsp => {
+          this.$message.info('更新成功')
+        })
+        .catch(error => {
+          this.$log.error('save option fail, ', error)
+          this.$message.error(error)
+          if (category === 'APP') {
+            this.app.ENABLE_AUTO_ANIME_SUB_TASK = 'false'
+          }
+          if (category === 'BGMTV') {
+            this.bgmtv.ENABLE_PROXY = 'false'
+          }
+          if (category === 'MIKAN') {
+            this.mikan.ENABLE_PROXY = 'false'
+          }
+        })
     },
     changeHideForSearchEngineSwitch (checked) {
       // this.$log.debug('checked', checked)
@@ -313,6 +354,9 @@ export default {
     },
     changeBgmTvEnableProxySwitch (checked) {
       this.bgmtv.ENABLE_PROXY = checked ? 'true' : 'false'
+    },
+    changeAppEnableAutoAnimeSubSwitch (checked) {
+      this.app.ENABLE_AUTO_ANIME_SUB_TASK = checked ? 'true' : 'false'
     },
     testQbittorrentConfig () {
       this.testConnectQbittorrentButtonLoading = this

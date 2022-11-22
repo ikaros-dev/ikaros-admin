@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 
 const api = {
-  basic: '/Anime',
-  seasonWithAnimeId: '/Anime/season/animeId',
-  listDTOS: '/Anime/dtos',
-  findDTOById: '/Anime/dto/id'
+  basic: '/anime',
+  seasonWithAnimeId: '/anime/season/animeId',
+  listDTOS: '/anime/dtos',
+  findDTOById: '/anime/dto/id'
 }
 
 export function saveAnime (anime) {
