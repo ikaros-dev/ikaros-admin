@@ -137,9 +137,24 @@
               />
               <a-switch :checked="bgmtv.ENABLE_PROXY | str2boolean" @change="changeBgmTvEnableProxySwitch" />
             </a-form-model-item>
+            <a-form-model-item label="Token">
+              <a-alert
+                message="需要在番组计划官网申请令牌，链接：https://bgm.tv/group/topic/370315"
+                banner
+                closable
+              />
+              <a-input-password v-model="bgmtv.ACCESS_TOKEN" allowClear placeholder="token"/>
+            </a-form-model-item>
             <a-form-model-item>
               <a-button type="primary" @click="saveOption('BGMTV')">
                 保存番组计划设置
+              </a-button>
+              <a-button
+                type="primary"
+                :loading="testBgmTvTokenButtonLoading"
+                @click="testBgmTvToken"
+                style="margin: 0px 5px">
+                测试令牌
               </a-button>
             </a-form-model-item>
           </a-form-model>
@@ -193,7 +208,7 @@ import { listPlaces } from '@/api/file'
 import {
   getOptionList, saveOptionWithRequest
 } from '@/api/options'
-import { testQbittorrentConnect } from '@/api/tripartite'
+import { testQbittorrentConnect, getBgmTvMe } from '@/api/tripartite'
 import { testProxyConnect } from '@/api/network'
 
 export default {
@@ -215,7 +230,8 @@ export default {
         loading: false
       },
       testConnectQbittorrentButtonLoading: false,
-      testConnectProxyButtonLoading: false
+      testConnectProxyButtonLoading: false,
+      testBgmTvTokenButtonLoading: false
     }
   },
   created () {
@@ -274,6 +290,7 @@ export default {
 
         if (category === 'BGMTV') {
           this.bgmtv = entity.kvMap
+          // this.$log.debug('bgmtv', this.bgmtv)
         }
 
         if (category === 'MIKAN') {
@@ -394,6 +411,25 @@ export default {
         })
         .finally(() => {
           this.testConnectProxyButtonLoading = false
+        })
+    },
+    testBgmTvToken () {
+      this.testBgmTvTokenButtonLoading = true
+      getBgmTvMe()
+        .then(rsp => {
+          const bgmTvUserInfo = rsp.result
+          if (bgmTvUserInfo) {
+            this.$message.success('你好, ' + bgmTvUserInfo.nickname + '!')
+          } else {
+            this.$message.error('测试番组计划令牌失败')
+          }
+        })
+        .catch(error => {
+          this.$log.error('test bgmtv token fail', error)
+          this.$message.error('测试番组计划令牌失败')
+        })
+        .finally(() => {
+          this.testBgmTvTokenButtonLoading = false
         })
     }
   }
