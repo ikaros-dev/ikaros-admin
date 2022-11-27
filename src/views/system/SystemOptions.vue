@@ -191,6 +191,9 @@
               />
               <a-switch :checked="app.ENABLE_AUTO_ANIME_SUB_TASK | str2boolean" @change="changeAppEnableAutoAnimeSubSwitch" />
             </a-form-model-item>
+            <a-form-model-item label="开启媒体目录生成">
+              <a-switch :checked="app.ENABLE_GENERATE_MEDIA_DIR_TASK | str2boolean" @change="changeAppEnableGenerateMediaDirSwitch" />
+            </a-form-model-item>
             <a-form-model-item>
               <a-button type="primary" @click="saveOption('APP')">
                 保存应用设置
@@ -374,6 +377,9 @@ export default {
     },
     changeAppEnableAutoAnimeSubSwitch (checked) {
       this.app.ENABLE_AUTO_ANIME_SUB_TASK = checked ? 'true' : 'false'
+    },
+    changeAppEnableGenerateMediaDirSwitch (checked) {
+      this.app.ENABLE_GENERATE_MEDIA_DIR_TASK = checked ? 'true' : 'false'
     },
     testQbittorrentConfig () {
       this.testConnectQbittorrentButtonLoading = this
