@@ -60,31 +60,38 @@ export const asyncRouterMap = [
 
       // Anime
       {
-        path: '/Anime',
+        path: '/anime',
         component: RouteView,
-        redirect: '/Anime/list',
+        redirect: '/anime/list',
         name: 'anime',
         meta: { title: '番剧', keepAlive: true, icon: 'appstore' },
         children: [
           {
-            path: '/Anime/userFollow',
+            path: '/anime/userFollow',
             name: 'AnimeUserFollow',
             hidden: true,
             component: () => import('@/views/anime/AnimeUserFollow'),
             meta: { title: '我的追番', keepAlive: true }
           },
           {
-            path: '/Anime/save',
+            path: '/anime/save',
             name: 'AnimeSave',
             component: () => import('@/views/anime/AnimeSave'),
             meta: { title: '保存番剧', hideHeader: true },
             hideChildrenInMenu: true
           },
           {
-            path: '/Anime/list',
+            path: '/anime/list',
             name: 'AnimeList',
             component: () => import('@/views/anime/AnimeList'),
             meta: { title: '番剧列表', hideHeader: true },
+            hideChildrenInMenu: true
+          },
+          {
+            path: '/anime/search',
+            name: 'AnimeSearch',
+            component: () => import('@/views/anime/AnimeSearch'),
+            meta: { title: '联网检索', hideHeader: true },
             hideChildrenInMenu: true
           }
         ]
