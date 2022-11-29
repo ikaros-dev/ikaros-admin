@@ -4,7 +4,8 @@ const api = {
   basic: '/anime',
   seasonWithAnimeId: '/anime/season/animeId',
   listDTOS: '/anime/dtos',
-  findDTOById: '/anime/dto/id'
+  findDTOById: '/anime/dto/id',
+  deleteAnimeById: '/anime/id'
 }
 
 export function saveAnime (anime) {
@@ -34,5 +35,12 @@ export function findAnimeDTOById (animeId) {
   return request({
     url: api.findDTOById + '/' + animeId,
     method: 'get'
+  })
+}
+
+export function deleteAnimeById (animeId) {
+  return request({
+    url: api.deleteAnimeById + '/' + animeId,
+    method: 'delete'
   })
 }

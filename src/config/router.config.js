@@ -67,11 +67,11 @@ export const asyncRouterMap = [
         meta: { title: '番剧', keepAlive: true, icon: 'appstore' },
         children: [
           {
-            path: '/anime/userFollow',
-            name: 'AnimeUserFollow',
+            path: '/anime/detail/:id',
+            name: 'AnimeDetail',
             hidden: true,
-            component: () => import('@/views/anime/AnimeUserFollow'),
-            meta: { title: '我的追番', keepAlive: true }
+            component: () => import('@/views/anime/AnimeDeatil.vue'),
+            meta: { title: '动漫详情', keepAlive: true }
           },
           {
             path: '/anime/save',
@@ -85,13 +85,6 @@ export const asyncRouterMap = [
             name: 'AnimeList',
             component: () => import('@/views/anime/AnimeList'),
             meta: { title: '番剧列表', hideHeader: true },
-            hideChildrenInMenu: true
-          },
-          {
-            path: '/anime/search',
-            name: 'AnimeSearch',
-            component: () => import('@/views/anime/AnimeSearch'),
-            meta: { title: '联网检索', hideHeader: true },
             hideChildrenInMenu: true
           }
         ]

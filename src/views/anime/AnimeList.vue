@@ -42,11 +42,13 @@
                   :xs="24"
                   :sm="12"
                   :md="8"
-                  :lg="8"
-                  :xl="6"
-                  class="col-anime-item">
-                  <a-card :bordered="false" :title="anime.titleCn === '' ? anime.title : anime.titleCn">
-                    <a slot="extra" href="#" @click="handleAnimeItemClick(anime)">编辑</a>
+                  :lg="6"
+                  :xl="3"
+                  class="col-anime-col"
+                  @contextmenu.prevent="handleContextMenu($event, anime)"
+                >
+                  <a-card style="height: 100%;margin: 5px 0" :bordered="false" :title="anime.titleCn === '' ? anime.title : anime.titleCn">
+                    <a slot="extra" href="#" @click="handleAnimeItemClick(anime.id)">编辑</a>
                     <img
                       slot="cover"
                       :alt="anime.originalTitle"
@@ -63,6 +65,8 @@
       </a-col>
     </a-row>
 
+    <br>
+
     <div class="page-wrapper">
       <a-pagination
         :current="pagination.page"
@@ -78,7 +82,7 @@
     </div>
 
     <a-modal
-      title="快速新增动漫"
+      title="快速联网新增动漫"
       :visible="animeAddfleetlyModal.visible"
       @cancel="animeAddfleetlyModal.visible = false"
       :footer="null"
@@ -89,8 +93,8 @@
             style="min-width: 150px;"
             v-model="animeAddFleetlyForm.type"
             placeholder="请选择类型">
-            <a-select-option value="originalTitle" disabled>
-              原始标题
+            <a-select-option value="title">
+              动漫名称
             </a-select-option>
             <a-select-option value="bgmtvId">
               番组计划的条目ID
@@ -117,8 +121,9 @@
 </template>
 
 <script>
-import { listAnimeDTOS, findAnimeDTOById } from '@/api/anime'
+import { listAnimeDTOS, deleteAnimeById, findAnimeDTOById } from '@/api/anime'
 import { reqBgmtvBangumiMetadata } from '@/api/network'
+import { searchAnime } from '@/api/metadata'
 
 export default {
   name: 'AnimeList',
@@ -202,10 +207,8 @@ export default {
         this.list.loading = false
       }
     },
-    handleAnimeItemClick (anime) {
-      // this.$log.debug('Anime', Anime)
+    handleAnimeItemClick (animeId) {
       // 这里根据animeId, 查询到完整的 animeDTO，把 dto作为参数传给保存页面
-      const animeId = anime.id
       findAnimeDTOById(animeId)
         .then((res) => {
           // this.$log.debug('res', res)
@@ -255,26 +258,75 @@ export default {
             this.animeAddfleetlyModal.confirmLoading = false
           })
       }
+      if (type === 'title' && value !== '') {
+        this.animeAddfleetlyModal.confirmLoading = true
+        searchAnime(value)
+          .then((rsp) => {
+            this.animeAddfleetlyModal.confirmLoading = false
+            this.animeAddfleetlyModal.visible = false
+            this.handlePageChange()
+          })
+          .catch((err) => {
+            this.$log.error('request bgmtv subject metadata to add Anime fleetly fail, err: ', err)
+            this.$message.error('请求联网快速新增番剧失败, keyword=' + value)
+            this.animeAddfleetlyModal.confirmLoading = false
+          })
+      }
     },
     openAnimeDetailModal () {
       this.$log.debug('run')
+    },
+
+    /**
+     * Show context menu
+     */
+    handleContextMenu (event, anime) {
+      this.$contextmenu({
+        items: [
+          {
+            label: `跳转到编辑页`,
+            onClick: () => {
+              this.handleAnimeItemClick(anime.id)
+            },
+            divided: true
+          },
+          {
+            label: `跳转到详情页`,
+            onClick: () => {
+              this.$router.push({
+                path: '/anime/detail/' + anime.id
+              })
+            },
+            divided: true
+          },
+          {
+            label: '删除',
+            onClick: () => {
+              this.$confirm({
+                title: '提示',
+                content: '确定删除该动漫？',
+                okText: '确定',
+                cancelText: '取消',
+                onOk: async () => {
+                  await deleteAnimeById(anime.id)
+                  await this.handleListAnimes()
+                }
+              })
+            }
+          }
+        ],
+        event,
+        minWidth: 210
+      })
+      return false
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.col-anime-item {
-  margin: 3px 0;
-  // min-width: 100%;
-  // min-height: 100%;
-  // height: 300px;
-  width: 15%;
+.col-anime-col {
   overflow: hidden;
-  img {
-    margin: 0;
-    height: 100%;
-    width: 100%;
-  }
+  aspect-ratio: 0.7;
 }
 </style>
