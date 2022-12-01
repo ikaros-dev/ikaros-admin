@@ -3,7 +3,8 @@ import request from '@/utils/request'
 const api = {
   basic: '/season',
   types: '/season/types',
-  matchingEpisodeUrlByFileIds: '/season/matching/episodes'
+  matchingEpisodesUrlByFileIds: '/season/matching/episodes',
+  matchingEpisodeUrlByFileId: '/season/matching/episode'
 }
 
 export function removeSeason (seasonId) {
@@ -31,13 +32,24 @@ export function findSeasonTypes () {
   })
 }
 
-export function matchingEpisodeUrlByFileIds (seasonId, fileIdList) {
+export function matchingEpisodesUrlByFileIds (seasonId, fileIdList) {
   return request({
-    url: api.matchingEpisodeUrlByFileIds,
+    url: api.matchingEpisodesUrlByFileIds,
     method: 'put',
     data: {
-      'season_id': seasonId,
-      'file_id_list': fileIdList
+      'seasonId': seasonId,
+      'fileIdList': fileIdList
+    }
+  })
+}
+
+export function matchingEpisodeUrlByFileId (episodeId, fileId) {
+  return request({
+    url: api.matchingEpisodeUrlByFileId,
+    method: 'put',
+    data: {
+      'episodeId': episodeId,
+      'fileId': fileId
     }
   })
 }

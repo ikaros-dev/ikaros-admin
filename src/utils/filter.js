@@ -3,6 +3,7 @@ import Vue from 'vue'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
 import { FileTypes, FilePlaces } from '@/core/constants'
+import { ANIME_SEASON_TYPE_MAP } from '@/store/mutation-types'
 
 dayjs.locale('zh-cn')
 
@@ -55,4 +56,12 @@ Vue.filter('fileTypePlace', function (place) {
 // 文件位置 => 对应文本
 Vue.filter('str2boolean', function (str) {
   return str === 'true'
+})
+
+Vue.filter('seasonTypeFilter', function (value) {
+  if (ANIME_SEASON_TYPE_MAP.get(value)) {
+    return ANIME_SEASON_TYPE_MAP.get(value)
+  } else {
+    return value
+  }
 })

@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="modalVisible" width="70%" title="文件详情">
+  <a-modal v-model="modalVisible" width="70%" title="文件详情" :destroyOnClose="true">
     <a-row :gutter="24" type="flex">
       <a-col :lg="15" :md="24" :sm="24" :xl="15" :xs="24">
         <div class="attach-detail-img pb-3">
