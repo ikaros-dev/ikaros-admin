@@ -53,7 +53,7 @@
                       slot="cover"
                       :alt="anime.originalTitle"
                       :src="anime.coverUrl"
-                      @click="openAnimeDetailModal"
+                      @click="toAnimeDetailPage(anime.id)"
                     />
                   </a-card>
                 </a-col>
@@ -273,10 +273,11 @@ export default {
           })
       }
     },
-    openAnimeDetailModal () {
-      this.$log.debug('run')
+    toAnimeDetailPage (animeId) {
+      this.$router.push({
+        path: '/anime/detail/' + animeId
+      })
     },
-
     /**
      * Show context menu
      */

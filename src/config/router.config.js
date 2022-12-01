@@ -70,7 +70,7 @@ export const asyncRouterMap = [
             path: '/anime/detail/:id',
             name: 'AnimeDetail',
             hidden: true,
-            component: () => import('@/views/anime/AnimeDeatil.vue'),
+            component: () => import('@/views/anime/AnimeDetail.vue'),
             meta: { title: '动漫详情', keepAlive: true }
           },
           {
