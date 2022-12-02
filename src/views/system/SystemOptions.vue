@@ -83,6 +83,12 @@
             <a-form-model-item label="HTTP Port">
               <a-input v-model="network.PROXY_HTTP_PORT" placeholder="7890"/>
             </a-form-model-item>
+            <a-form-model-item label="读取超时时间(毫秒)">
+              <a-input v-model="network.READ_TIMEOUT" placeholder="5000"/>
+            </a-form-model-item>
+            <a-form-model-item label="连接超时时间(毫秒)">
+              <a-input v-model="network.CONNECT_TIMEOUT" placeholder="5000"/>
+            </a-form-model-item>
             <a-form-model-item>
               <a-button type="primary" @click="saveOption('NETWORK')">
                 保存网络设置
