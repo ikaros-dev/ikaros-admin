@@ -127,19 +127,20 @@ export const asyncRouterMap = [
             name: 'SystemOptions',
             component: () => import('@/views/system/SystemOptions'),
             meta: { title: 'menu.system.options', hiddenHeaderContent: false }
-          },
-          {
-            path: '/system/actionlogs',
-            name: 'SystemActionLogs',
-            component: () => import('@/views/system/ActionLogs'),
-            meta: { title: 'menu.system.actionlogs', hiddenHeaderContent: false }
-          },
-          {
-            path: '/system/about',
-            name: 'About',
-            component: () => import('@/views/system/About'),
-            meta: { title: 'menu.system.about', hiddenHeaderContent: false }
           }
+          // ,
+          // {
+          //   path: '/system/actionlogs',
+          //   name: 'SystemActionLogs',
+          //   component: () => import('@/views/system/ActionLogs'),
+          //   meta: { title: 'menu.system.actionlogs', hiddenHeaderContent: false }
+          // },
+          // {
+          //   path: '/system/about',
+          //   name: 'About',
+          //   component: () => import('@/views/system/About'),
+          //   meta: { title: 'menu.system.about', hiddenHeaderContent: false }
+          // }
         ]
       }
 
