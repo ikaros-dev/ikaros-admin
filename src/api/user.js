@@ -4,7 +4,8 @@ const userApi = {
   Login: '/user/login',
   ForgePassword: '/user/forge-password',
   Register: '/user/register',
-  UserInfo: '/user/info'
+  UserInfo: '/user/info',
+  userSubscribeByAnimeId: '/user/subscribe/anime'
 }
 
 /**
@@ -40,5 +41,19 @@ export function getInfo () {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
+  })
+}
+
+export function saveUserSubscribeByAnimeId (animeId) {
+  return request({
+    url: userApi.userSubscribeByAnimeId + '/' + animeId,
+    method: 'put'
+  })
+}
+
+export function deleteUserSubscribeByAnimeId (animeId) {
+  return request({
+    url: userApi.userSubscribeByAnimeId + '/' + animeId,
+    method: 'delete'
   })
 }

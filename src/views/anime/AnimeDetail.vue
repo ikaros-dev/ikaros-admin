@@ -25,9 +25,27 @@
         <p>简介：{{ anime.overview }}</p>
 
         <div>
-          <h2>我的订阅状态</h2>
-          <p>暂未订阅</p>
-          <!-- todo 实现番剧订阅-->
+          <h2>订阅</h2>
+          <p>状态：{{ userSubStatus }}  <br /> 进度：{{ userSubProgress | userSubProgressFilter }}</p>
+          <a-button
+            :type="userSubButton.type"
+            :icon="userSubButton.icon"
+            :loading="userSubButton.loading"
+            @click="handleUserSubButtonClick"
+          >{{ userSubButton.value }}
+          </a-button>
+        </div>
+
+        <br />
+
+        <div>
+          <h2>特征剧集文件名</h2>
+          <a-alert
+            message="Ikaros会检索与当前文件特征最近似的剧集资源文件，一般是您订阅番剧时选择的第一集"
+            banner
+            closable
+          />
+          <p></p>
         </div>
       </a-col>
     </a-row>
@@ -62,11 +80,11 @@
                 <a @click="openFileDetailModal(file)">{{ file.name }}</a>
               </span>
               <span v-else>
-                <a-icon type="close-circle" theme="twoTone" two-tone-color="red"/>
+                <a-icon type="close-circle" theme="twoTone" two-tone-color="red" />
               </span>
             </span>
 
-            <span slot="customOperateTitleSlot" >
+            <span slot="customOperateTitleSlot">
               <a-button type="dashed" @click="handleBatchMatchingButtonClick(season.id)">
                 批量匹配
               </a-button>
@@ -92,7 +110,7 @@
       :receive-episode-id="currentEpisodeIdStr"
       :receive-season-id="currentSeasonIdStr"
       :visible.sync="fileMatchingModalVisible"
-      @dataHasUpdated="reRenderTable(anime.id)"/>
+      @dataHasUpdated="reRenderTable(anime.id)" />
   </page-header-wrapper>
 </template>
 
@@ -101,6 +119,7 @@ import moment from 'moment'
 import { findAnimeDTOById } from '@/api/anime'
 import FileDetailModal from '@/components/File/FileDetailModal.vue'
 import FileMatchingModal from '@/components/File/FileMatchingModal.vue'
+import { deleteUserSubscribeByAnimeId, saveUserSubscribeByAnimeId } from '@/api/user'
 
 export default {
   name: 'AnimeDetail',
@@ -115,21 +134,34 @@ export default {
         { title: '序号', dataIndex: 'seq', key: 'seq' },
         { title: '标题', dataIndex: 'title', key: 'title' },
         { title: '中文标题', dataIndex: 'titleCn', key: 'titleCn' },
-        { title: '放送时间',
+        {
+          title: '放送时间',
           dataIndex: 'airTime',
           key: 'airTime',
-          scopedSlots: { customRender: 'airTimeSlot' } },
+          scopedSlots: { customRender: 'airTimeSlot' }
+        },
         { title: '资源', dataIndex: 'file', key: 'file', scopedSlots: { customRender: 'resourceSlot' } },
         {
           dataIndex: 'operate',
           key: 'operate',
           slots: { title: 'customOperateTitleSlot' },
-          scopedSlots: { customRender: 'operationSlot' } }
+          scopedSlots: { customRender: 'operationSlot' }
+        }
       ],
       fileDetailVisible: false,
       fileMatchingModalVisible: false,
       fileMatchingModalKey: 0,
-      file: {}
+      file: {},
+      // @see https://1x.antdv.com/docs/vue/introduce-cn/
+      userSubButton: {
+        isSub: false,
+        type: 'dashed',
+        icon: 'close',
+        loading: false,
+        value: '订阅'
+      },
+      userSubStatus: '未订阅',
+      userSubProgress: ''
     }
   },
   beforeMount () {
@@ -149,6 +181,11 @@ export default {
           anime.airTime = moment(anime.airTime)
           // this.dataTableAdapter(anime.seasons)
           // this.$log.debug('anime', anime)
+          this.$log.debug('sub', anime.sub)
+          this.updateUserSubButton(anime.sub)
+          if (anime.subscribe) {
+            this.$set(this, 'userSubProgress', anime.subscribe.progress)
+          }
           this.$set(this, 'anime', anime)
         })
         .catch((err) => {
@@ -181,12 +218,76 @@ export default {
     reRenderTable (animeId) {
       // this.$log.debug('animeId', animeId)
       this.getAnimeDtoById(animeId)
+    },
+    reloadUserSubButton () {
+      if (this.userSubButton.isSub) {
+        this.userSubButton.type = 'default'
+        this.userSubButton.icon = 'check'
+        this.userSubButton.value = '取消订阅'
+        this.userSubStatus = '已订阅'
+        this.userSubProgress = 'WISH'
+      } else {
+        this.userSubButton.type = 'dashed'
+        this.userSubButton.icon = 'close'
+        this.userSubButton.value = '订阅'
+        this.userSubStatus = '未订阅'
+        this.userSubProgress = ''
+      }
+    },
+    updateUserSubButton (isSub) {
+      this.userSubButton.isSub = isSub
+      this.reloadUserSubButton()
+    },
+    handleUserSubButtonClick () {
+      if (this.userSubButton.isSub) {
+        this.cancelUserSub()
+      } else {
+        this.addUserSub()
+      }
+    },
+    addUserSub () {
+      const animeId = this.anime.id
+      this.userSubButton.loading = true
+      saveUserSubscribeByAnimeId(animeId)
+        .then(rsp => {
+          this.$log.debug('rsp', rsp)
+          if (rsp.result) {
+            this.$message.success('订阅成功')
+            this.updateUserSubButton(true)
+          }
+        })
+        .catch(err => {
+          this.$log.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
+          this.$message.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
+        })
+        .finally(() => {
+          this.userSubButton.loading = false
+        })
+    },
+    cancelUserSub () {
+      const animeId = this.anime.id
+      this.userSubButton.loading = true
+      deleteUserSubscribeByAnimeId(animeId)
+        .then(rsp => {
+          this.$log.debug('rsp', rsp)
+          if (rsp.result) {
+            this.$message.success('取消订阅成功')
+            this.updateUserSubButton(false)
+          }
+        })
+        .catch(err => {
+          this.$log.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
+          this.$message.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
+        })
+        .finally(() => {
+          this.userSubButton.loading = false
+        })
     }
   }
 
 }
 </script>
 
-<style lang="less" scoped>
+<style lang='less' scoped>
 
 </style>

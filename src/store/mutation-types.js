@@ -53,3 +53,16 @@ export const ANIME_SEASON_TYPE_MAP = new Map([
 
   ['OTHER', '其它']
 ])
+
+/**
+ * 对应服务端用户订阅的进度
+ * see run.ikaros.server.enums.SubscribeProgress
+ */
+export const USER_SUB_PROGRESS_MAP = new Map([
+  ['', '未订阅'],
+  ['WISH', '想看'],
+  ['DONE', '看过'],
+  ['DOING', '在看'],
+  ['SHELVE', '搁置'],
+  ['DISCARD', '抛弃']
+])
