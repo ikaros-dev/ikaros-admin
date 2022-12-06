@@ -24,6 +24,7 @@
       <p>请选择下方列表的第一集资源作为筛选其它剧集资源的的特征资源</p>
       <a-table
         size="middle"
+        :loading="resourceTableLoading"
         :row-selection="{ selectedRowKeys: selectedRowKeys, type: 'radio', onChange: onSelectChange }"
         :customRow="customRowClick"
         :columns="columns"
@@ -44,6 +45,7 @@
 <script>
 
 import { saveUserSubscribeByAnimeId } from '@/api/user'
+import { findDmhyRssItems } from '@/api/tripartite'
 
 export default {
   name: 'AnimeSubscribeModal',
@@ -56,6 +58,21 @@ export default {
     animeId: {
       type: Number,
       default: -1
+    },
+    additional: {
+      type: String,
+      default: ''
+    }
+  },
+  watch: {
+    // 每当 visible 改变时，重新渲染列表
+    visible (newValue, oldValue) {
+      // console.log('oldValue', oldValue)
+      // console.log('newValue', newValue)
+      // console.log(newValue && !this.additional)
+      if (newValue && !this.additional) {
+        this.findList(this.animeId)
+      }
     }
   },
   data () {
@@ -63,19 +80,15 @@ export default {
       subscribe: {
         animeId: this.animeId,
         progress: 'WISH',
-        additional: ''
+        additional: this.additional
       },
       columns: [
-        { title: '名称', dataIndex: 'name' }
+        { title: '名称', dataIndex: 'title' }
       ],
-      list: [
-        { key: '1', name: '[MingY&Billion Meta Lab] 孤獨搖滾！ / Bocchi The Rock! [01][1080p][繁日內嵌][更正]（招募）' },
-        { key: '2', name: '[爱恋字幕社][10月新番][孤独摇滚][Bocchi the Rock!][01][1080p][MP4][GB][简中]' },
-        { key: '3', name: '[千夏字幕组][孤独摇滚!_BOCCHI THE ROCK!][第01话][1080p_HEVC][简繁内封]' },
-        { key: '4', name: '[MingY&Billion Meta Lab][孤独摇滚！][Bocchi The Rock!][03][1080p][HEVC 10bit][CHS&CHT&JPN]' }
-      ],
+      list: [],
       selectedRowKeys: [],
-      submitButtonLoading: false
+      submitButtonLoading: false,
+      resourceTableLoading: false
     }
   },
   computed: {
@@ -89,6 +102,26 @@ export default {
     }
   },
   methods: {
+    findList (animeId) {
+      this.resourceTableLoading = true
+      findDmhyRssItems(animeId, '1')
+        .then(rsp => {
+          const itemList = rsp.result
+          itemList.forEach(item => {
+            item.key = item.pubDate
+          })
+          this.list = itemList
+          if (itemList.length === 0) {
+            this.$message.warn('未查询到资源')
+          }
+        })
+        .catch(err => {
+          this.$log.error('find dmhy rss items fail', err)
+        })
+        .finally(() => {
+          this.resourceTableLoading = false
+        })
+    },
     onModalClose () {
       this.$emit('animeSubscribeModalClose')
     },
@@ -112,7 +145,7 @@ export default {
     getAdditionalByKey (key) {
       const additionalEle = (this.list.find(e => e.key === key))
       // this.$log.debug('additionalEle', additionalEle)
-      return additionalEle.name
+      return additionalEle.title
     },
     handleOk (e) {
       if (!this.selectedRowKeys || this.selectedRowKeys.length === 0) {
@@ -126,7 +159,8 @@ export default {
 
       const animeId = this.animeId
       this.submitButtonLoading = true
-      saveUserSubscribeByAnimeId(animeId, this.subscribe.progress, additional)
+      this.subscribe.additional = additional
+      saveUserSubscribeByAnimeId(animeId, this.subscribe.progress, this.subscribe.additional)
         .then(rsp => {
           // this.$log.debug('rsp', rsp)
           if (rsp.result) {

@@ -134,7 +134,8 @@
 
     <AnimeSubscribeModal
       :visible.sync="animeSubscribeModalVisible"
-      :anime-id="anime.id"
+      :animeId.sync="anime.id"
+      :additional="userSubAdditional"
       @userSubProgressUpdated="handleUserSubProgressUpdated"
     />
   </page-header-wrapper>
@@ -275,6 +276,7 @@ export default {
       }
     },
     addUserSub () {
+      // this.$set(this.anime, 'id', this.anime.id)
       this.animeSubscribeModalVisible = true
     },
     cancelUserSub () {
