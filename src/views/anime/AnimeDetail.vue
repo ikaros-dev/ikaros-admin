@@ -39,13 +39,13 @@
         <br />
 
         <div>
-          <h2>特征剧集文件名</h2>
+          <h2>特征</h2>
           <a-alert
-            message="Ikaros会检索与当前文件特征最近似的剧集资源文件，一般是您订阅番剧时选择的第一集"
+            message="Ikaros会筛选出与当前名称特征最近似的剧集资源文件，一般是您订阅番剧时选择的第一集"
             banner
             closable
           />
-          <p></p>
+          <p>[桜都字幕组] 孤独摇滚！ / Bocchi the Rock! [01][1080p][简体内嵌] [409.44 MB]</p>
         </div>
       </a-col>
     </a-row>
@@ -111,6 +111,10 @@
       :receive-season-id="currentSeasonIdStr"
       :visible.sync="fileMatchingModalVisible"
       @dataHasUpdated="reRenderTable(anime.id)" />
+
+    <AnimeSubscribeModal
+      :visible.sync="animeSubscribeModalVisible"
+      :anime-id="anime.id"/>
   </page-header-wrapper>
 </template>
 
@@ -119,11 +123,12 @@ import moment from 'moment'
 import { findAnimeDTOById } from '@/api/anime'
 import FileDetailModal from '@/components/File/FileDetailModal.vue'
 import FileMatchingModal from '@/components/File/FileMatchingModal.vue'
-import { deleteUserSubscribeByAnimeId, saveUserSubscribeByAnimeId } from '@/api/user'
+import { deleteUserSubscribeByAnimeId } from '@/api/user'
+import AnimeSubscribeModal from '@/components/Anime/AnimeSubscribeModal.vue'
 
 export default {
   name: 'AnimeDetail',
-  components: { FileDetailModal, FileMatchingModal },
+  components: { AnimeSubscribeModal, FileDetailModal, FileMatchingModal },
   data () {
     return {
       anime: {},
@@ -161,7 +166,8 @@ export default {
         value: '订阅'
       },
       userSubStatus: '未订阅',
-      userSubProgress: ''
+      userSubProgress: '',
+      animeSubscribeModalVisible: false
     }
   },
   beforeMount () {
@@ -246,23 +252,24 @@ export default {
       }
     },
     addUserSub () {
-      const animeId = this.anime.id
-      this.userSubButton.loading = true
-      saveUserSubscribeByAnimeId(animeId)
-        .then(rsp => {
-          this.$log.debug('rsp', rsp)
-          if (rsp.result) {
-            this.$message.success('订阅成功')
-            this.updateUserSubButton(true)
-          }
-        })
-        .catch(err => {
-          this.$log.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
-          this.$message.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
-        })
-        .finally(() => {
-          this.userSubButton.loading = false
-        })
+      // const animeId = this.anime.id
+      // this.userSubButton.loading = true
+      // saveUserSubscribeByAnimeId(animeId)
+      //   .then(rsp => {
+      //     this.$log.debug('rsp', rsp)
+      //     if (rsp.result) {
+      //       this.$message.success('订阅成功')
+      //       this.updateUserSubButton(true)
+      //     }
+      //   })
+      //   .catch(err => {
+      //     this.$log.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
+      //     this.$message.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
+      //   })
+      //   .finally(() => {
+      //     this.userSubButton.loading = false
+      //   })
+      this.animeSubscribeModalVisible = true
     },
     cancelUserSub () {
       const animeId = this.anime.id
