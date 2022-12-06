@@ -26,7 +26,7 @@
 
         <div>
           <h2>订阅</h2>
-          <p>状态：{{ userSubStatus }}  <br /> 进度：{{ userSubProgress | userSubProgressFilter }}</p>
+          <p>状态：{{ userSubStatus }} <br /> 进度：{{ userSubProgress | userSubProgressFilter }}</p>
           <a-button
             :type="userSubButton.type"
             :icon="userSubButton.icon"
@@ -34,18 +34,38 @@
             @click="handleUserSubButtonClick"
           >{{ userSubButton.value }}
           </a-button>
+          &nbsp;
+          <span v-if="userSubProgress">
+            <a-radio-group v-model="userSubProgress" @change="onUserSubProgressChange">
+              <a-radio-button value="WISH">
+                想看
+              </a-radio-button>
+              <a-radio-button value="DOING">
+                在看
+              </a-radio-button>
+              <a-radio-button value="DONE">
+                看过
+              </a-radio-button>
+              <a-radio-button value="SHELVE">
+                搁置
+              </a-radio-button>
+              <a-radio-button value="DISCARD">
+                抛弃
+              </a-radio-button>
+            </a-radio-group>
+          </span>
         </div>
 
         <br />
 
-        <div>
+        <div v-if="userSubAdditional">
           <h2>特征</h2>
           <a-alert
             message="Ikaros会筛选出与当前名称特征最近似的剧集资源文件，一般是您订阅番剧时选择的第一集"
             banner
             closable
           />
-          <p>[桜都字幕组] 孤独摇滚！ / Bocchi the Rock! [01][1080p][简体内嵌] [409.44 MB]</p>
+          <p>{{ userSubAdditional }}</p>
         </div>
       </a-col>
     </a-row>
@@ -114,7 +134,9 @@
 
     <AnimeSubscribeModal
       :visible.sync="animeSubscribeModalVisible"
-      :anime-id="anime.id"/>
+      :anime-id="anime.id"
+      @userSubProgressUpdated="handleUserSubProgressUpdated"
+    />
   </page-header-wrapper>
 </template>
 
@@ -123,7 +145,7 @@ import moment from 'moment'
 import { findAnimeDTOById } from '@/api/anime'
 import FileDetailModal from '@/components/File/FileDetailModal.vue'
 import FileMatchingModal from '@/components/File/FileMatchingModal.vue'
-import { deleteUserSubscribeByAnimeId } from '@/api/user'
+import { deleteUserSubscribeByAnimeId, saveUserSubscribeByAnimeId } from '@/api/user'
 import AnimeSubscribeModal from '@/components/Anime/AnimeSubscribeModal.vue'
 
 export default {
@@ -167,7 +189,8 @@ export default {
       },
       userSubStatus: '未订阅',
       userSubProgress: '',
-      animeSubscribeModalVisible: false
+      animeSubscribeModalVisible: false,
+      userSubAdditional: ''
     }
   },
   beforeMount () {
@@ -187,10 +210,11 @@ export default {
           anime.airTime = moment(anime.airTime)
           // this.dataTableAdapter(anime.seasons)
           // this.$log.debug('anime', anime)
-          this.$log.debug('sub', anime.sub)
+          // this.$log.debug('sub', anime.sub)
           this.updateUserSubButton(anime.sub)
           if (anime.subscribe) {
             this.$set(this, 'userSubProgress', anime.subscribe.progress)
+            this.$set(this, 'userSubAdditional', anime.subscribe.additional)
           }
           this.$set(this, 'anime', anime)
         })
@@ -231,7 +255,6 @@ export default {
         this.userSubButton.icon = 'check'
         this.userSubButton.value = '取消订阅'
         this.userSubStatus = '已订阅'
-        this.userSubProgress = 'WISH'
       } else {
         this.userSubButton.type = 'dashed'
         this.userSubButton.icon = 'close'
@@ -252,23 +275,6 @@ export default {
       }
     },
     addUserSub () {
-      // const animeId = this.anime.id
-      // this.userSubButton.loading = true
-      // saveUserSubscribeByAnimeId(animeId)
-      //   .then(rsp => {
-      //     this.$log.debug('rsp', rsp)
-      //     if (rsp.result) {
-      //       this.$message.success('订阅成功')
-      //       this.updateUserSubButton(true)
-      //     }
-      //   })
-      //   .catch(err => {
-      //     this.$log.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
-      //     this.$message.error('sub anime fail, animeId=' + animeId + ', error msg: ', err)
-      //   })
-      //   .finally(() => {
-      //     this.userSubButton.loading = false
-      //   })
       this.animeSubscribeModalVisible = true
     },
     cancelUserSub () {
@@ -276,10 +282,12 @@ export default {
       this.userSubButton.loading = true
       deleteUserSubscribeByAnimeId(animeId)
         .then(rsp => {
-          this.$log.debug('rsp', rsp)
+          // this.$log.debug('rsp', rsp)
           if (rsp.result) {
             this.$message.success('取消订阅成功')
             this.updateUserSubButton(false)
+            this.userSubProgress = ''
+            this.userSubAdditional = ''
           }
         })
         .catch(err => {
@@ -288,6 +296,27 @@ export default {
         })
         .finally(() => {
           this.userSubButton.loading = false
+        })
+    },
+    handleUserSubProgressUpdated (subscribe) {
+      this.userSubProgress = subscribe.progress
+      this.userSubAdditional = subscribe.additional
+      this.updateUserSubButton(true)
+    },
+    onUserSubProgressChange () {
+      saveUserSubscribeByAnimeId(this.anime.id, this.userSubProgress, this.userSubAdditional)
+        .then(rsp => {
+          if (rsp.result) {
+            this.$message.success('更新订阅进度成功')
+            this.$log.debug('update sub progress success')
+          } else {
+            this.$message.warn('更新订阅进度失败')
+            this.$log.warn('update sub progress fail')
+          }
+        })
+        .catch(err => {
+          this.$message.error('更新订阅进度失败, 异常信息：', err)
+          this.$log.error('update sub progress fail, err: ', err)
         })
     }
   }
