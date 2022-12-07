@@ -146,7 +146,7 @@ export default {
         hasPrevious: false,
         params: {
           page: 1,
-          size: 8,
+          size: 16,
           title: undefined,
           originalTitle: undefined
         },
