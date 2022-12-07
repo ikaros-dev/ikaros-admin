@@ -3,7 +3,8 @@ import request from '@/utils/request'
 const api = {
   testQbittorrentConnect: '/tripartite/qbittorrent/connect/test',
   getBgmTvMe: '/tripartite/bgmtv/token/user/me',
-  findDmhyRssItems: '/tripartite/dmhy/rss/items/anime'
+  findDmhyRssItemsByAnimeId: '/tripartite/dmhy/rss/items/anime',
+  findDmhyRssItems: '/tripartite/dmhy/rss/items'
 }
 
 export function testQbittorrentConnect () {
@@ -19,12 +20,22 @@ export function getBgmTvMe () {
     method: 'get'
   })
 }
-export function findDmhyRssItems (animeId, seq) {
+export function findDmhyRssItemsByAnimeId (animeId, seq) {
   return request({
-    url: api.findDmhyRssItems + '/' + animeId,
+    url: api.findDmhyRssItemsByAnimeId + '/' + animeId,
     method: 'get',
     params: {
       'seq': seq
+    }
+  })
+}
+
+export function findDmhyRssItems (keyword) {
+  return request({
+    url: api.findDmhyRssItems,
+    method: 'get',
+    params: {
+      'keyword': keyword
     }
   })
 }

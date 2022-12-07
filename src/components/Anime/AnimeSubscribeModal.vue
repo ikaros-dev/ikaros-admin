@@ -1,27 +1,31 @@
 <template>
   <a-modal v-model="modalVisible" width="70%" :afterClose="onModalClose" title="动漫订阅">
-    <a-radio-group v-model="subscribe.progress">
-      <a-radio-button value="WISH">
-        想看
-      </a-radio-button>
-      <a-radio-button value="DOING">
-        在看
-      </a-radio-button>
-      <a-radio-button value="DONE">
-        看过
-      </a-radio-button>
-      <a-radio-button value="SHELVE">
-        搁置
-      </a-radio-button>
-      <a-radio-button value="DISCARD">
-        抛弃
-      </a-radio-button>
-    </a-radio-group>
+    <div>
+      <a-radio-group v-model="subscribe.progress">
+        <a-radio-button value="WISH">
+          想看
+        </a-radio-button>
+        <a-radio-button value="DOING">
+          在看
+        </a-radio-button>
+        <a-radio-button value="DONE">
+          看过
+        </a-radio-button>
+        <a-radio-button value="SHELVE">
+          搁置
+        </a-radio-button>
+        <a-radio-button value="DISCARD">
+          抛弃
+        </a-radio-button>
+      </a-radio-group>
+      &nbsp;
+      <a-input-search placeholder="输入番剧关键词" style="width: 200px" v-model="searchKeyword" @search="onSearch" @pressEnter="onSearch"/>
+    </div>
 
     <!--    <br/><br/>-->
 
     <div>
-      <p>请选择下方列表的第一集资源作为筛选其它剧集资源的的特征资源</p>
+      <p>请选择下方列表的一集资源作为筛选其它剧集资源的的特征资源</p>
       <a-table
         size="middle"
         :loading="resourceTableLoading"
@@ -45,7 +49,7 @@
 <script>
 
 import { saveUserSubscribeByAnimeId } from '@/api/user'
-import { findDmhyRssItems } from '@/api/tripartite'
+import { findDmhyRssItems, findDmhyRssItemsByAnimeId } from '@/api/tripartite'
 
 export default {
   name: 'AnimeSubscribeModal',
@@ -88,7 +92,8 @@ export default {
       list: [],
       selectedRowKeys: [],
       submitButtonLoading: false,
-      resourceTableLoading: false
+      resourceTableLoading: false,
+      searchKeyword: ''
     }
   },
   computed: {
@@ -104,7 +109,7 @@ export default {
   methods: {
     findList (animeId) {
       this.resourceTableLoading = true
-      findDmhyRssItems(animeId, '1')
+      findDmhyRssItemsByAnimeId(animeId, '1')
         .then(rsp => {
           const itemList = rsp.result
           itemList.forEach(item => {
@@ -179,6 +184,28 @@ export default {
     },
     handleCancel (e) {
       this.modalVisible = false
+    },
+    onSearch (e) {
+      this.$log.debug('searchKeyword', this.searchKeyword)
+      if (this.searchKeyword) {
+        this.resourceTableLoading = true
+        findDmhyRssItems(this.searchKeyword)
+          .then(rsp => {
+            this.$log.debug('rsp', rsp)
+            const itemList = rsp.result
+            if (itemList.length > 0) {
+              this.list = itemList
+            }
+            this.$message.success('查询成功，关键词：', this.searchKeyword)
+          })
+          .catch(err => {
+            this.$error(err)
+            this.$message.error('查询失败，异常：', err)
+          })
+          .finally(() => {
+            this.resourceTableLoading = false
+          })
+      }
     }
   }
 }
