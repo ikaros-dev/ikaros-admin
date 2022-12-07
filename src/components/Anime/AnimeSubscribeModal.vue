@@ -191,12 +191,14 @@ export default {
         this.resourceTableLoading = true
         findDmhyRssItems(this.searchKeyword)
           .then(rsp => {
-            this.$log.debug('rsp', rsp)
             const itemList = rsp.result
-            if (itemList.length > 0) {
-              this.list = itemList
+            itemList.forEach(item => {
+              item.key = item.pubDate
+            })
+            this.list = itemList
+            if (itemList.length === 0) {
+              this.$message.warn('未查询到资源')
             }
-            this.$message.success('查询成功，关键词：', this.searchKeyword)
           })
           .catch(err => {
             this.$error(err)
