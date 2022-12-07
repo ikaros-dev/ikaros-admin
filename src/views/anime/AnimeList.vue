@@ -183,7 +183,7 @@ export default {
       this.$log.debug(`Current: ${current}, PageSize: ${size}`)
       this.list.params.page = 1
       this.list.params.size = size
-      this.handleListFiles()
+      this.handleListAnimes()
     },
     async handleListAnimes () {
       // this.$log.debug('handleListAnimes', 'run once')
