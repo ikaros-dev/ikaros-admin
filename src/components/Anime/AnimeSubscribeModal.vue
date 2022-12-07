@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="modalVisible" :afterClose="onModalClose" title="动漫订阅">
+  <a-modal v-model="modalVisible" width="70%" :afterClose="onModalClose" title="动漫订阅">
     <a-radio-group v-model="subscribe.progress">
       <a-radio-button value="WISH">
         想看
