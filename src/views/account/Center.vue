@@ -4,8 +4,8 @@
       <a-col :md="24" :lg="7">
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
-            <div class="avatar">
-              <img :src="userInfo.avatar" />
+            <div class="avatar" @click="openAvatarChangeModal">
+              <img v-if="userInfo.avatar" :src="userInfo.avatar"/>
             </div>
             <div class="username">{{ userInfo.nickname }}</div>
             <div class="bio">{{ userInfo.introduce }}</div>
@@ -40,6 +40,9 @@ export default {
     this.currentUser = store.getters.userInfo
   },
   methods: {
+    openAvatarChangeModal () {
+      this.$log.debug('avatar')
+    }
   }
 }
 </script>
@@ -61,7 +64,9 @@ export default {
       height: 104px;
       margin-bottom: 20px;
       border-radius: 50%;
+      background-color: whitesmoke;
       overflow: hidden;
+      cursor: pointer;
 
       img {
         height: 100%;
