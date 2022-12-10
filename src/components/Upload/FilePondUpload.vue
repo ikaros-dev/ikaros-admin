@@ -174,6 +174,9 @@ export default {
     },
     handleClearFileList () {
       this.$refs.pond.removeFiles()
+    },
+    getFirstFile () {
+      return this.$refs.pond.getFile(0)
     }
   }
 }

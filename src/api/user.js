@@ -7,7 +7,8 @@ const userApi = {
   ForgePassword: '/user/forge-password',
   Register: '/user/register',
   UserInfo: '/user/info',
-  userSubscribeByAnimeId: '/user/subscribe/anime'
+  userSubscribeByAnimeId: '/user/subscribe/anime',
+  basic: '/user'
 }
 
 /**
@@ -63,5 +64,13 @@ export function deleteUserSubscribeByAnimeId (animeId) {
   return request({
     url: userApi.userSubscribeByAnimeId + '/' + animeId,
     method: 'delete'
+  })
+}
+
+export function updateUser (userInfo) {
+  return request({
+    url: userApi.basic,
+    method: 'put',
+    data: userInfo
   })
 }

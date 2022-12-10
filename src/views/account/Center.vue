@@ -5,16 +5,28 @@
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar" @click="openAvatarChangeModal">
-              <img v-if="userInfo.avatar" :src="userInfo.avatar"/>
+              <img v-if="currentUser.avatar" :src="currentUser.avatar" alt="Failure"/>
+              <span v-else>NotSet</span>
             </div>
-            <div class="username">{{ userInfo.nickname }}</div>
-            <div class="bio">{{ userInfo.introduce }}</div>
+            <div class="username">{{ currentUser.nickname }}</div>
+            <div class="bio">{{ currentUser.introduce }}</div>
           </div>
           <!-- <a-divider :dashed="true"/> -->
         </a-card>
       </a-col>
       <a-col :md="24" :lg="17"> 右边的内容 </a-col>
     </a-row>
+
+    <FileUploadModal
+      :visible.sync="avatarUploadVisible"
+      :allow-multiple="false"
+      @fileUploadModalClose="onFileUploadModalClose" />
+
+    <FileSelectModal
+      :visible.sync="fileSelectModalVisible"
+      @sendSelectedFileFieldValue="handSelectedFileFieldValue"
+      :disableCopySelectedFileIdButton="true" />
+
   </page-header-wrapper>
 </template>
 
@@ -23,14 +35,30 @@ import { PageView, RouteView } from '@/layouts'
 
 import { mapGetters } from 'vuex'
 import store from '@/store'
+import FileUploadModal from '@/components/File/FileUploadModal.vue'
+import { listByName } from '@/api/file'
+import { updateUser } from '@/api/user'
+import FileSelectModal from '@/components/File/FileSelectModal.vue'
 
 export default {
   components: {
+    FileSelectModal,
+    FileUploadModal,
     RouteView,
     PageView
   },
   data () {
     return {
+      avatarUploadVisible: false,
+      fileSelectModalVisible: false,
+      currentUser: {},
+      params: {
+        page: 1,
+        size: 8,
+        keyword: undefined,
+        type: undefined,
+        place: undefined
+      }
     }
   },
   computed: {
@@ -41,7 +69,48 @@ export default {
   },
   methods: {
     openAvatarChangeModal () {
-      this.$log.debug('avatar')
+      this.fileSelectModalVisible = true
+    },
+    onFileUploadModalClose (firstFile) {
+      this.$log.debug('firstFile', firstFile)
+      if (!firstFile) {
+        return
+      }
+      const fileName = firstFile.source.name
+      this.$log.debug('fileName', fileName)
+      listByName(fileName)
+        .then(rsp => {
+          const fileList = rsp.result
+          if (fileList.length <= 0) {
+            this.$message.error('更新头像失败')
+          }
+          const avatarFile = fileList[0]
+          // this.$log.debug('avatarFile', avatarFile)
+          this.updateUser(avatarFile.url)
+        })
+        .catch(err => {
+          const msg = '更新头像失败，错误消息：' + err
+          this.$log.error(msg)
+          this.$message.error(msg)
+        })
+    },
+    handSelectedFileFieldValue (value) {
+      this.$log.debug('handSelectedFileFieldValue', 'value', value)
+      this.updateUser(value)
+    },
+    updateUser (newAvatarUrl) {
+      this.currentUser.avatar = newAvatarUrl
+      updateUser(this.currentUser)
+        .then(rsp => {
+          const newUserInfo = rsp.result
+          store.commit('SET_INFO', newUserInfo)
+          this.$message.success('更新用户头像成功')
+        })
+        .catch(err => {
+          const msg = '更新头像失败，错误消息：' + err
+          this.$log.error(msg)
+          this.$message.error(msg)
+      })
     }
   }
 }

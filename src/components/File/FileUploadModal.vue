@@ -1,6 +1,12 @@
 <template>
   <a-modal v-model="modalVisible" :afterClose="onModalClose" :footer="null" destroyOnClose title="上传文件">
-    <FilePondUpload ref="filePondUploadRef" :uploadHandler="uploadHandler" :enableChunkForce="true" :enableChunkUploads="true" />
+    <FilePondUpload
+      ref="filePondUploadRef"
+      :uploadHandler="uploadHandler"
+      :enableChunkForce="true"
+      :enableChunkUploads="true"
+      :multiple="allowMultiple"
+    />
   </a-modal>
 </template>
 <script>
@@ -14,6 +20,10 @@ export default {
     visible: {
       type: Boolean,
       default: false
+    },
+    allowMultiple: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -33,8 +43,9 @@ export default {
   },
   methods: {
     onModalClose () {
+      const firstFile = this.$refs.filePondUploadRef.getFirstFile()
       this.$refs.filePondUploadRef.handleClearFileList()
-      this.$emit('fileUploadModalClose')
+      this.$emit('fileUploadModalClose', firstFile)
     }
   }
 }
