@@ -8,7 +8,8 @@ const userApi = {
   Register: '/user/register',
   UserInfo: '/user/info',
   userSubscribeByAnimeId: '/user/subscribe/anime',
-  basic: '/user'
+  basic: '/user',
+  userPassword: '/user/password'
 }
 
 /**
@@ -72,5 +73,16 @@ export function updateUser (userInfo) {
     url: userApi.basic,
     method: 'put',
     data: userInfo
+  })
+}
+
+export function updateUserPassword (oldPassword, newPassword) {
+  return request({
+    url: userApi.userPassword,
+    method: 'put',
+    params: {
+      oldPassword,
+      newPassword
+    }
   })
 }
