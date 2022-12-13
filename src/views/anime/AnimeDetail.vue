@@ -306,7 +306,7 @@ export default {
       this.updateUserSubButton(true)
     },
     onUserSubProgressChange () {
-      saveUserSubscribeByAnimeId(this.anime.id, this.userSubProgress, this.userSubAdditional)
+      saveUserSubscribeByAnimeId(this.anime.id, this.userSubProgress)
         .then(rsp => {
           if (rsp.result) {
             this.$message.success('更新订阅进度成功')

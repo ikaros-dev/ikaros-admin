@@ -18,23 +18,23 @@
           抛弃
         </a-radio-button>
       </a-radio-group>
-      &nbsp;
-      <a-input-search placeholder="输入番剧关键词" style="width: 200px" v-model="searchKeyword" @search="onSearch" @pressEnter="onSearch"/>
+      <!--&nbsp;-->
+      <!--<a-input-search placeholder="输入番剧关键词" style="width: 200px" v-model="searchKeyword" @search="onSearch" @pressEnter="onSearch"/>-->
     </div>
 
     <!--    <br/><br/>-->
 
-    <div>
-      <p>请选择下方列表的一集资源作为筛选其它剧集资源的的特征资源</p>
-      <a-table
-        size="middle"
-        :loading="resourceTableLoading"
-        :row-selection="{ selectedRowKeys: selectedRowKeys, type: 'radio', onChange: onSelectChange }"
-        :customRow="customRowClick"
-        :columns="columns"
-        :data-source="list"
-      />
-    </div>
+    <!--<div>-->
+    <!--  <p>请选择下方列表的一集资源作为筛选其它剧集资源的的特征资源</p>-->
+    <!--  <a-table-->
+    <!--    size="middle"-->
+    <!--    :loading="resourceTableLoading"-->
+    <!--    :row-selection="{ selectedRowKeys: selectedRowKeys, type: 'radio', onChange: onSelectChange }"-->
+    <!--    :customRow="customRowClick"-->
+    <!--    :columns="columns"-->
+    <!--    :data-source="list"-->
+    <!--  />-->
+    <!--</div>-->
 
     <template slot="footer">
       <a-button key="back" @click="handleCancel">
@@ -153,19 +153,19 @@ export default {
       return additionalEle.title
     },
     handleOk (e) {
-      if (!this.selectedRowKeys || this.selectedRowKeys.length === 0) {
-        this.$message.warn('请选择一个特征资源')
-        return
-      }
+      // if (!this.selectedRowKeys || this.selectedRowKeys.length === 0) {
+      //   this.$message.warn('请选择一个特征资源')
+      //   return
+      // }
 
       // this.$log.debug('this.selectedRowKeys[0]', this.selectedRowKeys[0])
-      const additional = this.getAdditionalByKey(this.selectedRowKeys[0])
+      // const additional = this.getAdditionalByKey(this.selectedRowKeys[0])
       // this.$log.debug('additional', additional)
 
       const animeId = this.animeId
-      this.submitButtonLoading = true
-      this.subscribe.additional = additional
-      saveUserSubscribeByAnimeId(animeId, this.subscribe.progress, this.subscribe.additional)
+      // this.submitButtonLoading = true
+      // this.subscribe.additional = additional
+      saveUserSubscribeByAnimeId(animeId, this.subscribe.progress)
         .then(rsp => {
           // this.$log.debug('rsp', rsp)
           if (rsp.result) {

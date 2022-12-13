@@ -1,6 +1,6 @@
 import request from '@/utils/request'
-import Utf8 from 'crypto-js/enc-utf8'
-import Base64 from 'crypto-js/enc-base64'
+// import Utf8 from 'crypto-js/enc-utf8'
+// import Base64 from 'crypto-js/enc-base64'
 
 const userApi = {
   Login: '/user/login',
@@ -49,14 +49,14 @@ export function getInfo () {
 }
 
 export function saveUserSubscribeByAnimeId (animeId, progress, additional) {
-  const word = Utf8.parse(additional)
-  additional = Base64.stringify(word)
+  // const word = Utf8.parse(additional)
+  // additional = Base64.stringify(word)
   return request({
     url: userApi.userSubscribeByAnimeId + '/' + animeId,
     method: 'put',
     params: {
-      'progress': progress,
-      'additional': additional
+      'progress': progress
+      // , 'additional': additional
     }
   })
 }
