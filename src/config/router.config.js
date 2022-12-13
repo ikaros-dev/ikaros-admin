@@ -60,28 +60,28 @@ export const asyncRouterMap = [
 
       // Anime
       {
-        path: '/Anime',
+        path: '/anime',
         component: RouteView,
-        redirect: '/Anime/list',
+        redirect: '/anime/list',
         name: 'anime',
         meta: { title: '番剧', keepAlive: true, icon: 'appstore' },
         children: [
           {
-            path: '/Anime/userFollow',
-            name: 'AnimeUserFollow',
+            path: '/anime/detail/:id',
+            name: 'AnimeDetail',
             hidden: true,
-            component: () => import('@/views/anime/AnimeUserFollow'),
-            meta: { title: '我的追番', keepAlive: true }
+            component: () => import('@/views/anime/AnimeDetail.vue'),
+            meta: { title: '动漫详情', keepAlive: true }
           },
           {
-            path: '/Anime/save',
+            path: '/anime/save',
             name: 'AnimeSave',
             component: () => import('@/views/anime/AnimeSave'),
             meta: { title: '保存番剧', hideHeader: true },
             hideChildrenInMenu: true
           },
           {
-            path: '/Anime/list',
+            path: '/anime/list',
             name: 'AnimeList',
             component: () => import('@/views/anime/AnimeList'),
             meta: { title: '番剧列表', hideHeader: true },
@@ -127,19 +127,20 @@ export const asyncRouterMap = [
             name: 'SystemOptions',
             component: () => import('@/views/system/SystemOptions'),
             meta: { title: 'menu.system.options', hiddenHeaderContent: false }
-          },
-          {
-            path: '/system/actionlogs',
-            name: 'SystemActionLogs',
-            component: () => import('@/views/system/ActionLogs'),
-            meta: { title: 'menu.system.actionlogs', hiddenHeaderContent: false }
-          },
-          {
-            path: '/system/about',
-            name: 'About',
-            component: () => import('@/views/system/About'),
-            meta: { title: 'menu.system.about', hiddenHeaderContent: false }
           }
+          // ,
+          // {
+          //   path: '/system/actionlogs',
+          //   name: 'SystemActionLogs',
+          //   component: () => import('@/views/system/ActionLogs'),
+          //   meta: { title: 'menu.system.actionlogs', hiddenHeaderContent: false }
+          // },
+          // {
+          //   path: '/system/about',
+          //   name: 'About',
+          //   component: () => import('@/views/system/About'),
+          //   meta: { title: 'menu.system.about', hiddenHeaderContent: false }
+          // }
         ]
       }
 

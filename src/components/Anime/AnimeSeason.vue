@@ -27,8 +27,8 @@
       <a-button type="primary" @click="handleSaveClick">
         保存季度信息
       </a-button>
-      <a-button style="margin-left: 4px;" type="primary" @click="handleResourceMatchingClick">
-        匹配资源
+      <a-button style="margin-left: 4px;" type="primary" @click="fileMatchingModalVisible = true">
+        批量匹配资源
       </a-button>
     </a-form-model-item>
     <!-- 剧集信息 -->
@@ -56,7 +56,7 @@
           <a-tab-pane :closable="tabClosable" v-for="(episode, index) in episodes" :key="index" :tab="`第${ episode.seq === undefined ? '' : episode.seq }集`">
             <AnimeEpisode
               :receiveSeasonId="new String(season.id)"
-              :receiveEepisode="episode"
+              :receiveEpisode="episode"
               @updateEpisode="newEpisode => episode = newEpisode"/>
           </a-tab-pane>
 
@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import { ANIME_SEASON_TYPE_MAP } from '@/store/mutation-types'
 import AnimeEpisode from '@/components/Anime/AnimeEpisode.vue'
 import { findSeasonTypes, saveSeason } from '@/api/season'
 import { removeEpisode } from '@/api/episode'
@@ -89,15 +88,6 @@ export default {
     receiveSeason: {
       type: Object,
       default: () => ({})
-    }
-  },
-  filters: {
-    seasonTypeFilter (value) {
-      if (ANIME_SEASON_TYPE_MAP.get(value)) {
-        return ANIME_SEASON_TYPE_MAP.get(value)
-      } else {
-        return value
-      }
     }
   },
   beforeMount () {
@@ -223,9 +213,6 @@ export default {
           },
           onCancel () {}
         })
-      },
-      handleResourceMatchingClick () {
-        this.fileMatchingModalVisible = true
       }
     }
 }

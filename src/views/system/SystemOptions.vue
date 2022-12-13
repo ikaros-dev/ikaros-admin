@@ -2,7 +2,7 @@
   <page-header-wrapper :title="false">
     <div class="container">
       <a-tabs type="line" @change="selectTabChange">
-        <a-tab-pane class="tab-content-pane" key="COMMON" tab="常规设置">
+        <a-tab-pane class="tab-content-pane" key="COMMON" tab="常规">
           <a-form-model :model="common">
             <a-form-model-item label="标题">
               <a-input v-model="common.TITLE" />
@@ -36,7 +36,7 @@
           </a-form-model>
         </a-tab-pane>
 
-        <a-tab-pane class="tab-content-pane" key="SEO" tab="SEO设置">
+        <a-tab-pane class="tab-content-pane" key="SEO" tab="SEO">
           <a-form-model :model="seo">
             <a-form-model-item label="屏蔽搜索引擎">
               <a-switch :checked="seo.HIDE_FOR_SEARCH_ENGINE | str2boolean" @change="changeHideForSearchEngineSwitch" />
@@ -55,7 +55,7 @@
           </a-form-model>
         </a-tab-pane>
 
-        <a-tab-pane class="tab-content-pane" key="FILE" tab="文件设置">
+        <a-tab-pane class="tab-content-pane" key="FILE" tab="文件">
           <a-form-model :model="file">
             <a-form-model-item label="存储位置">
               <a-select
@@ -75,13 +75,19 @@
           </a-form-model>
         </a-tab-pane>
 
-        <a-tab-pane class="tab-content-pane" key="NETWORK" tab="网络设置">
+        <a-tab-pane class="tab-content-pane" key="NETWORK" tab="网络">
           <a-form-model :model="network">
             <a-form-model-item label="HTTP Host">
               <a-input v-model="network.PROXY_HTTP_HOST" placeholder="192.168.2.229"/>
             </a-form-model-item>
             <a-form-model-item label="HTTP Port">
               <a-input v-model="network.PROXY_HTTP_PORT" placeholder="7890"/>
+            </a-form-model-item>
+            <a-form-model-item label="读取超时时间(毫秒)">
+              <a-input v-model="network.READ_TIMEOUT" placeholder="5000"/>
+            </a-form-model-item>
+            <a-form-model-item label="连接超时时间(毫秒)">
+              <a-input v-model="network.CONNECT_TIMEOUT" placeholder="5000"/>
             </a-form-model-item>
             <a-form-model-item>
               <a-button type="primary" @click="saveOption('NETWORK')">
@@ -181,7 +187,7 @@
           </a-form-model>
         </a-tab-pane>
 
-        <a-tab-pane class="tab-content-pane" key="APP" tab="应用设置">
+        <a-tab-pane class="tab-content-pane" key="APP" tab="应用">
           <a-form-model :model="app">
             <a-form-model-item label="开启自动追番">
               <a-alert
@@ -191,12 +197,83 @@
               />
               <a-switch :checked="app.ENABLE_AUTO_ANIME_SUB_TASK | str2boolean" @change="changeAppEnableAutoAnimeSubSwitch" />
             </a-form-model-item>
+            <a-form-model-item label="开启媒体目录生成">
+              <a-switch :checked="app.ENABLE_GENERATE_MEDIA_DIR_TASK | str2boolean" @change="changeAppEnableGenerateMediaDirSwitch" />
+            </a-form-model-item>
             <a-form-model-item>
               <a-button type="primary" @click="saveOption('APP')">
                 保存应用设置
               </a-button>
             </a-form-model-item>
           </a-form-model>
+        </a-tab-pane>
+
+        <a-tab-pane class="tab-content-pane" key="NOTIFY" tab="通知">
+          <a-tabs default-active-key="MailConfig">
+            <a-tab-pane key="MailConfig" tab="邮件配置">
+              <a-form-model :model="notify">
+                <a-form-model-item label="开启邮件通知">
+                  <a-switch :checked="notify.MAIL_ENABLE | str2boolean" @change="changeMailNotifySwitch" />
+                </a-form-model-item>
+                <div v-if="notify.MAIL_ENABLE === 'true'">
+                  <a-form-model-item required>
+                    <span slot="label">
+                      邮件协议
+                      <a-tooltip>
+                        <template slot="title">
+                          目前仅支持SMTP协议
+                        </template>
+                        <a-icon type="question-circle" />
+                      </a-tooltip>
+                    </span>
+                    <a-select disabled v-model="notify.MAIL_PROTOCOL" default-value="SMTP" >
+                      <a-select-option value="SMTP">
+                        SMTP
+                      </a-select-option>
+                    </a-select>
+                  </a-form-model-item>
+                  <a-form-model-item label="SMTP地址" required>
+                    <a-input v-model="notify.MAIL_SMTP_HOST" placeholder="smtp.example.com"/>
+                  </a-form-model-item>
+                  <a-form-model-item label="SMTP端口" required>
+                    <a-input v-model="notify.MAIL_SMTP_PORT" placeholder="465"/>
+                  </a-form-model-item>
+                  <a-form-model-item label="SMTP发送邮件账号" required>
+                    <a-input v-model="notify.MAIL_SMTP_ACCOUNT" placeholder="notify@example.com"/>
+                  </a-form-model-item>
+                  <a-form-model-item label="SMTP发送邮件密码" required>
+                    <a-input-password v-model="notify.MAIL_SMTP_PASSWORD" />
+                  </a-form-model-item>
+                  <a-form-model-item label="SMTP发件人别名" required>
+                    <a-input v-model="notify.MAIL_SMTP_ACCOUNT_ALIAS" placeholder="Ikaros"/>
+                  </a-form-model-item>
+                </div>
+                <a-form-model-item>
+                  <a-button type="primary" @click="saveOption('NOTIFY')">
+                    保存邮件设置
+                  </a-button>
+                </a-form-model-item>
+              </a-form-model>
+            </a-tab-pane>
+            <a-tab-pane key="MailTest" tab="邮件测试">
+              <a-form-model :model="mailTest">
+                <a-form-model-item label="收件人地址" required>
+                  <a-input v-model="mailTest.address" placeholder="target@example.com"/>
+                </a-form-model-item>
+                <a-form-model-item label="主题" required>
+                  <a-input v-model="mailTest.subject" placeholder="测试邮件"/>
+                </a-form-model-item>
+                <a-form-model-item label="内容" required>
+                  <a-input type="textarea" autoSize v-model="mailTest.content" placeholder="这是一份测试邮件"/>
+                </a-form-model-item>
+              </a-form-model>
+              <a-form-model-item>
+                <a-button type="primary" @click="reqMailTest" :loading="mailTestSubmitButtonLoading">
+                  发送
+                </a-button>
+              </a-form-model-item>
+            </a-tab-pane>
+          </a-tabs>
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -210,8 +287,10 @@ import {
 } from '@/api/options'
 import { testQbittorrentConnect, getBgmTvMe } from '@/api/tripartite'
 import { testProxyConnect } from '@/api/network'
+import { mailTest } from '@/api/notify'
 
 export default {
+  name: 'SystemOptions',
   data () {
     return {
       options: [],
@@ -224,11 +303,21 @@ export default {
       bgmtv: {},
       mikan: {},
       jellyfin: {},
+      notify: {},
       other: {},
       places: {
         data: [],
         loading: false
       },
+      mailTest: {
+        address: '',
+        subject: '测试',
+        content: '<div>' +
+          '<h2>测试邮件标题</h2>' +
+          '<p>测试邮件内容</p>' +
+          '</div>'
+      },
+      mailTestSubmitButtonLoading: false,
       testConnectQbittorrentButtonLoading: false,
       testConnectProxyButtonLoading: false,
       testBgmTvTokenButtonLoading: false
@@ -301,6 +390,10 @@ export default {
           this.jellyfin = entity.kvMap
         }
 
+        if (category === 'NOTIFY') {
+          this.notify = entity.kvMap
+        }
+
         if (category === 'OTHER') {
           this.other = entity.kvMap
         }
@@ -336,6 +429,9 @@ export default {
       }
       if (category === 'JELLYFIN') {
         request.kvMap = this.jellyfin
+      }
+      if (category === 'NOTIFY') {
+        request.kvMap = this.notify
       }
       if (category === 'OTHER') {
         request.kvMap = this.other
@@ -374,6 +470,12 @@ export default {
     },
     changeAppEnableAutoAnimeSubSwitch (checked) {
       this.app.ENABLE_AUTO_ANIME_SUB_TASK = checked ? 'true' : 'false'
+    },
+    changeAppEnableGenerateMediaDirSwitch (checked) {
+      this.app.ENABLE_GENERATE_MEDIA_DIR_TASK = checked ? 'true' : 'false'
+    },
+    changeMailNotifySwitch (checked) {
+      this.notify.MAIL_ENABLE = checked ? 'true' : 'false'
     },
     testQbittorrentConfig () {
       this.testConnectQbittorrentButtonLoading = this
@@ -430,6 +532,40 @@ export default {
         })
         .finally(() => {
           this.testBgmTvTokenButtonLoading = false
+        })
+    },
+    reqMailTest () {
+      if (!this.mailTest.address) {
+        this.$message.error('请输入收件人地址')
+        return
+      }
+      if (!this.mailTest.subject) {
+        this.$message.error('请输入邮件主题')
+        return
+      }
+      if (!this.mailTest.content) {
+        this.$message.error('请输入邮件内容')
+        return
+      }
+      this.$log.debug('mailTest', this.mailTest)
+      this.mailTestSubmitButtonLoading = true
+      mailTest(this.mailTest)
+        .then(rsp => {
+          if (rsp.result) {
+            this.$message.success('邮件发送成功')
+          } else {
+            const msg = '邮件发送失败，请检查通知的邮件配置项, 异常消息' + rsp.message
+            this.$message.error(msg)
+            this.$log.error(msg)
+          }
+        })
+        .catch(err => {
+          const msg = '邮件发送失败，异常消息：' + err
+          this.$message.error(msg)
+          this.$log.error(msg)
+        })
+        .finally(() => {
+          this.mailTestSubmitButtonLoading = false
         })
     }
   }

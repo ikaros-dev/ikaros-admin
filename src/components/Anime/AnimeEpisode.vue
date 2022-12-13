@@ -11,7 +11,7 @@
     </a-form-model-item>
     <a-form-model-item label="URL" >
       <a-input v-model="episode.url" placeholder="点击右边按钮，可快速获取已存在文件URL或者上传新的文件">
-        <a-icon slot="addonAfter" type="search" @click="openFileSelectModal"/>
+        <a-icon slot="addonAfter" type="search" @click="fileMatchingModalVisible = true"/>
       </a-input>
     </a-form-model-item>
     <a-form-model-item label="中文标题" >
@@ -45,22 +45,28 @@
       :visible.sync="fileSelectModalVisible"
       @sendSelectedFileFieldValue="handSelectedFileFieldValue"
       :disableCopySelectedFileIdButton="true" />
+
+    <FileMatchingModal
+      :copy-field-url="true"
+      :visible.sync="fileMatchingModalVisible"
+      @sendSelectedFileFieldValue="handSelectedFileFieldValue"/>
   </a-form-model>
 </template>
 
 <script>
 import { saveEpisode } from '@/api/episode'
 import FileSelectModal from '@/components/File/FileSelectModal.vue'
+import FileMatchingModal from '@/components/File/FileMatchingModal.vue'
 import moment from 'moment'
 
 export default {
-  components: { FileSelectModal },
+  components: { FileSelectModal, FileMatchingModal },
   props: {
     receiveSeasonId: {
       type: String,
       default: -1
     },
-    receiveEepisode: {
+    receiveEpisode: {
       type: Object,
       default: () => ({})
     }
@@ -70,9 +76,9 @@ export default {
       this.seasonId = this.receiveSeasonId
     }
 
-    if (this.receiveEepisode) {
-      this.receiveEepisode.airTime = moment(this.receiveEepisode.airTime)
-      this.episode = this.receiveEepisode
+    if (this.receiveEpisode) {
+      this.receiveEpisode.airTime = moment(this.receiveEpisode.airTime)
+      this.episode = this.receiveEpisode
     }
   },
   mounted () {
@@ -107,7 +113,8 @@ export default {
       },
       fileSelectModalVisible: false,
       seasonId: -1,
-      episode: {}
+      episode: {},
+      fileMatchingModalVisible: false
     }
   },
 

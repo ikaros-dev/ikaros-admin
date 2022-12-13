@@ -28,6 +28,18 @@
             </a-row>
           </a-form>
         </div>
+        <div class="table-operator mb-0">
+          <a-button v-show="list.selected.length" icon="delete" type="danger" @click="handleDeleteAnimeInBatch">
+            删除
+          </a-button>
+          <a-button v-show="list.selected.length" icon="close" @click="list.selected = []"> 取消</a-button>
+          <a-button v-show="list.selected.length" icon="check-circle" type="primary" @click="handleSelectAll">
+            全选
+          </a-button>
+          <a-button v-show="list.selected.length" icon="star" type="primary" @click="starAnimeWithBatch">
+            订阅
+          </a-button>
+        </div>
       </a-col>
 
       <a-col :span="24">
@@ -42,16 +54,29 @@
                   :xs="24"
                   :sm="12"
                   :md="8"
-                  :lg="8"
-                  :xl="6"
-                  class="col-anime-item">
-                  <a-card :bordered="false" :title="anime.titleCn === '' ? anime.title : anime.titleCn">
-                    <a slot="extra" href="#" @click="handleAnimeItemClick(anime)">编辑</a>
+                  :lg="6"
+                  :xl="3"
+                  class="col-anime-col"
+                  @contextmenu.prevent="handleContextMenu($event, anime)"
+                >
+                  <a-card
+                    :class="`${isItemSelect(anime) ? 'card-body-select-true' : 'card-body-select-false'}`"
+                    :bordered="false"
+                    :title="anime.titleCn === '' ? anime.title : anime.titleCn">
+                    <template #extra>
+                      <a-icon
+                        v-show="!isItemSelect(anime)"
+                        :style="{ fontSize: '20px', color: 'rgb(37 99 235)' }"
+                        theme="twoTone"
+                        type="plus-circle"
+                        @click.stop="handleSelect(anime)"
+                      />
+                    </template>
                     <img
                       slot="cover"
                       :alt="anime.originalTitle"
                       :src="anime.coverUrl"
-                      @click="openAnimeDetailModal"
+                      @click="handleItemClick(anime)"
                     />
                   </a-card>
                 </a-col>
@@ -62,6 +87,8 @@
         </a-spin>
       </a-col>
     </a-row>
+
+    <br>
 
     <div class="page-wrapper">
       <a-pagination
@@ -78,7 +105,7 @@
     </div>
 
     <a-modal
-      title="快速新增动漫"
+      title="快速联网新增动漫"
       :visible="animeAddfleetlyModal.visible"
       @cancel="animeAddfleetlyModal.visible = false"
       :footer="null"
@@ -89,8 +116,8 @@
             style="min-width: 150px;"
             v-model="animeAddFleetlyForm.type"
             placeholder="请选择类型">
-            <a-select-option value="originalTitle" disabled>
-              原始标题
+            <a-select-option value="title">
+              动漫名称
             </a-select-option>
             <a-select-option value="bgmtvId">
               番组计划的条目ID
@@ -117,8 +144,10 @@
 </template>
 
 <script>
-import { listAnimeDTOS, findAnimeDTOById } from '@/api/anime'
+import { listAnimeDTOS, deleteAnimeById, findAnimeDTOById, deleteWithBatchByIds } from '@/api/anime'
 import { reqBgmtvBangumiMetadata } from '@/api/network'
+import { searchAnime } from '@/api/metadata'
+import { saveUserSubscribeWithBatchByAnimeIdArr } from '@/api/user'
 
 export default {
   name: 'AnimeList',
@@ -128,6 +157,11 @@ export default {
         page: this.list.params.page,
         size: this.list.params.size,
         total: this.list.total
+      }
+    },
+    isItemSelect () {
+      return function (anime) {
+        return this.list.selected.findIndex(item => item.id === anime.id) > -1
       }
     }
   },
@@ -141,10 +175,11 @@ export default {
         hasPrevious: false,
         params: {
           page: 1,
-          size: 8,
+          size: 16,
           title: undefined,
           originalTitle: undefined
         },
+        selected: [],
         current: {}
       },
       animeAddfleetlyModal: {
@@ -178,7 +213,7 @@ export default {
       this.$log.debug(`Current: ${current}, PageSize: ${size}`)
       this.list.params.page = 1
       this.list.params.size = size
-      this.handleListFiles()
+      this.handleListAnimes()
     },
     async handleListAnimes () {
       // this.$log.debug('handleListAnimes', 'run once')
@@ -202,10 +237,8 @@ export default {
         this.list.loading = false
       }
     },
-    handleAnimeItemClick (anime) {
-      // this.$log.debug('Anime', Anime)
+    handleAnimeItemClick (animeId) {
       // 这里根据animeId, 查询到完整的 animeDTO，把 dto作为参数传给保存页面
-      const animeId = anime.id
       findAnimeDTOById(animeId)
         .then((res) => {
           // this.$log.debug('res', res)
@@ -255,26 +288,161 @@ export default {
             this.animeAddfleetlyModal.confirmLoading = false
           })
       }
+      if (type === 'title' && value !== '') {
+        this.animeAddfleetlyModal.confirmLoading = true
+        searchAnime(value)
+          .then((rsp) => {
+            this.animeAddfleetlyModal.confirmLoading = false
+            this.animeAddfleetlyModal.visible = false
+            this.handlePageChange()
+          })
+          .catch((err) => {
+            this.$log.error('request bgmtv subject metadata to add Anime fleetly fail, err: ', err)
+            this.$message.error('请求联网快速新增番剧失败, keyword=' + value)
+            this.animeAddfleetlyModal.confirmLoading = false
+          })
+      }
     },
-    openAnimeDetailModal () {
-      this.$log.debug('run')
+    toAnimeDetailPage (animeId) {
+      this.$router.push({
+        path: '/anime/detail/' + animeId
+      })
+    },
+    /**
+     * Show context menu
+     */
+    handleContextMenu (event, anime) {
+      this.$contextmenu({
+        items: [
+          {
+            label: `跳转到编辑页`,
+            onClick: () => {
+              this.handleAnimeItemClick(anime.id)
+            },
+            divided: true
+          },
+          {
+            label: `跳转到详情页`,
+            onClick: () => {
+              this.$router.push({
+                path: '/anime/detail/' + anime.id
+              })
+            },
+            divided: true
+          },
+          {
+            label: '删除',
+            onClick: () => {
+              this.$confirm({
+                title: '提示',
+                content: '确定删除该动漫？',
+                okText: '确定',
+                cancelText: '取消',
+                onOk: async () => {
+                  await deleteAnimeById(anime.id)
+                  await this.handleListAnimes()
+                }
+              })
+            }
+          }
+        ],
+        event,
+        minWidth: 210
+      })
+      return false
+    },
+    handleSelect (anime) {
+      this.list.selected = [...this.list.selected, anime]
+    },
+
+    handleUnselect (anime) {
+      this.list.selected = this.list.selected.filter(item => item.id !== anime.id)
+    },
+
+    handleSelectAll () {
+      this.list.selected = this.list.data
+    },
+
+    handleDeleteAnimeInBatch () {
+      // todo impl
+      const animeIdArr = []
+      this.list.selected.forEach(anime => {
+        animeIdArr.push(anime.id)
+      })
+      this.list.loading = true
+      deleteWithBatchByIds(animeIdArr)
+        .then(rsp => {
+          if (rsp.result) {
+            this.$message.success('批量删除动漫成功')
+            this.handleListAnimes()
+          } else {
+            const msg = '批量删除动漫失败，异常消息：' + rsp.message
+            this.$message.error(msg)
+            this.$log.error(msg)
+          }
+        })
+        .catch(err => {
+          const msg = '批量删除动漫失败，异常消息：' + err
+          this.$message.error(msg)
+          this.$log.error(msg)
+        })
+        .finally(() => {
+          this.list.loading = false
+        })
+    },
+
+    handleItemClick (anime) {
+      if (this.list.selected.length <= 0) {
+        this.toAnimeDetailPage(anime.id)
+        return
+      }
+      this.isItemSelect(anime) ? this.handleUnselect(anime) : this.handleSelect(anime)
+    },
+
+    starAnimeWithBatch () {
+      const animeIdArr = []
+      this.list.selected.forEach(anime => {
+        animeIdArr.push(anime.id)
+      })
+
+      saveUserSubscribeWithBatchByAnimeIdArr(animeIdArr)
+        .then(rsp => {
+          if (rsp.result) {
+            this.$message.success('订阅番剧成功')
+            this.list.selected = []
+          } else {
+            const msg = '订阅番剧失败，异常信息：' + rsp.message
+            this.$message.error(msg)
+            this.$log.error(msg)
+          }
+        })
+        .catch(err => {
+          const msg = '订阅番剧失败，异常信息：' + err
+          this.$message.error(msg)
+          this.$log.error(msg)
+        })
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-.col-anime-item {
-  margin: 3px 0;
-  // min-width: 100%;
-  // min-height: 100%;
-  // height: 300px;
-  width: 15%;
+.col-anime-col {
   overflow: hidden;
-  img {
-    margin: 0;
+  aspect-ratio: 0.7;
+
+  .card-body-select-true{
     height: 100%;
-    width: 100%;
+    margin: 5px 0;
+    border: 1px blue solid;
+    border-radius: 5px;
+    height: inherit;
+  }
+  .card-body-select-false{
+    height: 100%;
+    margin: 5px 0;
+    border: 1px #ececec solid;
+    border-radius: 5px;
   }
 }
 </style>

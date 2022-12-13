@@ -57,7 +57,7 @@
 
       <a-col :span="24">
         <a-table
-          :row-selection="{ selectedRowKeys: fileTableSelectedRowKeys, onChange: fileTableOnSelectChange }"
+          :row-selection="{ selectedRowKeys: fileTableSelectedRowKeys, onChange: fileTableOnSelectChange, onSelect: fileTableOnSingleRowSelect }"
           :columns="fileTableColumns"
           :data-source="list.data"
           :pagination="false"
@@ -81,7 +81,28 @@
     </div>
 
     <template slot="footer">
-      <a-button type="primary" @click="handleRequestMatchingClick" :loading="requestMatchingButtonLoading">请求匹配</a-button>
+      <a-button
+        type="primary"
+        @click="handleCopyFieldIdButtonClick"
+        :disabled="copyFieldIdButtonDisable"
+      >复制ID</a-button>
+      <a-button
+        type="primary"
+        @click="handleCopyFieldUrlButtonClick"
+        :disabled="copyFieldUrlButtonDisable"
+      >复制URL</a-button>
+      <a-button
+        type="primary"
+        @click="handleBatchMatchingClick"
+        :loading="batchMatchingButtonLoading"
+        :disabled="batchMatchingButtonDisable"
+      >批量匹配</a-button>
+      <a-button
+        type="primary"
+        @click="handleSingleMatchingClick"
+        :loading="singleMatchingButtonLoading"
+        :disabled="singleMatchingButtonDisable"
+      >单个匹配</a-button>
     </template>
 
     <FileUploadModal :visible.sync="upload.visible" @fileUploadModalClose="onFileUploadModalClose" />
@@ -92,7 +113,7 @@
 <script>
 import FileUploadModal from '@/components/File/FileUploadModal.vue'
 import { listTypes, listPlaces, listByPaging } from '@/api/file'
-import { matchingEpisodeUrlByFileIds } from '@/api/season'
+import { matchingEpisodeUrlByFileId, matchingEpisodesUrlByFileIds } from '@/api/season'
 
 export default {
   name: 'FileMatchingModal',
@@ -103,14 +124,53 @@ export default {
       default: false
     },
     receiveSeasonId: {
-      type: String,
-      default: -1
+      type: String
+    },
+    receiveEpisodeId: {
+      type: String
+    },
+    copyFieldId: {
+      type: Boolean,
+      default: false
+    },
+    copyFieldUrl: {
+      type: Boolean,
+      default: false
     }
   },
   beforeMount () {
+    // this.$log.debug('receiveEpisodeId', this.receiveEpisodeId)
+    // 批量匹配
     if (this.receiveSeasonId) {
       this.seasonId = this.receiveSeasonId
+      this.batchMatchingButtonDisable = false
     }
+
+    // 单个匹配
+    if (this.receiveEpisodeId) {
+      this.episodeId = this.receiveEpisodeId
+      this.singleMatchingButtonDisable = false
+      this.singleSelectMode = true
+    }
+
+    // 复制文件ID
+    if (this.copyFieldId) {
+      this.singleSelectMode = true
+      this.copyFieldIdButtonDisable = false
+    }
+
+    // 复制文件URL
+    if (this.copyFieldUrl) {
+      this.singleSelectMode = true
+      this.copyFieldUrlButtonDisable = false
+    }
+
+    // 当前模式控制台输出
+    // if (this.singleSelectMode) {
+    //   this.$log.debug('current is single select mode')
+    // } else {
+    //   this.$log.debug('current is batch select mode')
+    // }
   },
   computed: {
     modalVisible: {
@@ -150,6 +210,7 @@ export default {
         }
       ],
       seasonId: '',
+      episodeId: '',
       fileTableSelectedRowKeys: [],
       list: {
         data: [],
@@ -179,8 +240,13 @@ export default {
       upload: {
         visible: false
       },
-
-      requestMatchingButtonLoading: false
+      batchMatchingButtonLoading: false,
+      batchMatchingButtonDisable: true,
+      singleMatchingButtonLoading: false,
+      singleMatchingButtonDisable: true,
+      singleSelectMode: false,
+      copyFieldIdButtonDisable: true,
+      copyFieldUrlButtonDisable: true
     }
   },
   created () {
@@ -215,8 +281,7 @@ export default {
         this.list.data = response.result.content
         // 添加表格用的key，此处直接使用文件ID
         this.list.data.forEach(element => {
-          const id = element.id
-          element.key = id
+          element.key = element.id
         })
         // this.$log.debug('data', this.list.data)
         this.list.total = response.result.total
@@ -314,24 +379,88 @@ export default {
     },
 
     fileTableOnSelectChange (selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      // this.$log.debug('selectedRowKeys changed: ', selectedRowKeys)
       this.fileTableSelectedRowKeys = selectedRowKeys
     },
 
-    handleRequestMatchingClick () {
-      this.requestMatchingButtonLoading = true
-      matchingEpisodeUrlByFileIds(this.seasonId, this.fileTableSelectedRowKeys)
+    fileTableOnSingleRowSelect (file) {
+      // this.$log.debug('id', file.id)
+      // 单选模式
+      if (this.singleSelectMode) {
+        this.fileTableSelectedRowKeys = [ file.id ]
+      }
+    },
+
+    handleBatchMatchingClick () {
+      if (!this.seasonId) {
+        this.$message.error('季度ID不存在，取消批量匹配操作')
+        return
+      }
+      this.batchMatchingButtonLoading = true
+      matchingEpisodesUrlByFileIds(this.seasonId, this.fileTableSelectedRowKeys)
       .then(res => {
         this.$message.success('匹配成功')
+        this.$emit('dataHasUpdated')
         this.modalVisible = false
       })
       .catch(error => {
-        this.$message.error('匹配失败')
+        this.$message.error('匹配失败, 错误信息:' + error)
         this.$log.debug('matching episode url by file ids fail, error:', error)
       })
       .finally(() => {
-        this.requestMatchingButtonLoading = false
+        this.batchMatchingButtonLoading = false
       })
+    },
+    handleSingleMatchingClick () {
+      if (!this.episodeId) {
+        this.$message.error('剧集ID不存在，取消单个匹配操作')
+        return
+      }
+      if (this.fileTableSelectedRowKeys.length !== 1) {
+        this.$message.error('选中了多个文件，操作取消，单个匹配只能选中一个文件')
+        return
+      }
+      this.singleMatchingButtonLoading = true
+      const fileId = this.fileTableSelectedRowKeys[0]
+      this.$log.debug('fileId', fileId)
+      matchingEpisodeUrlByFileId(this.episodeId, fileId)
+        .then(res => {
+          this.$message.success('匹配成功')
+          this.$emit('dataHasUpdated')
+          this.modalVisible = false
+        })
+        .catch(error => {
+          this.$message.error('匹配失败, 错误信息:' + error)
+          this.$log.error('matching episode url by file id fail, error:', error)
+        })
+        .finally(() => {
+          this.singleMatchingButtonLoading = false
+        })
+    },
+
+    getListDataFileById (id) {
+      const fileArr = this.list.data.filter(file => file.id === id)
+      return fileArr[0]
+    },
+
+    handleCopyFieldIdButtonClick () {
+      if (this.fileTableSelectedRowKeys.length !== 1) {
+        this.$message.error('未选择或选择了多个, 操作取消, 请只选择一个')
+        return
+      }
+      this.$emit('sendSelectedFileFieldValue', this.fileTableSelectedRowKeys[0])
+      this.modalVisible = false
+    },
+
+    handleCopyFieldUrlButtonClick () {
+      if (this.fileTableSelectedRowKeys.length !== 1) {
+        this.$message.error('未选择或选择了多个, 操作取消, 请只选择一个')
+        return
+      }
+      const file = this.getListDataFileById(this.fileTableSelectedRowKeys[0])
+      this.$log.debug('file', file)
+      this.$emit('sendSelectedFileFieldValue', file.url)
+      this.modalVisible = false
     }
   }
 }

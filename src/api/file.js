@@ -4,6 +4,7 @@ const api = {
   basic: '/file',
   upload: '/file/data',
   list: '/file/list',
+  listByName: '/file/list/name',
   types: '/file/types',
   places: '/file/places',
   updateName: '/file/name'
@@ -28,6 +29,13 @@ export function listByPaging (params) {
     url: api.list,
     method: 'get',
     params: params
+  })
+}
+
+export function listByName (name) {
+  return request({
+    url: api.listByName + '/' + name,
+    method: 'get'
   })
 }
 
