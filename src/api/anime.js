@@ -1,11 +1,14 @@
 import request from '@/utils/request'
+import Base64 from 'crypto-js/enc-base64'
+import Utf8 from 'crypto-js/enc-utf8'
 
 const api = {
   basic: '/anime',
   seasonWithAnimeId: '/anime/season/animeId',
   listDTOS: '/anime/dtos',
   findDTOById: '/anime/dto/id',
-  deleteAnimeById: '/anime/id'
+  deleteAnimeById: '/anime/id',
+  deleteWithBatchByIds: 'anime/ids'
 }
 
 export function saveAnime (anime) {
@@ -41,6 +44,15 @@ export function findAnimeDTOById (animeId) {
 export function deleteAnimeById (animeId) {
   return request({
     url: api.deleteAnimeById + '/' + animeId,
+    method: 'delete'
+  })
+}
+
+export function deleteWithBatchByIds (animeIdArr) {
+  const animeIdJson = JSON.stringify(animeIdArr)
+  const animeIdArrJsonBase64 = Base64.stringify(Utf8.parse(animeIdJson))
+  return request({
+    url: api.deleteWithBatchByIds + '/' + animeIdArrJsonBase64,
     method: 'delete'
   })
 }

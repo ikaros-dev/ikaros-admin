@@ -35,7 +35,7 @@
           >{{ userSubButton.value }}
           </a-button>
           &nbsp;
-          <span v-if="userSubProgress">
+          <span v-if="userSubButton.isSub">
             <a-radio-group v-model="userSubProgress" @change="onUserSubProgressChange">
               <a-radio-button value="WISH">
                 想看
@@ -253,12 +253,12 @@ export default {
     reloadUserSubButton () {
       if (this.userSubButton.isSub) {
         this.userSubButton.type = 'default'
-        this.userSubButton.icon = 'check'
+        this.userSubButton.icon = 'close'
         this.userSubButton.value = '取消订阅'
         this.userSubStatus = '已订阅'
       } else {
         this.userSubButton.type = 'dashed'
-        this.userSubButton.icon = 'close'
+        this.userSubButton.icon = 'check'
         this.userSubButton.value = '订阅'
         this.userSubStatus = '未订阅'
         this.userSubProgress = ''

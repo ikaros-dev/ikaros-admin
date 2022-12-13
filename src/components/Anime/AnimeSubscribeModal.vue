@@ -70,14 +70,14 @@ export default {
   },
   watch: {
     // 每当 visible 改变时，重新渲染列表
-    visible (newValue, oldValue) {
-      // console.log('oldValue', oldValue)
-      // console.log('newValue', newValue)
-      // console.log(newValue && !this.additional)
-      if (newValue && !this.additional) {
-        this.findList(this.animeId)
-      }
-    }
+    // visible (newValue, oldValue) {
+    //   // console.log('oldValue', oldValue)
+    //   // console.log('newValue', newValue)
+    //   // console.log(newValue && !this.additional)
+    //   if (newValue && !this.additional) {
+    //     this.findList(this.animeId)
+    //   }
+    // }
   },
   data () {
     return {

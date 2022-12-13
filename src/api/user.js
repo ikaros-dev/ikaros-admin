@@ -1,6 +1,6 @@
 import request from '@/utils/request'
-// import Utf8 from 'crypto-js/enc-utf8'
-// import Base64 from 'crypto-js/enc-base64'
+import Base64 from 'crypto-js/enc-base64'
+import Utf8 from 'crypto-js/enc-utf8'
 
 const userApi = {
   Login: '/user/login',
@@ -9,7 +9,8 @@ const userApi = {
   UserInfo: '/user/info',
   userSubscribeByAnimeId: '/user/subscribe/anime',
   basic: '/user',
-  userPassword: '/user/password'
+  userPassword: '/user/password',
+  userSubscribeWithBatchByAnimeIdArrBase64Json: '/user/subscribe/anime/ids'
 }
 
 /**
@@ -48,7 +49,7 @@ export function getInfo () {
   })
 }
 
-export function saveUserSubscribeByAnimeId (animeId, progress, additional) {
+export function saveUserSubscribeByAnimeId (animeId, progress) {
   // const word = Utf8.parse(additional)
   // additional = Base64.stringify(word)
   return request({
@@ -58,6 +59,14 @@ export function saveUserSubscribeByAnimeId (animeId, progress, additional) {
       'progress': progress
       // , 'additional': additional
     }
+  })
+}
+
+export function saveUserSubscribeWithBatchByAnimeIdArr (animeIdArr) {
+  const animeIdArrBase64Json = Base64.stringify(Utf8.parse(JSON.stringify(animeIdArr)))
+  return request({
+    url: userApi.userSubscribeWithBatchByAnimeIdArrBase64Json + '/' + animeIdArrBase64Json,
+    method: 'put'
   })
 }
 
