@@ -94,15 +94,15 @@ export const asyncRouterMap = [
       {
         path: '/account',
         component: RouteView,
-        redirect: '/account/center',
+        redirect: '/account/subscribe',
         name: 'account',
         meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] },
         children: [
           {
-            path: '/account/center',
-            name: 'center',
-            component: () => import('@/views/account/Center'),
-            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] }
+            path: '/account/subscribe',
+            name: 'Subscribe',
+            component: () => import('@/views/account/AccountSubscribe.vue'),
+            meta: { title: '我的订阅' }
           },
           {
             path: '/account/settings',
