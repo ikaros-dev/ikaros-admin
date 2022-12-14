@@ -29,9 +29,9 @@
               <a-form-model-item label="昵称" required>
                 <a-input v-model="currentUser.nickname"/>
               </a-form-model-item>
-              <!-- <a-form-model-item label="邮箱" required>-->
-              <!--   <a-input v-model="currentUser.email"/>-->
-              <!-- </a-form-model-item>-->
+               <a-form-model-item label="邮箱" required>
+                 <a-input v-model="currentUser.email"/>
+               </a-form-model-item>
               <a-form-model-item label="个人介绍">
                 <a-textarea placeholder="这里是XXX" v-model="currentUser.introduce" :rows="4" />
               </a-form-model-item>
