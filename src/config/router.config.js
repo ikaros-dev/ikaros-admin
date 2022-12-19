@@ -58,6 +58,24 @@ export const asyncRouterMap = [
         meta: { title: 'menu.file', icon: 'picture' }
       },
 
+      // torrent
+      {
+        path: '/torrent',
+        component: RouteView,
+        redirect: '/torrent/add',
+        name: 'Torrent',
+        meta: { title: '种子', keepAlive: true, icon: 'appstore' },
+        children: [
+          {
+            path: '/torrent/add',
+            name: 'TorrentAdd',
+            hidden: false,
+            component: () => import('@/views/torrent/TorrentAdd.vue'),
+            meta: { title: '添加种子', keepAlive: true }
+          }
+        ]
+      },
+
       // Anime
       {
         path: '/anime',
