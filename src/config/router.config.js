@@ -58,6 +58,24 @@ export const asyncRouterMap = [
         meta: { title: 'menu.file', icon: 'picture' }
       },
 
+      // torrent
+      {
+        path: '/torrent',
+        component: RouteView,
+        redirect: '/torrent/add',
+        name: 'Torrent',
+        meta: { title: '种子', keepAlive: true, icon: 'appstore' },
+        children: [
+          {
+            path: '/torrent/add',
+            name: 'TorrentAdd',
+            hidden: false,
+            component: () => import('@/views/torrent/TorrentAdd.vue'),
+            meta: { title: '添加种子', keepAlive: true }
+          }
+        ]
+      },
+
       // Anime
       {
         path: '/anime',
@@ -94,15 +112,15 @@ export const asyncRouterMap = [
       {
         path: '/account',
         component: RouteView,
-        redirect: '/account/center',
+        redirect: '/account/subscribe',
         name: 'account',
         meta: { title: 'menu.account', icon: 'user', keepAlive: true, permission: ['user'] },
         children: [
           {
-            path: '/account/center',
-            name: 'center',
-            component: () => import('@/views/account/Center'),
-            meta: { title: 'menu.account.center', keepAlive: true, permission: ['user'] }
+            path: '/account/subscribe',
+            name: 'Subscribe',
+            component: () => import('@/views/account/AccountSubscribe.vue'),
+            meta: { title: '我的订阅' }
           },
           {
             path: '/account/settings',
