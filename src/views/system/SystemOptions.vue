@@ -36,25 +36,6 @@
           </a-form-model>
         </a-tab-pane>
 
-        <a-tab-pane class="tab-content-pane" key="SEO" tab="SEO">
-          <a-form-model :model="seo">
-            <a-form-model-item label="屏蔽搜索引擎">
-              <a-switch :checked="seo.HIDE_FOR_SEARCH_ENGINE | str2boolean" @change="changeHideForSearchEngineSwitch" />
-            </a-form-model-item>
-            <a-form-model-item label="关键词">
-              <a-input v-model="seo.KEYWORDS" />
-            </a-form-model-item>
-            <a-form-model-item label="站点描述">
-              <a-input v-model="seo.SITE_DESCRIPTION" type="textarea" />
-            </a-form-model-item>
-            <a-form-model-item>
-              <a-button type="primary" @click="saveOption('SEO')">
-                保存SEO设置
-              </a-button>
-            </a-form-model-item>
-          </a-form-model>
-        </a-tab-pane>
-
         <a-tab-pane class="tab-content-pane" key="FILE" tab="文件">
           <a-form-model :model="file">
             <a-form-model-item label="存储位置">
@@ -296,7 +277,6 @@ export default {
       options: [],
       app: {},
       common: {},
-      seo: {},
       file: {},
       network: {},
       qbittorrent: {},
@@ -361,10 +341,6 @@ export default {
           this.common = entity.kvMap
         }
 
-        if (category === 'SEO') {
-          this.seo = entity.kvMap
-        }
-
         if (category === 'FILE') {
           this.file = entity.kvMap
         }
@@ -408,9 +384,6 @@ export default {
       }
       if (category === 'COMMON') {
         request.kvMap = this.common
-      }
-      if (category === 'SEO') {
-        request.kvMap = this.seo
       }
       if (category === 'FILE') {
         request.kvMap = this.file
