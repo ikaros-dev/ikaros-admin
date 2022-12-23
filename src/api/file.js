@@ -27,8 +27,8 @@ export function upload (file, onUploadProgress) {
 export function listByPaging (params) {
   return request({
     url: api.list,
-    method: 'get',
-    params: params
+    method: 'post',
+    data: params
   })
 }
 
