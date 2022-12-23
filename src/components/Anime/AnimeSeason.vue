@@ -27,9 +27,9 @@
       <a-button type="primary" @click="handleSaveClick">
         保存季度信息
       </a-button>
-      <a-button style="margin-left: 4px;" type="primary" @click="fileMatchingModalVisible = true">
-        批量匹配资源
-      </a-button>
+      <!--      <a-button style="margin-left: 4px;" type="primary" @click="fileMatchingModalVisible = true">-->
+      <!--        批量匹配资源-->
+      <!--      </a-button>-->
     </a-form-model-item>
     <!-- 剧集信息 -->
     <a-collapse :bordered="false">
