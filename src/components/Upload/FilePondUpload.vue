@@ -131,7 +131,7 @@ export default {
             }
         },
         revert: {
-          url: './file/filepond/remove',
+          url: './file/filepond/revert',
           headers: {
             Authorization: storage.get(ACCESS_TOKEN)
           }
