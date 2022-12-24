@@ -129,6 +129,12 @@ export default {
             headers: {
               Authorization: storage.get(ACCESS_TOKEN)
             }
+        },
+        revert: {
+          url: './file/filepond/remove',
+          headers: {
+            Authorization: storage.get(ACCESS_TOKEN)
+          }
         }
         // process: (fieldName, file, metadata, load, error, progress, abort) => {
         //   this.uploadHandler(
