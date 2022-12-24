@@ -2,7 +2,7 @@
   <page-header-wrapper :title="false">
     <a-form-model :model="torrent" >
       <a-alert
-        message="只支持添加单个种子磁力链接，前缀：magnet:"
+        message="需要在 系统/系统设置/Qbittorrent 配置，只支持添加单个种子磁力链接，前缀：magnet:xxx "
         banner
         closable
       />
